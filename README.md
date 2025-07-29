@@ -8,7 +8,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.11-4ABAFB?style=for-the-badge&logo=tailwindcss)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.0-4377C1?style=for-the-badge&logo=typescript)
 
-[预览地址](#)
+[预览地址](https://lithe-admin.vercel.app)
 
 </div>
 
