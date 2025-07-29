@@ -1,0 +1,7 @@
+@import './base.css';
+
+@layer base {
+  body {
+    @apply overflow-hidden tracking-wide;
+  }
+}

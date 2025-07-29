@@ -1,0 +1,36 @@
+import { useComponentModifier } from '@/composable/comp/useComponentModifier'
+import { useDiscreteApi } from '@/composable/useDiscreteApi'
+
+import type { MessageType, ModalOptions, NotificationType } from 'naive-ui'
+
+const { message, modal, notification } = useDiscreteApi()
+
+const { getModalModifier } = useComponentModifier()
+
+export const useMessageDiscrete = (type: MessageType = 'info') => {
+  message.create(`${type} - 与Setup里调用单独分开显示`, {
+    type: type,
+    duration: 0,
+    closable: true,
+  })
+}
+
+export const useModalDiscrete = (type: ModalOptions['type'] = 'info') => {
+  modal.create({
+    ...getModalModifier(),
+    title: `${type}`,
+    content: `Setup 外的 ${type} Dialog`,
+    preset: 'dialog',
+    type: type,
+    positiveText: '确认',
+    negativeText: '算了',
+  })
+}
+
+export const useNotificationDiscrete = (type: NotificationType = 'info') => {
+  notification.create({
+    type: type,
+    content: '又要说点啥呢',
+    meta: '我是 Setup 外的 Notification， 出现位置当然可以不一样',
+  })
+}
