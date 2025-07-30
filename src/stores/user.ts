@@ -54,15 +54,17 @@ export const useUserStore = defineStore('userStore', () => {
     userRoute.value = resolveRoute(res) || []
   }
 
-  function cleanup(redirect?: string) {
+  function cleanup(redirectPath?: string) {
     router.replace({
       name: 'signin',
-      ...(redirect ? { query: { r: redirect } } : {}),
+      ...(redirectPath ? { query: { r: redirectPath } } : {}),
     })
 
     token.value = null
 
-    router.removeRoute('layout')
+    if (router.hasRoute('layout')) {
+      router.removeRoute('layout')
+    }
 
     userMenu.value = []
 
