@@ -7,7 +7,6 @@ import perfectionist from 'eslint-plugin-perfectionist'
 import pluginVue from 'eslint-plugin-vue'
 import { globalIgnores } from 'eslint/config'
 
-
 // More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
 configureVueProject({ scriptLangs: ['ts', 'tsx'] })
 
@@ -29,13 +28,13 @@ export default defineConfigWithVueTs(
   skipFormatting,
   {
     plugins: {
-      perfectionist
+      perfectionist,
     },
     rules: {
       // vue
       'vue/multi-word-component-names': 'off',
 
-       // typescript
+      // typescript
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -49,6 +48,6 @@ export default defineConfigWithVueTs(
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'type'],
         },
       ],
-    }
-  }
+    },
+  },
 )
