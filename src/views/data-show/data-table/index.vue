@@ -345,14 +345,6 @@ const paginationPrefix: PaginationProps['prefix'] = (info) => {
   )
 }
 
-const handleQueryClick = () => {
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      getUserList()
-    }
-  })
-}
-
 const dropdownOptions = reactive<DropdownProps>({
   x: 0,
   y: 0,
@@ -376,9 +368,13 @@ const dropdownOptions = reactive<DropdownProps>({
 })
 
 async function request(pageSize: number): Promise<{ data: UserInfo[]; total: number }> {
-  return fetch(`http://43.143.155.96:3000/api/faker/v2/diy?num=${pageSize}`, {
+  return fetch(`https://lithe-admin-serverless.vercel.app/api/faker?limit=${pageSize}`, {
     method: 'GET',
   }).then((res) => res.json())
+}
+
+function inputOnlyAllowNumber(value: string) {
+  return !value || /^\d+$/.test(value)
 }
 
 function createOrEditUser(data?: UserInfo) {
@@ -416,8 +412,12 @@ function createOrEditUser(data?: UserInfo) {
   })
 }
 
-function inputOnlyAllowNumber(value: string) {
-  return !value || /^\d+$/.test(value)
+const handleQueryClick = () => {
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      getUserList()
+    }
+  })
 }
 
 function handleDownloadCsvClick() {

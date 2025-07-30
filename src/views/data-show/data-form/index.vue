@@ -73,6 +73,8 @@ const rulesCodeHighlight = ref()
 
 const formDisabled = ref(false)
 
+const isRequestLoading = ref(false)
+
 const rules: FormRules = {
   name: { required: true, message: '请输入用户名' },
 }
@@ -154,10 +156,14 @@ function inputOnlyAllowNumber(value: string) {
 }
 
 function generateRandomForm() {
-  fetch(`http://43.143.155.96:3000/api/faker/v2/diy/hobby`)
+  isRequestLoading.value = true
+  fetch(`https://lithe-admin-serverless.vercel.app/api/faker`)
     .then((res) => res.json())
     .then((res) => {
       setForm(res.data)
+    })
+    .finally(() => {
+      isRequestLoading.value = false
     })
 }
 
@@ -474,8 +480,9 @@ watch(
                 </NButton>
                 <NButton
                   type="info"
-                  :disabled="formDisabled"
+                  :disabled="formDisabled || isRequestLoading"
                   @click="generateRandomForm"
+                  :loading="isRequestLoading"
                 >
                   随机填充表单
                 </NButton>
