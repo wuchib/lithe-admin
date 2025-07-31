@@ -1,9 +1,9 @@
 import ButtonAnimation from './ButtonAnimation.vue'
+import EmptyPlaceholder from './EmptyPlaceholder.vue'
 import HintHelp from './HintHelp.vue'
-import SuspenseEmpty from './SuspenseEmpty.vue'
 
-export { SuspenseEmpty, HintHelp, ButtonAnimation }
+export { EmptyPlaceholder, HintHelp, ButtonAnimation }
 
 export * from './ButtonAnimation.vue'
+export * from './EmptyPlaceholder.vue'
 export * from './HintHelp.vue'
-export * from './SuspenseEmpty.vue'

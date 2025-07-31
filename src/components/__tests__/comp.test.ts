@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
 
-import { ButtonAnimation, SuspenseEmpty } from '../index'
+import { ButtonAnimation, EmptyPlaceholder } from '../index'
 
 describe('ButtonAnimation Component', () => {
   it('render component', () => {
@@ -51,9 +51,9 @@ describe('ButtonAnimation Component', () => {
   })
 })
 
-describe('SuspenseEmpty Component', () => {
+describe('EmptyPlaceholder Component', () => {
   it('render component', () => {
-    const wrapper = mount(SuspenseEmpty, {
+    const wrapper = mount(EmptyPlaceholder, {
       props: {
         show: true,
       },
@@ -64,7 +64,7 @@ describe('SuspenseEmpty Component', () => {
   })
 
   it('add content slot', () => {
-    const wrapper = mount(SuspenseEmpty, {
+    const wrapper = mount(EmptyPlaceholder, {
       props: {
         show: true,
       },

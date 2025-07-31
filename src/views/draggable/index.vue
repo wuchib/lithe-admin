@@ -5,7 +5,7 @@ import { NAlert, NCard, NSplit, NScrollbar, NButton } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
-import { SuspenseEmpty } from '@/components'
+import { EmptyPlaceholder } from '@/components'
 import { usePersonalization } from '@/composable/usePersonalization'
 
 import type { UseDraggableReturn } from 'vue-draggable-plus'
@@ -208,7 +208,7 @@ watch(
               </VueDraggable>
             </NScrollbar>
             <NScrollbar>
-              <SuspenseEmpty
+              <EmptyPlaceholder
                 :show="cloneList2.length <= 0"
                 description="把左边的任务拖拽到这里"
               >
@@ -242,7 +242,7 @@ watch(
                     </div>
                   </VueDraggable>
                 </template>
-              </SuspenseEmpty>
+              </EmptyPlaceholder>
             </NScrollbar>
           </div>
         </template>

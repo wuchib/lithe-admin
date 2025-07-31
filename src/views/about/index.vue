@@ -46,7 +46,7 @@ const dir = `📂 lithe-admin
 │    ├── 📄 ButtonAnimation.vue
 │    ├── 📄 HintHelp.vue
 │    ├── 📄 Noise.vue
-│    ├── 📄 SuspenseEmpty.vue
+│    ├── 📄 EmptyPlaceholder.vue
 │    └── 📂 __tests__/
 │      ├── 📄 comp.test.ts
 │    ├── 📄 index.ts

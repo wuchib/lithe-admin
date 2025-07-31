@@ -6,7 +6,7 @@ import { isVNode } from 'vue'
 import type { ButtonProps, PopoverProps } from 'naive-ui'
 import type { AllowedComponentProps, HTMLAttributes, SVGAttributes, VNodeChild } from 'vue'
 
-interface TipsProps {
+interface HintHelpProps {
   buttonProps?: AllowedComponentProps & ButtonProps
   content?: (() => VNodeChild) | string
   iconProps?: SVGAttributes
@@ -15,7 +15,7 @@ interface TipsProps {
   popoverProps?: PopoverProps
 }
 
-const { label, popoverProps, buttonProps, iconProps, content } = defineProps<TipsProps>()
+const { label, popoverProps, buttonProps, iconProps, content } = defineProps<HintHelpProps>()
 </script>
 <template>
   <div class="flex items-center gap-x-0.5">

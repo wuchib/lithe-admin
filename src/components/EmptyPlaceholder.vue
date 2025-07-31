@@ -4,11 +4,11 @@ import { NEmpty } from 'naive-ui'
 import type { EmptyProps, EmptySlots } from 'naive-ui'
 import type { VNode } from 'vue'
 
-export interface SuspenseEmptyProps extends /* @vue-ignore */ EmptyProps {
+export interface EmptyPlaceholderProps extends /* @vue-ignore */ EmptyProps {
   show?: boolean
 }
 
-export interface SuspenseEmptySlots extends EmptySlots {
+export interface EmptyPlaceholderSlots extends EmptySlots {
   content?: () => VNode[]
 }
 
@@ -16,12 +16,14 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const props = defineProps<SuspenseEmptyProps>()
+const props = defineProps<EmptyPlaceholderProps>()
 
-const slots = defineSlots<SuspenseEmptySlots>()
+const slots = defineSlots<EmptyPlaceholderSlots>()
 
-function getSuspenseEmptySlots() {
-  return (Object.keys(slots) as (keyof SuspenseEmptySlots)[]).filter((name) => name !== 'content')
+function getEmptySlots() {
+  return (Object.keys(slots) as (keyof EmptyPlaceholderSlots)[]).filter(
+    (name) => name !== 'content',
+  )
 }
 </script>
 <template>
@@ -35,7 +37,7 @@ function getSuspenseEmptySlots() {
     >
       <NEmpty v-bind="$attrs">
         <template
-          v-for="slot of getSuspenseEmptySlots()"
+          v-for="slot of getEmptySlots()"
           :key="slot"
           #[slot]
         >

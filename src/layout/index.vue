@@ -4,7 +4,7 @@ import { NScrollbar } from 'naive-ui'
 import { provide, reactive, ref } from 'vue'
 
 import texturePng from '@/assets/texture.png'
-import { SuspenseEmpty } from '@/components'
+import { EmptyPlaceholder } from '@/components'
 import { useComponentThemeOverrides } from '@/composable/comp/useComponentThemeOverrides'
 import { menuInjectionKey, tabsInjectionKey } from '@/injection'
 import { useConfigureStore } from '@/stores/configure'
@@ -80,7 +80,7 @@ provide(tabsInjectionKey, {
         >
           <MainLayout />
         </NScrollbar>
-        <SuspenseEmpty
+        <EmptyPlaceholder
           :show="isEmpty(tabsStore.tabs)"
           description="空标签页"
           size="huge"
@@ -108,7 +108,7 @@ provide(tabsInjectionKey, {
               </div>
             </Transition>
           </template>
-        </SuspenseEmpty>
+        </EmptyPlaceholder>
       </div>
     </div>
   </div>
