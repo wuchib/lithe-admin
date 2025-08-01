@@ -24,7 +24,7 @@ const configureStore = useConfigureStore()
 
 const { tabs, tabActiveKey, tabsKeepAlive } = storeToRefs(tabsStore)
 
-const { configure, isRouterLoading } = storeToRefs(configureStore)
+const { configure, isNavigating } = storeToRefs(configureStore)
 
 const { create, setActive } = tabsStore
 
@@ -43,7 +43,7 @@ function createTab(route: RouteLocationNormalizedLoaded) {
   create({
     compName,
     icon,
-    name: name as string,
+    name,
     key: fullPath,
     label,
     pinned,
@@ -95,14 +95,14 @@ watch(
 watch(
   (): [RouteLocationNormalizedLoaded, boolean] => [
     router.currentRoute.value,
-    isRouterLoading.value,
+    isNavigating.value,
   ],
-  ([newRoute, isRouterLoading], [oldRoute]) => {
+  ([newRoute, isNavigating], [oldRoute]) => {
     const { name, meta } = newRoute
     const { showTab, multiTab } = meta
     const findTab = tabs.value.find((item) => item.name === name)
 
-    if (!isRouterLoading && newRoute.fullPath !== oldRoute?.fullPath) {
+    if (!isNavigating && newRoute.fullPath !== oldRoute?.fullPath) {
       if (showTab && (!findTab || multiTab)) {
         createTab(newRoute)
       } else if (!isEmpty(findTab)) {

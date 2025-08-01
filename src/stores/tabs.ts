@@ -1,9 +1,11 @@
 import { useStorage } from '@vueuse/core'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
+import type { RouteRecordNameGeneric } from 'vue-router'
+
 export interface Tab {
   compName?: string
-  name?: string
+  name?: RouteRecordNameGeneric
   icon?: string
   key: string
   label?: string

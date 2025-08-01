@@ -14,9 +14,9 @@ const configureStore = useConfigureStore(createPinia())
 
 export function setupRouterGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
-    configureStore.setRouterLoading(true)
+    configureStore.setNavigating(true)
 
-    if (configureStore.configure.showRouteLoadingBar) {
+    if (configureStore.configure.showTopLoadingBar) {
       loadingBar.start()
     }
 
@@ -65,9 +65,9 @@ export function setupRouterGuard(router: Router) {
   })
 
   router.afterEach(() => {
-    configureStore.setRouterLoading(false)
+    configureStore.setNavigating(false)
 
-    if (configureStore.configure.showRouteLoadingBar) {
+    if (configureStore.configure.showTopLoadingBar) {
       loadingBar.finish()
     }
   })

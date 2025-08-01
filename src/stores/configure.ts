@@ -15,7 +15,7 @@ export interface ConfigureOptions {
   showBreadcrumb: boolean
   showWatermark: boolean
   showNoise: boolean
-  showRouteLoadingBar: boolean
+  showTopLoadingBar: boolean
   enableRouteTransition: boolean
   enableTextSelect: boolean
   watermarkOptions: Partial<WatermarkProps>
@@ -32,7 +32,7 @@ const DEFAULT_CONFIGURE_OPTIONS: ConfigureOptions = {
   showWatermark: false,
   showNavigation: true,
   showBreadcrumb: true,
-  showRouteLoadingBar: true,
+  showTopLoadingBar: true,
   enableRouteTransition: true,
   enableTextSelect: true,
   watermarkOptions: {
@@ -63,7 +63,7 @@ const DEFAULT_CONFIGURE_OPTIONS: ConfigureOptions = {
 export const useConfigureStore = defineStore('configureStore', () => {
   const configure = useStorage<ConfigureOptions>('configure', DEFAULT_CONFIGURE_OPTIONS)
 
-  const isRouterLoading = ref(false)
+  const isNavigating = ref(false)
 
   const modify = (options: Partial<ConfigureOptions>) => {
     configure.value = mergeWith({}, configure.value, options, (objValue, srcValue) => {
@@ -77,8 +77,8 @@ export const useConfigureStore = defineStore('configureStore', () => {
     configure.value = structuredClone(DEFAULT_CONFIGURE_OPTIONS)
   }
 
-  const setRouterLoading = (value: boolean) => {
-    isRouterLoading.value = value
+  const setNavigating = (value: boolean) => {
+    isNavigating.value = value
   }
 
   watch(
@@ -93,10 +93,10 @@ export const useConfigureStore = defineStore('configureStore', () => {
 
   return {
     configure,
-    isRouterLoading,
+    isNavigating,
     reset,
     modify,
-    setRouterLoading,
+    setNavigating,
   }
 })
 

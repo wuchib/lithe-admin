@@ -156,11 +156,11 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>显示顶部加载条</span>
               <NSwitch
-                :value="configure.showRouteLoadingBar"
+                :value="configure.showTopLoadingBar"
                 @update-value="
                   (value) =>
                     modify({
-                      showRouteLoadingBar: value,
+                      showTopLoadingBar: value,
                     })
                 "
               />
