@@ -61,7 +61,7 @@ export function useDataTable<T extends ComponentPublicInstance>(
 
   function initTableResizeObserver() {
     if (!target.value) {
-      maxHeight.value = void 0
+      maxHeight.value = undefined
       return
     }
 

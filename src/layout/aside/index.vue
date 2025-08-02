@@ -16,7 +16,9 @@ const menuInject = inject(menuInjectionKey, null)
 const configureStore = useConfigureStore()
 
 const menuCollapseWidth = computed(() =>
-  configureStore.configure.menuCollapsed ? menuInject?.collapse.width : menuInject?.collapse.maxWidth,
+  configureStore.configure.menuCollapsed
+    ? menuInject?.collapse.width
+    : menuInject?.collapse.maxWidth,
 )
 
 function handleCollapseClick() {

@@ -419,7 +419,8 @@ onMounted(() => {
                   :class="[
                     tab.icon,
                     {
-                      'text-primary': tab.componentName && tabsKeepAlive.includes(tab.componentName),
+                      'text-primary':
+                        tab.componentName && tabsKeepAlive.includes(tab.componentName),
                     },
                   ]"
                 />

@@ -52,7 +52,7 @@ const DEFAULT_CONFIGURE_OPTIONS: ConfigureOptions = {
     fontStyle: 'normal',
     fontWeight: 400,
     lineHeight: 16,
-    image: void 0,
+    image: undefined,
     imageHeight: 64,
     imageWidth: 64,
     imageOpacity: 0.5,

@@ -169,12 +169,12 @@ export const useTabsStore = defineStore('tabsStore', () => {
 
   const isPinned = (key: string) => {
     const index = findTabIndex(key)
-    return index !== -1 ? tabs.value[index].pinned : void 0
+    return index !== -1 ? tabs.value[index].pinned : undefined
   }
 
   const isLocked = (key: string) => {
     const index = findTabIndex(key)
-    return index !== -1 ? tabs.value[index].locked : void 0
+    return index !== -1 ? tabs.value[index].locked : undefined
   }
 
   const setLocked = (key: string) => {

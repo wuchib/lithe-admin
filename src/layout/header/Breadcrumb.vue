@@ -20,7 +20,7 @@ function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options
       icon: () => h('span', { class: `${item.meta?.icon} size-5` }),
       children: !isEmpty(item.children)
         ? resolveDropdownOptions(item.children as RouteRecordRaw[])
-        : void 0,
+        : undefined,
     }
   })
 }
