@@ -11,6 +11,7 @@ import { useTabsStore } from '@/stores/tabs'
 
 import type { Tab } from '@/stores/tabs'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import { csCZ } from 'naive-ui'
 
 defineOptions({
   name: 'MainLayout',
@@ -114,12 +115,15 @@ watch(
 onMounted(() => {
   const currentRoute = router.currentRoute.value
   const { name, meta } = currentRoute
+  console.log(tabs.value)
   const findTab = tabs.value.find((item) => item.name === name)
   const { showTab, multiTab } = meta
 
   if (name === 'layout' && tabActiveKey.value) {
     router.replace(tabActiveKey.value)
   } else if (showTab && (!findTab || multiTab)) {
+    console.log(!findTab, multiTab)
+
     doCreateTab(currentRoute)
   } else if (!isEmpty(findTab)) {
     setActive(findTab.key)

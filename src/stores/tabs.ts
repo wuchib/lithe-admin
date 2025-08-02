@@ -19,6 +19,7 @@ export const useTabsStore = defineStore('tabsStore', () => {
       componentName: 'Dashboard',
       icon: 'iconify-[mage--dashboard-chart]',
       key: '/dashboard',
+      name: 'dashboard',
       label: '仪表板',
       pinned: true,
     },
