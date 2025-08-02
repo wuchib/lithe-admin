@@ -9,7 +9,6 @@ import {
   useModal,
   NScrollbar,
 } from 'naive-ui'
-import { storeToRefs } from 'pinia'
 import { h, ref } from 'vue'
 
 import { ButtonAnimation } from '@/components'
@@ -30,8 +29,6 @@ import packageJson from '@/../package.json'
 const configureStore = useConfigureStore()
 
 const { color, setColor } = usePersonalization()
-
-const { configure } = storeToRefs(configureStore)
 
 const { modify, reset } = configureStore
 
@@ -142,9 +139,11 @@ const showNoiseModal = () => {
           <NDivider>布局相关</NDivider>
           <div class="flex flex-col gap-y-1.5">
             <div class="flex items-center justify-between">
-              <span>收起侧边菜单</span>
+              <span>展开侧边菜单</span>
               <NSwitch
-                :value="configure.menuCollapsed"
+                :value="configureStore.configure.menuCollapsed"
+                :checked-value="false"
+                :unchecked-value="true"
                 @update-value="
                   (value) =>
                     modify({
@@ -156,7 +155,7 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>显示顶部加载条</span>
               <NSwitch
-                :value="configure.showTopLoadingBar"
+                :value="configureStore.configure.showTopLoadingBar"
                 @update-value="
                   (value) =>
                     modify({
@@ -168,7 +167,7 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>显示Logo</span>
               <NSwitch
-                :value="configure.showLogo"
+                :value="configureStore.configure.showLogo"
                 @update-value="
                   (value) =>
                     modify({
@@ -180,7 +179,7 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>显示导航按钮</span>
               <NSwitch
-                :value="configure.showNavigation"
+                :value="configureStore.configure.showNavigation"
                 @update-value="
                   (value) =>
                     modify({
@@ -192,7 +191,7 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>显示面包屑</span>
               <NSwitch
-                :value="configure.showBreadcrumb"
+                :value="configureStore.configure.showBreadcrumb"
                 @update-value="
                   (value) =>
                     modify({
@@ -204,7 +203,7 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>显示标签页</span>
               <NSwitch
-                :value="configure.showTabs"
+                :value="configureStore.configure.showTabs"
                 @update-value="
                   (value) =>
                     modify({
@@ -216,7 +215,7 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>常显标签关闭按钮</span>
               <NSwitch
-                :value="configure.showTabClose"
+                :value="configureStore.configure.showTabClose"
                 @update-value="
                   (value) =>
                     modify({
@@ -228,7 +227,7 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>显示底部</span>
               <NSwitch
-                :value="configure.showFooter"
+                :value="configureStore.configure.showFooter"
                 @update-value="
                   (value) =>
                     modify({
@@ -253,7 +252,7 @@ const showNoiseModal = () => {
               </ButtonAnimation>
             </div>
             <NSwitch
-              :value="configure.showWatermark"
+              :value="configureStore.configure.showWatermark"
               @update-value="
                 (value) =>
                   modify({
@@ -274,7 +273,7 @@ const showNoiseModal = () => {
               </ButtonAnimation>
             </div>
             <NSwitch
-              :value="configure.showNoise"
+              :value="configureStore.configure.showNoise"
               @update-value="
                 (value) =>
                   modify({
@@ -285,13 +284,13 @@ const showNoiseModal = () => {
           </div>
           <div class="flex flex-col gap-y-1.5">
             <div class="flex items-center justify-between">
-              <span>启用路由过渡效果</span>
+              <span>启用导航过渡效果</span>
               <NSwitch
-                :value="configure.enableRouteTransition"
+                :value="configureStore.configure.enableNavigationTransition"
                 @update-value="
                   (value) =>
                     modify({
-                      enableRouteTransition: value,
+                      enableNavigationTransition: value,
                     })
                 "
               />
@@ -299,7 +298,7 @@ const showNoiseModal = () => {
             <div class="flex items-center justify-between">
               <span>文字可选中</span>
               <NSwitch
-                :value="configure.enableTextSelect"
+                :value="configureStore.configure.enableTextSelect"
                 @update-value="
                   (value) =>
                     modify({

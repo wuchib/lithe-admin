@@ -9,11 +9,11 @@ const navigationState = reactive({
   canGoForward: true,
 })
 
-const stop = watch(
+const stopWatch = watch(
   () => router.currentRoute.value,
   () => {
     if (!window.navigation) {
-      stop()
+      stopWatch()
       return
     }
 

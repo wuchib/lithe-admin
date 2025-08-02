@@ -16,7 +16,7 @@ defineOptions({
   name: 'MainLayout',
 })
 
-const Tabs = inject(tabsInjectionKey, null)
+const tabsInject = inject(tabsInjectionKey, null)
 
 const tabsStore = useTabsStore()
 
@@ -36,12 +36,12 @@ let oldTabs: Tab[] = []
 const transitionName = ref('')
 
 function createTab(route: RouteLocationNormalizedLoaded) {
-  const { pinned, compName, icon = 'iconify ph--browser', label = '未命名标签' } = route.meta
+  const { pinned, componentName, icon = 'iconify ph--browser', label = '未命名标签' } = route.meta
 
   const { fullPath, name } = route
 
   create({
-    compName,
+    componentName,
     icon,
     name,
     key: fullPath,
@@ -57,7 +57,7 @@ watch(
       router.push(tabActiveKey.value)
     }
 
-    if (!configure.value.enableRouteTransition) return
+    if (!configure.value.enableNavigationTransition) return
 
     if (!configure.value.showTabs) {
       transitionName.value = 'scale'
@@ -81,12 +81,12 @@ watch(
 )
 
 watch(
-  () => Tabs?.shouldRefresh.value,
+  () => tabsInject?.shouldRefresh.value,
   (shouldRefresh) => {
     if (shouldRefresh) {
       transitionName.value = 'shake'
       nextTick(() => {
-        Tabs?.doRefresh(false)
+        tabsInject?.doRefresh(false)
       })
     }
   },
@@ -138,14 +138,14 @@ onMounted(() => {
 </script>
 <template>
   <RouterView
-    v-if="configure.enableRouteTransition"
+    v-if="configure.enableNavigationTransition"
     v-slot="{ Component, route }"
   >
     <Transition :name="transitionName">
       <KeepAlive :include="tabsKeepAlive">
         <component
           :is="Component"
-          v-if="isMounted && !Tabs?.shouldRefresh.value"
+          v-if="isMounted && !tabsInject?.shouldRefresh.value"
           :key="route.path + JSON.stringify(route.query)"
         />
       </KeepAlive>

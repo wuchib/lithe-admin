@@ -9,7 +9,7 @@ import { useUserStore } from '@/stores/user'
 
 import type { MenuInst } from 'naive-ui'
 
-const Menu = inject(menuInjectionKey, null)
+const menuInject = inject(menuInjectionKey, null)
 
 const configureStore = useConfigureStore()
 
@@ -35,7 +35,7 @@ watch(
   <NScrollbar>
     <NMenu
       ref="menuRef"
-      :collapsed-width="Menu?.collapse.width"
+      :collapsed-width="menuInject?.collapse.width"
       :collapsed="configureStore.configure.menuCollapsed"
       :collapsed-icon-size="20"
       :value="menuActiveKey"

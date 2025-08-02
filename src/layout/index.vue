@@ -28,7 +28,7 @@ const { scrollbarInMainLayout } = useComponentThemeOverrides()
 
 const shouldRefresh = ref(false)
 
-const collapsed = reactive({
+const menuCollapse = reactive({
   width: 64,
   maxWidth: 272,
 })
@@ -38,7 +38,7 @@ const doRefresh: TabsInjection['doRefresh'] = (value) => {
 }
 
 provide(menuInjectionKey, {
-  collapse: collapsed,
+  collapse: menuCollapse,
 })
 
 provide(tabsInjectionKey, {

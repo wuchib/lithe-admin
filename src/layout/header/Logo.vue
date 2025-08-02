@@ -6,12 +6,12 @@ import { useConfigureStore } from '@/stores/configure'
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
-const Menu = inject(menuInjectionKey, null)
+const menuInject = inject(menuInjectionKey, null)
 
 const configureStore = useConfigureStore()
 
 const collapseWidth = computed(() => {
-  return configureStore.configure.menuCollapsed ? Menu?.collapse.width : Menu?.collapse.maxWidth
+  return configureStore.configure.menuCollapsed ? menuInject?.collapse.width : menuInject?.collapse.maxWidth
 })
 </script>
 <template>

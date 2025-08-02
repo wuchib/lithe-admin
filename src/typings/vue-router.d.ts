@@ -2,7 +2,7 @@ import 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    compName?: string
+    componentName?: string
     pinned?: boolean
     label?: string
     icon?: string

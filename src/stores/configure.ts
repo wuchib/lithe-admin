@@ -16,7 +16,7 @@ export interface ConfigureOptions {
   showWatermark: boolean
   showNoise: boolean
   showTopLoadingBar: boolean
-  enableRouteTransition: boolean
+  enableNavigationTransition: boolean
   enableTextSelect: boolean
   watermarkOptions: Partial<WatermarkProps>
   noiseOpacity: number
@@ -33,7 +33,7 @@ const DEFAULT_CONFIGURE_OPTIONS: ConfigureOptions = {
   showNavigation: true,
   showBreadcrumb: true,
   showTopLoadingBar: true,
-  enableRouteTransition: true,
+  enableNavigationTransition: true,
   enableTextSelect: true,
   watermarkOptions: {
     content: 'Watermark',

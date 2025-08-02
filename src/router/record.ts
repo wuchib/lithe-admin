@@ -7,7 +7,7 @@ export const routeRecordRaw: MergeMenuMixedOption[] = [
     icon: 'iconify-[mage--dashboard-chart]',
     label: '仪表板',
     meta: {
-      compName: 'Dashboard',
+      componentName: 'Dashboard',
       pinned: true,
       showTab: true,
     },
@@ -26,7 +26,7 @@ export const routeRecordRaw: MergeMenuMixedOption[] = [
         icon: 'iconify-[ph--table]',
         label: '数据表格',
         meta: {
-          compName: 'DataTable',
+          componentName: 'DataTable',
           label: '数据表格',
           showTab: true,
         },
@@ -38,7 +38,7 @@ export const routeRecordRaw: MergeMenuMixedOption[] = [
         icon: 'iconify-[ph--article]',
         label: '数据表单',
         meta: {
-          compName: 'DataForm',
+          componentName: 'DataForm',
           label: '数据表单',
           showTab: true,
         },
@@ -171,7 +171,7 @@ export const routeRecordRaw: MergeMenuMixedOption[] = [
     icon: 'iconify-[ph--messenger-logo]',
     label: '反馈组件',
     meta: {
-      compName: 'Feedback',
+      componentName: 'Feedback',
       showTab: true,
     },
     component: 'feedback/index',
@@ -182,7 +182,7 @@ export const routeRecordRaw: MergeMenuMixedOption[] = [
     icon: 'iconify-[pixelarticons--drag-and-drop]',
     label: '拖拽模块',
     meta: {
-      compName: 'Draggable',
+      componentName: 'Draggable',
       showTab: true,
     },
     component: 'draggable/index',
@@ -193,7 +193,7 @@ export const routeRecordRaw: MergeMenuMixedOption[] = [
     icon: 'iconify-[streamline-freehand--server-error-404-not-found]',
     label: '404页面',
     meta: {
-      compName: 'notfoundPage404',
+      componentName: 'notfoundPage404',
     },
     component: 'not-found/404',
   },

@@ -4,7 +4,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import type { RouteRecordNameGeneric } from 'vue-router'
 
 export interface Tab {
-  compName?: string
+  componentName?: string
   name?: RouteRecordNameGeneric
   icon?: string
   key: string
@@ -16,7 +16,7 @@ export interface Tab {
 export const useTabsStore = defineStore('tabsStore', () => {
   const tabs = useStorage<Tab[]>('tabs', [
     {
-      compName: 'Dashboard',
+      componentName: 'Dashboard',
       icon: 'iconify-[mage--dashboard-chart]',
       key: '/dashboard',
       label: '仪表板',
@@ -29,85 +29,85 @@ export const useTabsStore = defineStore('tabsStore', () => {
   const tabsKeepAlive = useStorage<string[]>('tabsKeepAlive', [])
 
   const removeTabs = (keys: string[]) => {
-    const activeTabKeyIndex = tabs.value.findIndex((item) => item.key === tabActiveKey.value)
+    const keysSet = new Set(keys)
+    const activeIndex = tabs.value.findIndex((tab) => tab.key === tabActiveKey.value)
 
-    if (keys.includes(tabActiveKey.value)) {
-      let newActiveKey = ''
+    let newActiveKey = ''
 
-      for (let i = activeTabKeyIndex + 1; i < tabs.value.length; i++) {
-        if (!keys.includes(tabs.value[i].key)) {
+    if (keysSet.has(tabActiveKey.value)) {
+      for (let i = activeIndex + 1; i < tabs.value.length; i++) {
+        if (!keysSet.has(tabs.value[i].key)) {
           newActiveKey = tabs.value[i].key
           break
         }
       }
 
       if (!newActiveKey) {
-        for (let i = activeTabKeyIndex - 1; i >= 0; i--) {
-          if (!keys.includes(tabs.value[i].key)) {
+        for (let i = activeIndex - 1; i >= 0; i--) {
+          if (!keysSet.has(tabs.value[i].key)) {
             newActiveKey = tabs.value[i].key
             break
           }
         }
       }
 
-      setActive(newActiveKey)
+      if (newActiveKey) {
+        setActive(newActiveKey)
+      }
     }
 
-    tabs.value = tabs.value.filter((item) => !keys.includes(item.key))
+    tabs.value = tabs.value.filter((tab) => !keysSet.has(tab.key))
   }
 
   function findTabIndex(key: string) {
     return tabs.value.findIndex((item) => item.key === key)
   }
 
-  function getLefts(key: string) {
-    const mutableTabKeys: string[] = []
+  function getUnlockedTabKeysBefore(key: string) {
+    const unlockedTabKeys: string[] = []
 
-    for (let i = 0; i < tabs.value.length; i++) {
-      if (tabs.value[i].key === key) break
+    for (const tab of tabs.value) {
+      if (tab.key === key) break
 
-      if (!tabs.value[i].locked && !tabs.value[i].pinned) {
-        mutableTabKeys.push(tabs.value[i].key)
+      if (!tab.locked && !tab.pinned) {
+        unlockedTabKeys.push(tab.key)
       }
     }
-
-    return mutableTabKeys
+    return unlockedTabKeys
   }
 
-  function getRights(key: string) {
-    const mutableTabKeys: string[] = []
+  function getUnlockedTabKeysAfter(key: string) {
+    const unlockedTabKeys: string[] = []
 
     for (let i = tabs.value.length - 1; i >= 0; i--) {
       if (tabs.value[i].key === key) break
 
       if (!tabs.value[i].locked && !tabs.value[i].pinned) {
-        mutableTabKeys.push(tabs.value[i].key)
+        unlockedTabKeys.push(tabs.value[i].key)
       }
     }
 
-    return mutableTabKeys
+    return unlockedTabKeys
   }
 
-  function getOthers(key: string) {
-    const mutableTabKeys: string[] = []
+  function getUnlockedTabKeysExcept(key: string) {
+    const unlockedTabKeys: string[] = []
 
-    for (let i = 0; i < tabs.value.length; i++) {
-      if (tabs.value[i].key !== key) {
-        if (!tabs.value[i].locked && !tabs.value[i].pinned) {
-          mutableTabKeys.push(tabs.value[i].key)
-        }
+    for (const tab of tabs.value) {
+      if (tab.key !== key && !tab.locked && !tab.pinned) {
+        unlockedTabKeys.push(tab.key)
       }
     }
 
-    return mutableTabKeys
+    return unlockedTabKeys
   }
 
-  function getAlls() {
+  function getUnlockedTabKeys() {
     const mutableTabKeys: string[] = []
 
-    for (let i = 0; i < tabs.value.length; i++) {
-      if (!tabs.value[i].locked && !tabs.value[i].pinned) {
-        mutableTabKeys.push(tabs.value[i].key)
+    for (const tab of tabs.value) {
+      if (!tab.locked && !tab.pinned) {
+        mutableTabKeys.push(tab.key)
       }
     }
 
@@ -132,37 +132,37 @@ export const useTabsStore = defineStore('tabsStore', () => {
     setActive(tab.key)
   }
 
-  const remove = (key: string) => {
+  const removeTab = (key: string) => {
     removeTabs([key])
   }
 
-  const removeLefts = (key: string) => {
-    removeTabs(getLefts(key))
+  const removeTabsBefore = (key: string) => {
+    removeTabs(getUnlockedTabKeysBefore(key))
   }
 
-  const removeRights = (key: string) => {
-    removeTabs(getRights(key))
+  const removeTabsAfter = (key: string) => {
+    removeTabs(getUnlockedTabKeysAfter(key))
   }
 
-  const removeOthers = (key: string) => {
-    removeTabs(getOthers(key))
+  const removeTabsExcept = (key: string) => {
+    removeTabs(getUnlockedTabKeysExcept(key))
   }
 
-  const removeAlls = () => {
-    removeTabs(getAlls())
+  const removeAllTabs = () => {
+    removeTabs(getUnlockedTabKeys())
   }
 
-  const hasKeepAlive = (compName?: string) => {
-    const index = tabsKeepAlive.value.findIndex((item) => item === compName)
+  const hasKeepAlive = (componentName?: string) => {
+    const index = tabsKeepAlive.value.findIndex((item) => item === componentName)
     return index !== -1 ? true : false
   }
 
-  const addKeepAlive = (compName: string) => {
-    const index = tabsKeepAlive.value.findIndex((item) => item === compName)
+  const setKeepAlive = (componentName: string) => {
+    const index = tabsKeepAlive.value.findIndex((item) => item === componentName)
     if (index !== -1) {
       tabsKeepAlive.value.splice(index, 1)
     } else {
-      tabsKeepAlive.value.push(compName)
+      tabsKeepAlive.value.push(componentName)
     }
   }
 
@@ -188,20 +188,20 @@ export const useTabsStore = defineStore('tabsStore', () => {
     tabActiveKey,
     tabsKeepAlive,
     create,
-    getAlls,
-    getLefts,
-    getOthers,
-    getRights,
+    getUnlockedTabKeys,
+    getUnlockedTabKeysBefore,
+    getUnlockedTabKeysExcept,
+    getUnlockedTabKeysAfter,
     hasKeepAlive,
     isLocked,
     isPinned,
-    removeAlls,
-    removeLefts,
-    removeOthers,
-    removeRights,
-    remove,
+    removeAllTabs,
+    removeTabsBefore,
+    removeTabsExcept,
+    removeTabsAfter,
+    removeTab,
     setActive,
-    addKeepAlive,
+    setKeepAlive,
     setLocked,
     setTabs,
   }

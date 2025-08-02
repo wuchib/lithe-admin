@@ -11,12 +11,12 @@ defineOptions({
   name: 'AsideLayout',
 })
 
-const Menu = inject(menuInjectionKey, null)
+const menuInject = inject(menuInjectionKey, null)
 
 const configureStore = useConfigureStore()
 
 const menuCollapseWidth = computed(() =>
-  configureStore.configure.menuCollapsed ? Menu?.collapse.width : Menu?.collapse.maxWidth,
+  configureStore.configure.menuCollapsed ? menuInject?.collapse.width : menuInject?.collapse.maxWidth,
 )
 
 function handleCollapseClick() {

@@ -35,7 +35,7 @@ type ContextMenuActions = {
   lock: () => void
 }
 
-const Tabs = inject(tabsInjectionKey, null)
+const tabsInject = inject(tabsInjectionKey, null)
 
 const scrollbarRef = useTemplateRef<InstanceType<typeof NScrollbar>>('scrollbarRef')
 
@@ -48,19 +48,19 @@ const { tabs, tabActiveKey, tabsKeepAlive } = storeToRefs(tabsStore)
 const {
   isLocked,
   isPinned,
-  getOthers,
-  getLefts,
-  getRights,
-  getAlls,
+  getUnlockedTabKeysExcept,
+  getUnlockedTabKeysBefore,
+  getUnlockedTabKeysAfter,
+  getUnlockedTabKeys,
   hasKeepAlive,
-  addKeepAlive,
+  setKeepAlive,
   setLocked,
   setTabs,
-  remove,
-  removeAlls,
-  removeLefts,
-  removeOthers,
-  removeRights,
+  removeTab,
+  removeAllTabs,
+  removeTabsBefore,
+  removeTabsExcept,
+  removeTabsAfter,
 } = tabsStore
 
 const tabPinnedList = ref<Tab[]>([])
@@ -69,12 +69,10 @@ const tabList = ref<Tab[]>([])
 
 const isMounted = ref(false)
 
-const tabUnderlayTransition = reactive({
+const tabBackgroundTransitionClasses = reactive({
   leaveToClass: '',
   enterFromClass: 'scale-0 opacity-0',
 })
-
-const tabContextmenuOptions = ref<Tab | null>(null)
 
 const isTabDragging = ref(false)
 
@@ -82,14 +80,16 @@ const showTabTooltip = ref(true)
 
 const showTabDropdown = ref(false)
 
+const tabContextMenu = ref<Tab | null>(null)
+
 const tabDropdownOptions = computed<DropdownOption[]>(() => {
-  const currentTab = tabContextmenuOptions.value
+  const currentTab = tabContextMenu.value
 
   if (!currentTab) {
     return []
   }
 
-  const { key, compName } = currentTab
+  const { key, componentName } = currentTab
 
   return [
     {
@@ -102,7 +102,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭',
     },
     {
-      disabled: isEmpty(getOthers(key)),
+      disabled: isEmpty(getUnlockedTabKeysExcept(key)),
       icon: () =>
         h('span', {
           class: 'iconify ph--arrows-out-line-horizontal',
@@ -111,7 +111,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭其他',
     },
     {
-      disabled: isEmpty(getLefts(key)),
+      disabled: isEmpty(getUnlockedTabKeysBefore(key)),
       icon: () =>
         h('span', {
           class: 'iconify ph--arrow-line-left',
@@ -120,7 +120,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭左侧',
     },
     {
-      disabled: isEmpty(getRights(key)),
+      disabled: isEmpty(getUnlockedTabKeysAfter(key)),
       icon: () =>
         h('span', {
           class: 'iconify ph--arrow-line-right',
@@ -129,7 +129,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭右侧',
     },
     {
-      disabled: isEmpty(getAlls()),
+      disabled: isEmpty(getUnlockedTabKeys()),
       icon: () =>
         h('span', {
           class: 'iconify ph--arrows-horizontal',
@@ -138,9 +138,9 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭所有',
     },
     {
-      disabled: isEmpty(compName),
+      disabled: isEmpty(componentName),
       icon: () =>
-        hasKeepAlive(compName)
+        hasKeepAlive(componentName)
           ? h('span', {
               class: 'iconify-[hugeicons--database-02]',
             })
@@ -148,7 +148,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
               class: 'iconify-[hugeicons--database-locked]',
             }),
       key: 'keepAlive',
-      label: hasKeepAlive(compName) ? '取消缓存' : '缓存标签页',
+      label: hasKeepAlive(componentName) ? '取消缓存' : '缓存标签页',
     },
     {
       disabled: isPinned(key),
@@ -176,12 +176,12 @@ const handleTabClick = (key: string) => {
 }
 
 const handleTabCloseClick = (key: string) => {
-  remove(key)
+  removeTab(key)
 }
 
 const handleTabContextMenuClick = (e: MouseEvent, tab: Tab) => {
   e.preventDefault()
-  tabContextmenuOptions.value = tab
+  tabContextMenu.value = tab
   showTabDropdown.value = false
   showTabTooltip.value = false
 
@@ -195,7 +195,7 @@ const handleTabContextMenuClick = (e: MouseEvent, tab: Tab) => {
 const onTabDropdownClickOutside = () => {
   showTabDropdown.value = false
   showTabTooltip.value = true
-  tabContextmenuOptions.value = null
+  tabContextMenu.value = null
 }
 
 const onTabDraggableStart = () => {
@@ -233,35 +233,37 @@ const onScrollbarWheeled = (e: WheelEvent) => {
 }
 
 function getTabContextMenuActions(): ContextMenuActions | null {
-  const tabValue = tabContextmenuOptions.value
+  const tabValue = tabContextMenu.value
 
   if (!tabValue) {
     return null
   }
 
+  const { key, componentName } = tabValue
+
   return {
     close: () => {
-      remove(tabValue.key)
+      removeTab(key)
     },
     closeAll: () => {
-      removeAlls()
+      removeAllTabs()
     },
     closeLeft: () => {
-      removeLefts(tabValue.key)
+      removeTabsBefore(key)
     },
     closeOther: () => {
-      removeOthers(tabValue.key)
+      removeTabsExcept(key)
     },
     closeRight: () => {
-      removeRights(tabValue.key)
+      removeTabsAfter(key)
     },
     keepAlive: () => {
-      if (tabValue.compName) {
-        addKeepAlive(tabValue.compName)
+      if (componentName) {
+        setKeepAlive(componentName)
       }
     },
     lock: () => {
-      setLocked(tabValue.key)
+      setLocked(key)
     },
   }
 }
@@ -278,12 +280,12 @@ watch(
   (): [Tab[], string] => [tabs.value, tabActiveKey.value],
   ([newTabs, newActive], [oldTabs, oldActive]) => {
     if (!newActive) {
-      tabUnderlayTransition.leaveToClass = 'scale-0 opacity-0'
+      tabBackgroundTransitionClasses.leaveToClass = 'scale-0 opacity-0'
       return
     }
 
     if (!oldActive) {
-      tabUnderlayTransition.enterFromClass = 'scale-0 opacity-0'
+      tabBackgroundTransitionClasses.enterFromClass = 'scale-0 opacity-0'
       return
     }
 
@@ -291,11 +293,11 @@ watch(
     const newActiveIndex = newTabs.findIndex((item) => item.key === newActive)
 
     if (oldActiveIndex > newActiveIndex && newActiveIndex !== -1) {
-      tabUnderlayTransition.leaveToClass = '-translate-x-full'
-      tabUnderlayTransition.enterFromClass = 'translate-x-full'
+      tabBackgroundTransitionClasses.leaveToClass = '-translate-x-full'
+      tabBackgroundTransitionClasses.enterFromClass = 'translate-x-full'
     } else {
-      tabUnderlayTransition.leaveToClass = 'translate-x-full'
-      tabUnderlayTransition.enterFromClass = '-translate-x-full'
+      tabBackgroundTransitionClasses.leaveToClass = 'translate-x-full'
+      tabBackgroundTransitionClasses.enterFromClass = '-translate-x-full'
     }
   },
 )
@@ -332,8 +334,8 @@ onMounted(() => {
         <Transition
           enter-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
           leave-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
-          :leave-to-class="tabUnderlayTransition.leaveToClass"
-          :enter-from-class="tabUnderlayTransition.enterFromClass"
+          :leave-to-class="tabBackgroundTransitionClasses.leaveToClass"
+          :enter-from-class="tabBackgroundTransitionClasses.enterFromClass"
           @after-enter="scrollToActiveTab"
         >
           <div
@@ -392,8 +394,8 @@ onMounted(() => {
             <Transition
               enter-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
               leave-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
-              :leave-to-class="tabUnderlayTransition.leaveToClass"
-              :enter-from-class="tabUnderlayTransition.enterFromClass"
+              :leave-to-class="tabBackgroundTransitionClasses.leaveToClass"
+              :enter-from-class="tabBackgroundTransitionClasses.enterFromClass"
               @after-enter="scrollToActiveTab"
             >
               <div
@@ -417,7 +419,7 @@ onMounted(() => {
                   :class="[
                     tab.icon,
                     {
-                      'text-primary': tab.compName && tabsKeepAlive.includes(tab.compName),
+                      'text-primary': tab.componentName && tabsKeepAlive.includes(tab.componentName),
                     },
                   ]"
                 />
@@ -453,7 +455,7 @@ onMounted(() => {
     <div class="flex items-center gap-x-2 px-3.5">
       <ButtonAnimation
         title="刷新"
-        @click="Tabs?.doRefresh(true)"
+        @click="tabsInject?.doRefresh(true)"
         animation="rotate"
       >
         <span class="iconify size-5 ph--arrows-clockwise"></span>
