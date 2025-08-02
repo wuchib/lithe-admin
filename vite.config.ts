@@ -8,8 +8,6 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig((env) => {
-  console.log(env.mode)
-
   return {
     plugins: [vue(), vueJsx(), tailwindcss()],
     resolve: {
