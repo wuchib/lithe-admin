@@ -9,7 +9,7 @@ const { getModalModifier } = useComponentModifier()
 
 export const useMessageDiscrete = (type: MessageType = 'info') => {
   message.create(`${type} - 与Setup里调用单独分开显示`, {
-    type: type,
+    type,
     duration: 0,
     closable: true,
   })
@@ -21,7 +21,7 @@ export const useModalDiscrete = (type: ModalOptions['type'] = 'info') => {
     title: `${type}`,
     content: `Setup 外的 ${type} Dialog`,
     preset: 'dialog',
-    type: type,
+    type,
     positiveText: '确认',
     negativeText: '算了',
   })
@@ -29,7 +29,7 @@ export const useModalDiscrete = (type: ModalOptions['type'] = 'info') => {
 
 export const useNotificationDiscrete = (type: NotificationType = 'info') => {
   notification.create({
-    type: type,
+    type,
     content: '又要说点啥呢',
     meta: '我是 Setup 外的 Notification， 出现位置当然可以不一样',
   })

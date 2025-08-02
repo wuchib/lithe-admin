@@ -11,6 +11,7 @@ import {
 } from 'naive-ui'
 import { h, ref } from 'vue'
 
+import packageJson from '@/../package.json'
 import { ButtonAnimation } from '@/components'
 import { useComponentThemeOverrides } from '@/composable/comp/useComponentThemeOverrides'
 import { usePersonalization } from '@/composable/usePersonalization'
@@ -19,12 +20,6 @@ import twColors from '@/utils/tailwindColor'
 
 import NoiseModal from './NoiseModal.vue'
 import WatermarkModal from './WatermarkModal.vue'
-
-import type { DrawerProps } from 'naive-ui'
-
-export interface SiteConfigProps extends /* @vue-ignore */ DrawerProps {}
-
-import packageJson from '@/../package.json'
 
 const configureStore = useConfigureStore()
 

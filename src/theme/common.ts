@@ -31,7 +31,7 @@ export function commonThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
 
       borderRadius: '4px',
 
-      primaryColor: primaryColor,
+      primaryColor,
       primaryColorHover: cdh(primaryColor, 0.1),
       primaryColorPressed: cdh(primaryColor, 0.2),
       primaryColorSuppl: primaryColor,

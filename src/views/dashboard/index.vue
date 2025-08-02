@@ -304,7 +304,7 @@ function initRevenueChart() {
         fontSize: 11,
         formatter(value: number) {
           if (value === 0) return '0'
-          return (value / 1000).toFixed(0) + ',000'
+          return `${(value / 1000).toFixed(0)},000`
         },
       },
       splitLine: {
@@ -714,7 +714,7 @@ function initMonthlyRadarChart() {
         fontSize: 12,
         formatter(value: number) {
           if (value >= 1000) {
-            return (value / 1000).toFixed(0) + 'k'
+            return `${(value / 1000).toFixed(0)}k`
           }
           return value
         },

@@ -29,4 +29,3 @@ const onConfirm = () => {
     <span class="iconify size-5 ph--sign-out" />
   </ButtonAnimation>
 </template>
-<style></style>

@@ -10,4 +10,3 @@ const route = useRoute()
     </div>
   </div>
 </template>
-<style></style>

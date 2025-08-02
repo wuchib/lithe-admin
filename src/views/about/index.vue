@@ -17,7 +17,7 @@ const { isDark } = usePersonalization()
 
 const { dependencies, devDependencies } = packageJson
 
-const directoryStructureHighlight = ref(``)
+const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 

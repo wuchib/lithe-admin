@@ -38,7 +38,7 @@ const handleChangeMessageStateType = () => {
     if (counter <= 0) {
       clearInterval(timer)
       messageInstance.type = 'error'
-      messageInstance.content = `切换图标了`
+      messageInstance.content = '切换图标了'
       return
     }
     messageInstance.content = `${counter}秒后 根据状态类更换图标`

@@ -157,7 +157,7 @@ function inputOnlyAllowNumber(value: string) {
 
 function generateRandomForm() {
   isRequestLoading.value = true
-  fetch(`https://lithe-admin-serverless.vercel.app/api/faker`)
+  fetch('https://lithe-admin-serverless.vercel.app/api/faker')
     .then((res) => res.json())
     .then((res) => {
       setForm(res.data)
