@@ -10,6 +10,10 @@ import { usePersonalization } from '@/composable/usePersonalization'
 
 import type { UseDraggableReturn } from 'vue-draggable-plus'
 
+defineOptions({
+  name: 'DragDrop',
+})
+
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
 const { isDark } = usePersonalization()

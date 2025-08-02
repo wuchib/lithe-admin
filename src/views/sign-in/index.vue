@@ -17,6 +17,10 @@ import ThemeColorPopover from './component/ThemeColorPopover.vue'
 
 import type { FormItemRule } from 'naive-ui'
 
+defineOptions({
+  name: 'SignIn',
+})
+
 const { isDark } = usePersonalization()
 
 const userStore = useUserStore()

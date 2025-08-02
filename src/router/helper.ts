@@ -30,7 +30,7 @@ type MergeMenuOption = ReplaceKeys<
   MenuOption,
   {
     icon: string
-    children?: MergeMenuMixedOption[]
+    children?: MergeMenuMixedOptions[]
   }
 > &
   RouteOption
@@ -46,9 +46,9 @@ type MergeMenuGroup = NoIndex<
 
 type MergeMenuDivider = NoIndex<MenuDividerOption>
 
-export type MergeMenuMixedOption = MergeMenuOption | MergeMenuGroup | MergeMenuDivider
+export type MergeMenuMixedOptions = MergeMenuOption | MergeMenuGroup | MergeMenuDivider
 
-export function resolveMenu(options: MergeMenuMixedOption[], parentDisabled = false) {
+export function resolveMenu(options: MergeMenuMixedOptions[], parentDisabled = false) {
   const menuOption: MenuProps['options'] = []
 
   options.forEach((item) => {
@@ -91,12 +91,12 @@ export function resolveMenu(options: MergeMenuMixedOption[], parentDisabled = fa
   return menuOption
 }
 
-export function resolveRoute(options: MergeMenuMixedOption[]) {
+export function resolveRoute(options: MergeMenuMixedOptions[]) {
   const modules = import.meta.glob('@/views/**/*.vue')
 
   const routeOptions: RouteRecordRaw[] = []
 
-  function flattenOptions(options: MergeMenuMixedOption[]): MergeMenuMixedOption[] {
+  function flattenOptions(options: MergeMenuMixedOptions[]): MergeMenuMixedOptions[] {
     return options.flatMap((item) => {
       if (item.type === 'divider') {
         return []

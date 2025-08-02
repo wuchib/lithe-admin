@@ -4,6 +4,10 @@ import { reactive } from 'vue'
 
 import type { ModalProps } from 'naive-ui'
 
+defineOptions({
+  name: 'Feedback',
+})
+
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
 const message = useMessage()

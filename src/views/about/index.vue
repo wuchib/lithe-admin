@@ -7,6 +7,10 @@ import { ref, watch } from 'vue'
 import packageJson from '@/../package.json'
 import { usePersonalization } from '@/composable/usePersonalization'
 
+defineOptions({
+  name: 'About',
+})
+
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
 const { isDark } = usePersonalization()

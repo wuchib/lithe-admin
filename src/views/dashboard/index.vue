@@ -9,6 +9,10 @@ import twc from '@/utils/tailwindColor'
 
 import type { ECharts } from 'echarts'
 
+defineOptions({
+  name: 'Dashboard',
+})
+
 const { isDark, color } = usePersonalization()
 
 const cardList = ref(generateCardData())

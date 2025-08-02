@@ -6,7 +6,7 @@ import router from '@/router'
 import { resolveMenu, resolveRoute } from '@/router/helper'
 import { routeRecordRaw } from '@/router/record'
 
-import type { MergeMenuMixedOption } from '@/router/helper'
+import type { MergeMenuMixedOptions } from '@/router/helper'
 import type { MenuProps } from 'naive-ui'
 import type { RouteRecordRaw } from 'vue-router'
 
@@ -38,7 +38,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   async function resolveUserMenu() {
-    const res = await new Promise<MergeMenuMixedOption[]>((resolve) => {
+    const res = await new Promise<MergeMenuMixedOptions[]>((resolve) => {
       if (token.value?.includes('admin')) {
         resolve(routeRecordRaw)
       } else {

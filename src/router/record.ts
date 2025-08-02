@@ -1,6 +1,6 @@
-import type { MergeMenuMixedOption } from './helper'
+import type { MergeMenuMixedOptions } from './helper'
 
-export const routeRecordRaw: MergeMenuMixedOption[] = [
+export const routeRecordRaw: MergeMenuMixedOptions[] = [
   {
     path: 'dashboard',
     name: 'dashboard',
@@ -177,15 +177,15 @@ export const routeRecordRaw: MergeMenuMixedOption[] = [
     component: 'feedback/index',
   },
   {
-    path: 'draggable',
-    name: 'draggable',
+    path: 'drag-drop',
+    name: 'dragDrop',
     icon: 'iconify-[pixelarticons--drag-and-drop]',
     label: '拖拽模块',
     meta: {
-      componentName: 'Draggable',
+      componentName: 'DragDrop',
       showTab: true,
     },
-    component: 'draggable/index',
+    component: 'drag-drop/index',
   },
   {
     path: 'not-found-page-404',
