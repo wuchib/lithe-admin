@@ -5,7 +5,6 @@ import twc from '@/utils/tailwindColor'
 import type { GlobalThemeOverrides } from 'naive-ui'
 
 export function cc(primaryColor: string, color1: string, color2: string) {
-  // This should be 4.5
   return chroma.contrast(primaryColor, '#fff') > 4.4 ? color1 : color2
 }
 

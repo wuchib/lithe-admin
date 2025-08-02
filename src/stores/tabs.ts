@@ -122,7 +122,7 @@ export const useTabsStore = defineStore('tabsStore', () => {
     tabActiveKey.value = key
   }
 
-  function create(tab: Tab) {
+  function createTab(tab: Tab) {
     const index = tabs.value.findIndex((item) => item.key === tab.key)
 
     if (index === -1) {
@@ -187,7 +187,7 @@ export const useTabsStore = defineStore('tabsStore', () => {
     tabs,
     tabActiveKey,
     tabsKeepAlive,
-    create,
+    createTab,
     getUnlockedTabKeys,
     getUnlockedTabKeysBefore,
     getUnlockedTabKeysExcept,
