@@ -13,7 +13,7 @@ const { isDark } = usePersonalization()
 
 const { dependencies, devDependencies } = packageJson
 
-const directoryStructure = ref(``)
+const directoryStructureHighlight = ref(``)
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
@@ -150,7 +150,7 @@ const dir = `📂 lithe-admin
 watch(
   isDark,
   async (isDark) => {
-    directoryStructure.value = await codeToHtml(dir, {
+    directoryStructureHighlight.value = await codeToHtml(dir, {
       lang: 'markdown',
       theme: isDark ? 'dark-plus' : 'min-light',
     })
@@ -247,7 +247,7 @@ watch(
     <div class="flex gap-x-2">
       <NCard title="目录结构">
         <NScrollbar container-style="max-height: 1100px;">
-          <div v-html="directoryStructure"></div>
+          <div v-html="directoryStructureHighlight"></div>
         </NScrollbar>
       </NCard>
       <NCard title="依赖信息">

@@ -4,19 +4,23 @@ import { ref, type StyleValue } from 'vue'
 
 import router from '@/router'
 
-interface ErrorProps {
+interface ErrorPageProps {
   code?: number
   content?: string
   containerClass?: string
   containerStyle?: StyleValue
 }
 
+defineOptions({
+  name: 'ErrorPage',
+})
+
 const {
   code = 404,
   content = 'Not Found',
   containerClass,
   containerStyle,
-} = defineProps<ErrorProps>()
+} = defineProps<ErrorPageProps>()
 
 const prevCode = ref(0)
 </script>

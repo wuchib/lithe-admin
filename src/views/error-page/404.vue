@@ -4,7 +4,7 @@ import { reactive } from 'vue'
 
 import router from '@/router'
 
-import NotFound from './index.vue'
+import ErrorPage from './index.vue'
 
 const errorState = reactive({
   code: 404,
@@ -49,7 +49,7 @@ const changeStateCode200 = () => {
       class="absolute flex h-screen w-full items-center justify-center"
       style="padding-bottom: 240px"
     >
-      <NotFound
+      <ErrorPage
         v-bind="errorState"
         container-class="w-full"
         container-style="width: 500px"
@@ -60,7 +60,7 @@ const changeStateCode200 = () => {
           @click="router.push('/404')"
           >路由显示</NButton
         >
-      </NotFound>
+      </ErrorPage>
     </div>
   </div>
 </template>

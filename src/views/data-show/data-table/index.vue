@@ -79,15 +79,15 @@ const sexOptions = [
   { label: '女', value: '女' },
 ]
 
-const loading = ref(false)
-const striped = ref(false)
-const scrollX = ref(true)
-const singleLine = ref(true)
-const showDropdown = ref(false)
+const isRequestLoading = ref(false)
+const enableStriped = ref(false)
+const enableScrollX = ref(true)
+const enableSingleLine = ref(true)
 const enableContextmenu = ref(true)
+const showDropdown = ref(false)
 const contextmenuId = ref<number | string | null>(null)
 
-const userList = ref<UserInfo[]>([])
+const dataList = ref<UserInfo[]>([])
 
 const checkedRowKeys = ref<Array<number | string>>([])
 
@@ -97,7 +97,7 @@ const CellActions = (row: UserInfo) => (
       secondary
       type='primary'
       size='small'
-      onClick={() => createOrEditUser(row)}
+      onClick={() => createOrEditData(row)}
     >
       编辑
     </NButton>
@@ -218,7 +218,7 @@ const columns: DataTableColumns<UserInfo> = [
       <ShowOrEdit
         value={row.fullName}
         onUpdateValue={(value) => {
-          userList.value[index].fullName = value
+          dataList.value[index].fullName = value
         }}
       />
     ),
@@ -315,16 +315,16 @@ const pagination = reactive<PaginationProps>({
   showQuickJumpDropdown: true,
   onUpdatePage: (page: number) => {
     pagination.page = page
-    getUserList()
+    getDataList()
   },
   onUpdatePageSize: (pageSize: number) => {
     pagination.pageSize = pageSize
     pagination.page = 1
-    getUserList()
+    getDataList()
   },
 })
 
-const prevItemCount = ref(0)
+const prevUserListTotal = ref(0)
 
 const paginationPrefix: PaginationProps['prefix'] = (info) => {
   const { itemCount } = info
@@ -333,10 +333,10 @@ const paginationPrefix: PaginationProps['prefix'] = (info) => {
       <div>
         <span>总&nbsp;</span>
         <NNumberAnimation
-          from={prevItemCount.value}
+          from={prevUserListTotal.value}
           to={itemCount}
           onFinish={() => {
-            prevItemCount.value = itemCount
+            prevUserListTotal.value = itemCount
           }}
         />
         <span>&nbsp;条</span>
@@ -377,7 +377,7 @@ function inputOnlyAllowNumber(value: string) {
   return !value || /^\d+$/.test(value)
 }
 
-function createOrEditUser(data?: UserInfo) {
+function createOrEditData(data?: UserInfo) {
   const title = data ? '编辑数据' : '新增数据'
 
   const handleSubmitClick = () => {
@@ -415,7 +415,7 @@ function createOrEditUser(data?: UserInfo) {
 const handleQueryClick = () => {
   formRef.value?.validate((errors) => {
     if (!errors) {
-      getUserList()
+      getDataList()
     }
   })
 }
@@ -425,18 +425,18 @@ function handleDownloadCsvClick() {
   dataTableRef.value.downloadCsv()
 }
 
-async function getUserList() {
-  loading.value = true
+async function getDataList() {
+  isRequestLoading.value = true
   const pageSize = pagination.pageSize || 10
   const res = await request(pageSize).finally(() => {
-    loading.value = false
+    isRequestLoading.value = false
   })
 
-  userList.value = res.data
+  dataList.value = res.data
   pagination.itemCount = 300
 }
 
-getUserList()
+getDataList()
 </script>
 <template>
   <div class="main-wrap flex flex-col gap-y-2 p-4">
@@ -500,7 +500,7 @@ getUserList()
         <div class="flex gap-2">
           <NButton
             type="success"
-            @click="createOrEditUser()"
+            @click="createOrEditData()"
           >
             <template #icon>
               <span class="iconify ph--plus-circle" />
@@ -510,8 +510,8 @@ getUserList()
           <NButton
             type="info"
             @click="handleQueryClick"
-            :loading="loading"
-            :disabled="loading"
+            :loading="isRequestLoading"
+            :disabled="isRequestLoading"
           >
             <template #icon>
               <span class="iconify ph--magnifying-glass" />
@@ -535,15 +535,15 @@ getUserList()
           v-model:checked-row-keys="checkedRowKeys"
           :remote="true"
           :max-height="maxHeight"
-          :scroll-x="scrollX ? 1800 : 0"
+          :scroll-x="enableScrollX ? 1800 : 0"
           :min-height="166.6"
           :columns="columns"
-          :data="userList"
+          :data="dataList"
           :row-key="(row) => row.id"
-          :loading="loading"
-          :striped="striped"
+          :loading="isRequestLoading"
+          :striped="enableStriped"
           :row-props="rowProps"
-          :single-line="singleLine"
+          :single-line="enableSingleLine"
         />
         <div class="mt-3 flex items-end justify-between">
           <div class="flex items-center gap-x-3">
@@ -553,22 +553,22 @@ getUserList()
               :ghost="true"
             >
               <NButton
-                @click="striped = !striped"
-                :type="striped ? 'primary' : 'default'"
+                @click="enableStriped = !enableStriped"
+                :type="enableStriped ? 'primary' : 'default'"
                 secondary
               >
                 条纹风格
               </NButton>
               <NButton
-                @click="singleLine = !singleLine"
-                :type="!singleLine ? 'primary' : 'default'"
+                @click="enableSingleLine = !enableSingleLine"
+                :type="!enableSingleLine ? 'primary' : 'default'"
                 secondary
               >
                 单线风格
               </NButton>
               <NButton
-                @click="scrollX = !scrollX"
-                :type="scrollX ? 'primary' : 'default'"
+                @click="enableScrollX = !enableScrollX"
+                :type="enableScrollX ? 'primary' : 'default'"
                 secondary
               >
                 横向滚动

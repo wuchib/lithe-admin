@@ -79,7 +79,7 @@ const rules: FormRules = {
   name: { required: true, message: '请输入用户名' },
 }
 
-const hobbyList = [
+const hobbyOptions = [
   {
     value: '唱',
     label: '唱',
@@ -352,7 +352,7 @@ watch(
                     <NCheckboxGroup v-model:value="form.hobby">
                       <div>
                         <NCheckbox
-                          v-for="{ value, label } in hobbyList"
+                          v-for="{ value, label } in hobbyOptions"
                           :key="value"
                           :value="value"
                           :label="label"

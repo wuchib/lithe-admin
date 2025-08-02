@@ -7,9 +7,9 @@ import type { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   { path: '/sign-in', name: 'signin', component: () => import('@/views/sign-in/index.vue') },
   {
-    name: 'notfound',
+    name: 'errorPage',
     path: '/:pathMatch(.*)*',
-    component: () => import('@/views/not-found/index.vue'),
+    component: () => import('@/views/error-page/index.vue'),
   },
 ]
 

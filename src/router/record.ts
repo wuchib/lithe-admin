@@ -195,10 +195,10 @@ export const routeRecordRaw: MergeMenuMixedOption[] = [
     meta: {
       componentName: 'notfoundPage404',
     },
-    component: 'not-found/404',
+    component: 'error-page/404',
   },
   {
-    path: '/about/:id?/:name?',
+    path: '/about',
     key: 'about',
     name: 'about',
     icon: 'iconify-[ph--info]',

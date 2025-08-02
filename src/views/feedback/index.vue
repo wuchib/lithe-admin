@@ -18,12 +18,12 @@ const { getModalModifier } = useComponentModifier()
 
 const notification = useNotification()
 
-const handleSwitchMessageStateType = () => {
+const handleChangeMessageStateType = () => {
   let counter = 5
 
   let timer: any = null
 
-  const messageInstance = message.create('5秒后 根据状态类型切换图标', {
+  const messageInstance = message.create('5秒后 根据状态类更换换图标', {
     type: 'info',
     duration: 0,
     closable: true,
@@ -37,7 +37,7 @@ const handleSwitchMessageStateType = () => {
       messageInstance.content = `切换图标了`
       return
     }
-    messageInstance.content = `${counter}秒后 根据状态类型切换图标`
+    messageInstance.content = `${counter}秒后 根据状态类更换图标`
   }, 1000)
 }
 
@@ -130,7 +130,7 @@ const handleCreateDialogApi = (type: ModalProps['type'] = 'success') => {
         >
           加载Message
         </NButton>
-        <NButton @click="handleSwitchMessageStateType"> 根据状态切换图标 </NButton>
+        <NButton @click="handleChangeMessageStateType"> 根据状态切换图标 </NButton>
         <NCard
           size="small"
           title="Setup 外使用"

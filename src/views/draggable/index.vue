@@ -34,21 +34,21 @@ const gridList = ref(
   })),
 )
 
-const cloneList = ref(
+const taskList = ref(
   Object.keys(Array.from({ length: 5 }).fill(0)).map((item) => ({
     name: `任务-${item}`,
     id: `任务-${item}`,
   })),
 )
 
-const cloneList2 = ref<{ name: string; id: string; key: string }[]>([])
+const cloneTaskList = ref<{ name: string; id: string; key: string }[]>([])
 
 const baseDragRef = ref<UseDraggableReturn>()
 const gridDragRef = ref<UseDraggableReturn>()
-const cloneDragRef = ref<UseDraggableReturn>()
-const cloneDragRef2 = ref<UseDraggableReturn>()
+const taskDragRef = ref<UseDraggableReturn>()
+const cloneTaskListDragRef = ref<UseDraggableReturn>()
 
-function clone(element: Record<'name' | 'id', string>) {
+function cloneTask(element: Record<'name' | 'id', string>) {
   return {
     name: `${element.name}`,
     id: `${element.id}`,
@@ -56,15 +56,15 @@ function clone(element: Record<'name' | 'id', string>) {
   }
 }
 
-function remove(element: Record<'name' | 'id' | 'key', string>) {
-  const find = cloneList2.value.find((item) => item.key === element.key)
+function removeTask(element: Record<'name' | 'id' | 'key', string>) {
+  const find = cloneTaskList.value.find((item) => item.key === element.key)
   if (find) {
-    cloneList2.value = cloneList2.value.filter((item) => item.key !== element.key)
+    cloneTaskList.value = cloneTaskList.value.filter((item) => item.key !== element.key)
   }
 }
 
 watch(
-  [baseList, gridList, cloneList2, isDark],
+  [baseList, gridList, cloneTaskList, isDark],
   async (newVal) => {
     const [baseList, gridList, cloneList2, isDark] = newVal
     baseListCodeHighlight.value = await codeToHtml(JSON.stringify(baseList, null, 2), {
@@ -189,17 +189,17 @@ watch(
           <div class="flex h-full gap-x-4">
             <NScrollbar>
               <VueDraggable
-                ref="cloneDragRef"
-                v-model="cloneList"
+                ref="taskDragRef"
+                v-model="taskList"
                 :animation="150"
                 :scrollSensitivity="100"
                 ghostClass="ghost"
                 :group="{ name: 'clone', pull: 'clone', put: false }"
                 class="flex flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none"
-                :clone="clone"
+                :clone="cloneTask"
               >
                 <div
-                  v-for="item in cloneList"
+                  v-for="item in taskList"
                   :key="item.id"
                   class="flex h-14 cursor-move items-center justify-center rounded bg-neutral-500/8 p-3"
                 >
@@ -209,13 +209,13 @@ watch(
             </NScrollbar>
             <NScrollbar>
               <EmptyPlaceholder
-                :show="cloneList2.length <= 0"
+                :show="cloneTaskList.length <= 0"
                 description="把左边的任务拖拽到这里"
               >
                 <template #content>
                   <VueDraggable
-                    ref="cloneDragRef2"
-                    v-model="cloneList2"
+                    ref="cloneTaskListDragRef"
+                    v-model="cloneTaskList"
                     :animation="150"
                     :scrollSensitivity="100"
                     ghostClass="ghost"
@@ -224,7 +224,7 @@ watch(
                     style="min-height: 300px"
                   >
                     <div
-                      v-for="item in cloneList2"
+                      v-for="item in cloneTaskList"
                       :key="item.key"
                       class="flex h-14 cursor-move items-center justify-between rounded bg-neutral-500/8 px-4 py-3"
                     >
@@ -233,7 +233,7 @@ watch(
                         quaternary
                         circle
                         size="small"
-                        @click="remove(item)"
+                        @click="removeTask(item)"
                       >
                         <template #icon>
                           <span class="iconify ph--x"></span>
