@@ -4,7 +4,7 @@ declare global {
       canGoBack: boolean
       canGoForward: boolean
     }
-    eltLoader?: HTMLElement | null
+    loaderElement?: HTMLElement | null
   }
 }
 

@@ -15,7 +15,7 @@ const { duration = 600, animation = 'beat' } = defineProps<ButtonAnimationProps>
 
 const isAnimating = ref(false)
 
-const handleButtonClick = () => {
+const onButtonClicked = () => {
   if (isAnimating.value) return
 
   isAnimating.value = true
@@ -31,7 +31,7 @@ const handleButtonClick = () => {
     quaternary
     circle
     v-bind="$attrs"
-    @click.stop="handleButtonClick"
+    @click.stop="onButtonClicked"
   >
     <template #icon>
       <div

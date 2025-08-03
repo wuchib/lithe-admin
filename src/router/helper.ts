@@ -9,7 +9,7 @@ type NoIndex<T> = {
   [K in keyof T as string extends K ? never : K]: T[K]
 }
 
-type ReplaceKeys<T, R extends Partial<Record<keyof T, any>>> = T extends any
+type ReplaceKeys<T, R extends Partial<Record<keyof T, unknown>>> = T extends unknown
   ? {
       [K in keyof T]: K extends keyof R ? R[K] : T[K]
     } & Omit<R, keyof T>

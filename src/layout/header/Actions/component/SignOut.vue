@@ -17,11 +17,11 @@ const handleSignOutClick = () => {
     content: '确定要退出登录吗？',
     positiveText: '确定',
     negativeText: '取消',
-    onPositiveClick: clearUserInfo,
+    onPositiveClick: cleanupUserInfo,
   })
 }
 
-function clearUserInfo() {
+function cleanupUserInfo() {
   userStore.cleanup()
 }
 </script>

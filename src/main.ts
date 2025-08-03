@@ -14,9 +14,9 @@ async function setupApp() {
 
   await router.isReady()
 
-  if (window.eltLoader) {
-    window.eltLoader.remove()
-    window.eltLoader = null
+  if (window.loaderElement) {
+    window.loaderElement.remove()
+    window.loaderElement = null
   }
 
   app.mount('#app')

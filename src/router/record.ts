@@ -206,7 +206,7 @@ export const routeRecordRaw: MergeMenuMixedOptions[] = [
     component: 'about/index',
     meta: {
       showTab: true,
-      multiTab: true,
+      enableMultiTab: true,
     },
   },
 ]

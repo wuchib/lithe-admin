@@ -3,22 +3,22 @@ import { ref } from 'vue'
 export type Theme = 'dark' | 'light' | 'system'
 
 interface PersonalizationOptions {
-  colorKey: string
+  storageColorKey: string
   defaultColor: string
   defaultTheme: Theme
   storageThemeKey: string
 }
 
-let personalizationInstance: ReturnType<typeof createPersonalization> | null = null
+let personalizationInstance: ReturnType<typeof setupPersonalization> | null = null
 
-function createPersonalization(options: PersonalizationOptions) {
-  const { colorKey, defaultColor, defaultTheme, storageThemeKey } = options
+function setupPersonalization(options: PersonalizationOptions) {
+  const { storageColorKey, defaultColor, defaultTheme, storageThemeKey } = options
 
   const rootElement = window.document.documentElement
   const prefersDarkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
   const theme = ref<Theme>((localStorage.getItem(storageThemeKey) as Theme) || defaultTheme)
-  const color = ref(localStorage.getItem(colorKey) || defaultColor)
+  const color = ref(localStorage.getItem(storageColorKey) || defaultColor)
   const isDark = ref(false)
 
   function setTheme(value: Theme) {
@@ -30,15 +30,15 @@ function createPersonalization(options: PersonalizationOptions) {
       localStorage.setItem(storageThemeKey, theme.value)
     }
 
-    updateThemeClass()
+    toggleDocumentElementClass()
   }
 
   function setColor(value: string) {
     color.value = value
-    localStorage.setItem(colorKey, color.value)
+    localStorage.setItem(storageColorKey, color.value)
   }
 
-  function updateThemeClass() {
+  function toggleDocumentElementClass() {
     const isDarkTheme =
       localStorage.getItem(storageThemeKey) === 'dark' ||
       (!localStorage.getItem(storageThemeKey) && prefersDarkMediaQuery.matches)
@@ -48,7 +48,7 @@ function createPersonalization(options: PersonalizationOptions) {
     rootElement.classList.toggle('dark', isDarkTheme)
   }
 
-  function applyThemeFromStorage() {
+  function updateTheme() {
     const storageTheme = localStorage.getItem(storageThemeKey) as Theme
     if (['dark', 'light'].includes(storageTheme)) {
       setTheme(storageTheme)
@@ -58,13 +58,13 @@ function createPersonalization(options: PersonalizationOptions) {
   }
 
   function destroy() {
-    prefersDarkMediaQuery.removeEventListener('change', updateThemeClass)
-    window.removeEventListener('storage', applyThemeFromStorage)
+    prefersDarkMediaQuery.removeEventListener('change', toggleDocumentElementClass)
+    window.removeEventListener('storage', updateTheme)
   }
 
-  updateThemeClass()
-  prefersDarkMediaQuery.addEventListener('change', updateThemeClass)
-  window.addEventListener('storage', applyThemeFromStorage)
+  toggleDocumentElementClass()
+  prefersDarkMediaQuery.addEventListener('change', toggleDocumentElementClass)
+  window.addEventListener('storage', updateTheme)
 
   return {
     color,
@@ -78,8 +78,8 @@ function createPersonalization(options: PersonalizationOptions) {
 
 export const usePersonalization = () => {
   if (!personalizationInstance) {
-    personalizationInstance = createPersonalization({
-      colorKey: 'color',
+    personalizationInstance = setupPersonalization({
+      storageColorKey: 'color',
       defaultColor: '#8e51ff',
       defaultTheme: 'system',
       storageThemeKey: 'theme',

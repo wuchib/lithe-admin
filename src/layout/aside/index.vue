@@ -4,7 +4,7 @@ import { computed, inject } from 'vue'
 import { menuInjectionKey } from '@/injection'
 import { useConfigureStore } from '@/stores/configure'
 
-import CompMenu from './component/Menu.vue'
+import Menu from './component/Menu.vue'
 import UserCard from './component/UserCard.vue'
 
 defineOptions({
@@ -32,7 +32,7 @@ function handleCollapseClick() {
       width: `${menuCollapseWidth}px`,
     }"
   >
-    <CompMenu />
+    <Menu />
     <UserCard />
     <div
       class="absolute top-1/2 right-0 z-50 grid size-6 translate-x-1/2 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-naive-border bg-white transition-[background-color,border-color] duration-300 ease-naive-bezier hover:bg-neutral-50 dark:bg-neutral-750 dark:hover:bg-neutral-700"

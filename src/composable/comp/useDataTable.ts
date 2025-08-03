@@ -10,7 +10,7 @@ interface DataTableOptions {
   parentWrap?: MaybeHTMLElement
 }
 
-type EltKey = 'container' | 'dataTable' | 'table' | 'tableThead' | 'wrap'
+type ElementKey = 'container' | 'dataTable' | 'table' | 'tableThead' | 'wrap'
 
 export function useDataTable<T extends ComponentPublicInstance>(
   target: Ref<T | null>,
@@ -22,7 +22,7 @@ export function useDataTable<T extends ComponentPublicInstance>(
 
   const maxHeight = ref<number | undefined>(0)
 
-  const eltNode = reactive<Record<EltKey, HTMLElement | null>>({
+  const elementMap = reactive<Record<ElementKey, HTMLElement | null>>({
     dataTable: null,
     table: null,
     tableThead: null,
@@ -31,7 +31,7 @@ export function useDataTable<T extends ComponentPublicInstance>(
   })
 
   function updateMaxHeight() {
-    const { container, wrap, tableThead, table } = eltNode
+    const { container, wrap, tableThead, table } = elementMap
 
     if (!container || !wrap || !tableThead || !table) {
       return
@@ -48,14 +48,14 @@ export function useDataTable<T extends ComponentPublicInstance>(
         : containerHeight - wrapHeight - theadHeight + tableHeight) - 1
   }
 
-  const debouncedFn = debounce(() => {
+  const debounceUpdateMaxHeight = debounce(() => {
     updateMaxHeight()
   }, 300)
 
-  function getParentElt(elt: MaybeHTMLElement) {
-    if (isString(elt)) return eltNode.dataTable?.closest<HTMLElement>(elt) ?? null
-    if (isRef(elt)) return elt.value
-    if (isElement(elt)) return elt
+  function getParentElement(element: MaybeHTMLElement) {
+    if (isString(element)) return elementMap.dataTable?.closest<HTMLElement>(element) ?? null
+    if (isRef(element)) return element.value
+    if (isElement(element)) return element
     return null
   }
 
@@ -65,15 +65,15 @@ export function useDataTable<T extends ComponentPublicInstance>(
       return
     }
 
-    eltNode.dataTable = (target.value?.$el as HTMLElement) ?? null
-    eltNode.table = eltNode.dataTable?.querySelector('.n-data-table-base-table') ?? null
-    eltNode.tableThead = eltNode.table?.querySelector('.n-data-table-thead') ?? null
+    elementMap.dataTable = (target.value?.$el as HTMLElement) ?? null
+    elementMap.table = elementMap.dataTable?.querySelector('.n-data-table-base-table') ?? null
+    elementMap.tableThead = elementMap.table?.querySelector('.n-data-table-thead') ?? null
 
     nextTick(() => {
-      eltNode.container = getParentElt(parentContainer)
-      eltNode.wrap = getParentElt(parentWrap)
+      elementMap.container = getParentElement(parentContainer)
+      elementMap.wrap = getParentElement(parentWrap)
 
-      const missingKeys = Object.entries(eltNode)
+      const missingKeys = Object.entries(elementMap)
         .filter((value) => value[1] == null)
         .map(([key]) => key)
 
@@ -84,12 +84,12 @@ export function useDataTable<T extends ComponentPublicInstance>(
       resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
           const { height } = entry.contentRect
-          if (height) debouncedFn()
+          if (height) debounceUpdateMaxHeight()
         }
       })
 
-      if (eltNode.container) {
-        resizeObserver.observe(eltNode.container)
+      if (elementMap.container) {
+        resizeObserver.observe(elementMap.container)
       }
     })
   }

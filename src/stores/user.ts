@@ -29,15 +29,15 @@ export const useUserStore = defineStore('userStore', () => {
 
   const token = useStorage<string | null>('token', '')
 
-  const userMenu = ref<MenuProps['options']>([])
+  const menuList = ref<MenuProps['options']>([])
 
-  const userRoute = ref<RouteRecordRaw[]>([])
+  const routeList = ref<RouteRecordRaw[]>([])
 
   const setToken = (value: string | null) => {
     token.value = value
   }
 
-  async function resolveUserMenu() {
+  async function resolveMenuList() {
     const res = await new Promise<MergeMenuMixedOptions[]>((resolve) => {
       if (token.value?.includes('admin')) {
         resolve(routeRecordRaw)
@@ -50,8 +50,8 @@ export const useUserStore = defineStore('userStore', () => {
       }
     })
 
-    userMenu.value = resolveMenu(res) || []
-    userRoute.value = resolveRoute(res) || []
+    menuList.value = resolveMenu(res) || []
+    routeList.value = resolveRoute(res) || []
   }
 
   function cleanup(redirectPath?: string) {
@@ -66,17 +66,17 @@ export const useUserStore = defineStore('userStore', () => {
       router.removeRoute('layout')
     }
 
-    userMenu.value = []
+    menuList.value = []
 
-    userRoute.value = []
+    routeList.value = []
   }
 
   return {
     user,
     token,
-    userMenu,
-    userRoute,
-    resolveUserMenu,
+    menuList,
+    routeList,
+    resolveMenuList,
     setToken,
     cleanup,
   }

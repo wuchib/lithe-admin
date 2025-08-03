@@ -22,12 +22,19 @@ const { getModalModifier } = useComponentModifier()
 
 const notification = useNotification()
 
-const handleChangeMessageStateType = () => {
+const showModal = reactive({
+  modal1: false,
+  modal2: false,
+  modal3: false,
+  modal4: false,
+})
+
+const changeMessageState = () => {
   let counter = 5
 
-  let timer: any = null
+  let timer: ReturnType<typeof setInterval> | null = null
 
-  const messageInstance = message.create('5秒后 根据状态类更换换图标', {
+  const messageInstance = message.create('5秒后 根据状态更换图标', {
     type: 'info',
     duration: 0,
     closable: true,
@@ -36,7 +43,9 @@ const handleChangeMessageStateType = () => {
   timer = setInterval(() => {
     counter -= 1
     if (counter <= 0) {
-      clearInterval(timer)
+      if (timer) {
+        clearInterval(timer)
+      }
       messageInstance.type = 'error'
       messageInstance.content = '切换图标了'
       return
@@ -45,14 +54,7 @@ const handleChangeMessageStateType = () => {
   }, 1000)
 }
 
-const showModal = reactive({
-  modal1: false,
-  modal2: false,
-  modal3: false,
-  modal4: false,
-})
-
-const handleCreateDialogApi = (type: ModalProps['type'] = 'success') => {
+const createDialogApi = (type: ModalProps['type'] = 'success') => {
   const title = {
     success: '成功的Dialog',
     warning: '警告的Dialog',
@@ -134,7 +136,7 @@ const handleCreateDialogApi = (type: ModalProps['type'] = 'success') => {
         >
           加载Message
         </NButton>
-        <NButton @click="handleChangeMessageStateType"> 根据状态切换图标 </NButton>
+        <NButton @click="changeMessageState"> 根据状态切换图标 </NButton>
         <NCard
           size="small"
           title="Setup 外使用"
@@ -232,7 +234,7 @@ const handleCreateDialogApi = (type: ModalProps['type'] = 'success') => {
               type="success"
               size="small"
               secondary
-              @click="handleCreateDialogApi('success')"
+              @click="createDialogApi('success')"
             >
               成功Dialog
             </NButton>
@@ -240,7 +242,7 @@ const handleCreateDialogApi = (type: ModalProps['type'] = 'success') => {
               type="warning"
               size="small"
               tertiary
-              @click="handleCreateDialogApi('warning')"
+              @click="createDialogApi('warning')"
             >
               警告Dialog
             </NButton>
@@ -248,7 +250,7 @@ const handleCreateDialogApi = (type: ModalProps['type'] = 'success') => {
               type="error"
               size="small"
               dashed
-              @click="handleCreateDialogApi('error')"
+              @click="createDialogApi('error')"
             >
               失败Dialog
             </NButton>
@@ -256,7 +258,7 @@ const handleCreateDialogApi = (type: ModalProps['type'] = 'success') => {
               type="info"
               size="small"
               ghost
-              @click="handleCreateDialogApi('info')"
+              @click="createDialogApi('info')"
             >
               信息Dialog
             </NButton>

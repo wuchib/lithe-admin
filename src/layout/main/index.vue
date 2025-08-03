@@ -22,25 +22,25 @@ const tabsStore = useTabsStore()
 
 const configureStore = useConfigureStore()
 
-const { tabs, tabActiveKey, tabsKeepAlive } = storeToRefs(tabsStore)
+const { tabs, tabActiveKey, keepAliveTabs: keepAliveComponents } = storeToRefs(tabsStore)
 
 const { configure, isNavigating } = storeToRefs(configureStore)
 
-const { createTab, setActive } = tabsStore
+const { create, setActive } = tabsStore
 
 const isMounted = ref(false)
 
-// Snapshots need to be recorded to make accurate judgments
-let oldTabs: Tab[] = []
-
 const transitionName = ref('')
 
-function doCreateTab(route: RouteLocationNormalizedLoaded) {
+// snapshots need to be recorded to make accurate judgments
+let oldTabs: Tab[] = []
+
+function createTab(route: RouteLocationNormalizedLoaded) {
   const { pinned, componentName, icon = 'iconify ph--browser', label = '未命名标签' } = route.meta
 
   const { fullPath, name } = route
 
-  createTab({
+  create({
     componentName,
     icon,
     name,
@@ -96,12 +96,12 @@ watch(
   (): [RouteLocationNormalizedLoaded, boolean] => [router.currentRoute.value, isNavigating.value],
   ([newRoute, isNavigating], [oldRoute]) => {
     const { name, meta } = newRoute
-    const { showTab, multiTab } = meta
+    const { showTab, enableMultiTab } = meta
     const findTab = tabs.value.find((item) => item.name === name)
 
     if (!isNavigating && newRoute.fullPath !== oldRoute?.fullPath) {
-      if (showTab && (!findTab || multiTab)) {
-        doCreateTab(newRoute)
+      if (showTab && (!findTab || enableMultiTab)) {
+        createTab(newRoute)
       } else if (!isEmpty(findTab)) {
         setActive(findTab.key)
       } else {
@@ -116,12 +116,12 @@ onMounted(() => {
   const { name, meta } = currentRoute
 
   const findTab = tabs.value.find((item) => item.name === name)
-  const { showTab, multiTab } = meta
+  const { showTab, enableMultiTab: multiTab } = meta
 
   if (name === 'layout' && tabActiveKey.value) {
     router.replace(tabActiveKey.value)
   } else if (showTab && (!findTab || multiTab)) {
-    doCreateTab(currentRoute)
+    createTab(currentRoute)
   } else if (!isEmpty(findTab)) {
     setActive(findTab.key)
   }
@@ -140,7 +140,7 @@ onMounted(() => {
     v-slot="{ Component, route }"
   >
     <Transition :name="transitionName">
-      <KeepAlive :include="tabsKeepAlive">
+      <KeepAlive :include="keepAliveComponents">
         <component
           :is="Component"
           v-if="isMounted && !tabsInject?.shouldRefresh.value"

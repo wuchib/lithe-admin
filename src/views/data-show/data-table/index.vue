@@ -141,14 +141,14 @@ const ShowOrEdit = defineComponent({
     const inputRef = ref<InstanceType<typeof NInput> | null>(null)
     const inputValue = ref(props.value)
 
-    function handleOnClick() {
+    function onClick() {
       isEdit.value = true
       nextTick(() => {
         inputRef.value?.focus()
       })
     }
 
-    function handleChange() {
+    function onBlur() {
       if (!inputValue.value.trim()) {
         message.error('为空就再也编辑不了了')
         inputValue.value = props.value
@@ -158,7 +158,7 @@ const ShowOrEdit = defineComponent({
     }
 
     return () => (
-      <div onClick={handleOnClick}>
+      <div onClick={onClick}>
         {isEdit.value ? (
           <NInput
             ref={inputRef}
@@ -167,7 +167,7 @@ const ShowOrEdit = defineComponent({
             onUpdateValue={(value) => {
               inputValue.value = value
             }}
-            onBlur={handleChange}
+            onBlur={onBlur}
           />
         ) : (
           <span>{props.value}</span>

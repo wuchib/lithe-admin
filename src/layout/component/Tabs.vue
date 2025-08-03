@@ -43,24 +43,24 @@ const tabsStore = useTabsStore()
 
 const configureStore = useConfigureStore()
 
-const { tabs, tabActiveKey, tabsKeepAlive } = storeToRefs(tabsStore)
+const { tabs, tabActiveKey, keepAliveTabs } = storeToRefs(tabsStore)
 
 const {
   isLocked,
   isPinned,
-  getUnlockedTabKeysExcept,
-  getUnlockedTabKeysBefore,
-  getUnlockedTabKeysAfter,
-  getUnlockedTabKeys,
-  hasKeepAlive,
-  setKeepAlive,
+  hasKeepAliveTab,
+  getUnlockedKeysBefore,
+  getUnlockedKeysAfter,
+  getUnlockedKeysExcept,
+  getUnlockedKeys,
+  setKeepAliveTab,
   setLocked,
-  setTabs,
-  removeTab,
-  removeAllTabs,
-  removeTabsBefore,
-  removeTabsExcept,
-  removeTabsAfter,
+  update,
+  remove,
+  removeBefore,
+  removeAfter,
+  removeExcept,
+  removeAll,
 } = tabsStore
 
 const tabPinnedList = ref<Tab[]>([])
@@ -102,7 +102,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭',
     },
     {
-      disabled: isEmpty(getUnlockedTabKeysExcept(key)),
+      disabled: isEmpty(getUnlockedKeysExcept(key)),
       icon: () =>
         h('span', {
           class: 'iconify ph--arrows-out-line-horizontal',
@@ -111,7 +111,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭其他',
     },
     {
-      disabled: isEmpty(getUnlockedTabKeysBefore(key)),
+      disabled: isEmpty(getUnlockedKeysBefore(key)),
       icon: () =>
         h('span', {
           class: 'iconify ph--arrow-line-left',
@@ -120,7 +120,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭左侧',
     },
     {
-      disabled: isEmpty(getUnlockedTabKeysAfter(key)),
+      disabled: isEmpty(getUnlockedKeysAfter(key)),
       icon: () =>
         h('span', {
           class: 'iconify ph--arrow-line-right',
@@ -129,7 +129,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: '关闭右侧',
     },
     {
-      disabled: isEmpty(getUnlockedTabKeys()),
+      disabled: isEmpty(getUnlockedKeys()),
       icon: () =>
         h('span', {
           class: 'iconify ph--arrows-horizontal',
@@ -140,7 +140,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
     {
       disabled: isEmpty(componentName),
       icon: () =>
-        hasKeepAlive(componentName)
+        hasKeepAliveTab(componentName)
           ? h('span', {
               class: 'iconify-[hugeicons--database-02]',
             })
@@ -148,7 +148,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
               class: 'iconify-[hugeicons--database-locked]',
             }),
       key: 'keepAlive',
-      label: hasKeepAlive(componentName) ? '取消缓存' : '缓存标签页',
+      label: hasKeepAliveTab(componentName) ? '取消缓存' : '缓存标签页',
     },
     {
       disabled: isPinned(key),
@@ -176,7 +176,7 @@ const handleTabClick = (key: string) => {
 }
 
 const handleTabCloseClick = (key: string) => {
-  removeTab(key)
+  remove(key)
 }
 
 const handleTabContextMenuClick = (e: MouseEvent, tab: Tab) => {
@@ -204,7 +204,7 @@ const onTabDraggableStart = () => {
 }
 
 const onTabDraggableEnd = () => {
-  setTabs([...tabPinnedList.value, ...tabList.value])
+  update([...tabPinnedList.value, ...tabList.value])
   showTabTooltip.value = true
 }
 
@@ -243,23 +243,23 @@ function getTabContextMenuActions(): ContextMenuActions | null {
 
   return {
     close: () => {
-      removeTab(key)
+      remove(key)
     },
     closeAll: () => {
-      removeAllTabs()
+      removeAll()
     },
     closeLeft: () => {
-      removeTabsBefore(key)
+      removeBefore(key)
     },
     closeOther: () => {
-      removeTabsExcept(key)
+      removeExcept(key)
     },
     closeRight: () => {
-      removeTabsAfter(key)
+      removeAfter(key)
     },
     keepAlive: () => {
       if (componentName) {
-        setKeepAlive(componentName)
+        setKeepAliveTab(componentName)
       }
     },
     lock: () => {
@@ -420,7 +420,7 @@ onMounted(() => {
                     tab.icon,
                     {
                       'text-primary':
-                        tab.componentName && tabsKeepAlive.includes(tab.componentName),
+                        tab.componentName && keepAliveTabs.includes(tab.componentName),
                     },
                   ]"
                 />

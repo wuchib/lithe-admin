@@ -7,6 +7,6 @@ declare module 'vue-router' {
     label?: string
     icon?: string
     showTab?: boolean
-    multiTab?: boolean
+    enableMultiTab?: boolean
   }
 }

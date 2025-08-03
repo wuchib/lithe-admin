@@ -39,7 +39,7 @@ watch(
       :collapsed="configureStore.configure.menuCollapsed"
       :collapsed-icon-size="20"
       :value="menuActiveKey"
-      :options="userStore.userMenu"
+      :options="userStore.menuList"
     />
   </NScrollbar>
 </template>

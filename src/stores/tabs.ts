@@ -27,9 +27,9 @@ export const useTabsStore = defineStore('tabsStore', () => {
 
   const tabActiveKey = useStorage<string>('tabActiveKey', '')
 
-  const tabsKeepAlive = useStorage<string[]>('tabsKeepAlive', [])
+  const keepAliveTabs = useStorage<string[]>('keepAliveTabs', [])
 
-  const removeTabs = (keys: string[]) => {
+  function removeTabs(keys: string[]) {
     const keysSet = new Set(keys)
     const activeIndex = tabs.value.findIndex((tab) => tab.key === tabActiveKey.value)
 
@@ -64,58 +64,58 @@ export const useTabsStore = defineStore('tabsStore', () => {
     return tabs.value.findIndex((item) => item.key === key)
   }
 
-  function getUnlockedTabKeysBefore(key: string) {
-    const unlockedTabKeys: string[] = []
+  function getUnlockedKeysBefore(key: string) {
+    const unlockedKeys: string[] = []
 
     for (const tab of tabs.value) {
       if (tab.key === key) break
 
       if (!tab.locked && !tab.pinned) {
-        unlockedTabKeys.push(tab.key)
+        unlockedKeys.push(tab.key)
       }
     }
-    return unlockedTabKeys
+    return unlockedKeys
   }
 
-  function getUnlockedTabKeysAfter(key: string) {
-    const unlockedTabKeys: string[] = []
+  function getUnlockedKeysAfter(key: string) {
+    const unlockedKeys: string[] = []
 
     for (let i = tabs.value.length - 1; i >= 0; i--) {
       if (tabs.value[i].key === key) break
 
       if (!tabs.value[i].locked && !tabs.value[i].pinned) {
-        unlockedTabKeys.push(tabs.value[i].key)
+        unlockedKeys.push(tabs.value[i].key)
       }
     }
 
-    return unlockedTabKeys
+    return unlockedKeys
   }
 
-  function getUnlockedTabKeysExcept(key: string) {
-    const unlockedTabKeys: string[] = []
+  function getUnlockedKeysExcept(key: string) {
+    const unlockedKeys: string[] = []
 
     for (const tab of tabs.value) {
       if (tab.key !== key && !tab.locked && !tab.pinned) {
-        unlockedTabKeys.push(tab.key)
+        unlockedKeys.push(tab.key)
       }
     }
 
-    return unlockedTabKeys
+    return unlockedKeys
   }
 
-  function getUnlockedTabKeys() {
-    const mutableTabKeys: string[] = []
+  function getUnlockedKeys() {
+    const unlockedKeys: string[] = []
 
     for (const tab of tabs.value) {
       if (!tab.locked && !tab.pinned) {
-        mutableTabKeys.push(tab.key)
+        unlockedKeys.push(tab.key)
       }
     }
 
-    return mutableTabKeys
+    return unlockedKeys
   }
 
-  function setTabs(value: Tab[]) {
+  function update(value: Tab[]) {
     tabs.value = value
   }
 
@@ -123,7 +123,7 @@ export const useTabsStore = defineStore('tabsStore', () => {
     tabActiveKey.value = key
   }
 
-  function createTab(tab: Tab) {
+  function create(tab: Tab) {
     const index = tabs.value.findIndex((item) => item.key === tab.key)
 
     if (index === -1) {
@@ -133,37 +133,37 @@ export const useTabsStore = defineStore('tabsStore', () => {
     setActive(tab.key)
   }
 
-  const removeTab = (key: string) => {
+  const remove = (key: string) => {
     removeTabs([key])
   }
 
-  const removeTabsBefore = (key: string) => {
-    removeTabs(getUnlockedTabKeysBefore(key))
+  const removeBefore = (key: string) => {
+    removeTabs(getUnlockedKeysBefore(key))
   }
 
-  const removeTabsAfter = (key: string) => {
-    removeTabs(getUnlockedTabKeysAfter(key))
+  const removeAfter = (key: string) => {
+    removeTabs(getUnlockedKeysAfter(key))
   }
 
-  const removeTabsExcept = (key: string) => {
-    removeTabs(getUnlockedTabKeysExcept(key))
+  const removeExcept = (key: string) => {
+    removeTabs(getUnlockedKeysExcept(key))
   }
 
-  const removeAllTabs = () => {
-    removeTabs(getUnlockedTabKeys())
+  const removeAll = () => {
+    removeTabs(getUnlockedKeys())
   }
 
-  const hasKeepAlive = (componentName?: string) => {
-    const index = tabsKeepAlive.value.findIndex((item) => item === componentName)
+  const hasKeepAliveTab = (componentName?: string) => {
+    const index = keepAliveTabs.value.findIndex((item) => item === componentName)
     return index !== -1 ? true : false
   }
 
-  const setKeepAlive = (componentName: string) => {
-    const index = tabsKeepAlive.value.findIndex((item) => item === componentName)
+  const setKeepAliveTab = (componentName: string) => {
+    const index = keepAliveTabs.value.findIndex((item) => item === componentName)
     if (index !== -1) {
-      tabsKeepAlive.value.splice(index, 1)
+      keepAliveTabs.value.splice(index, 1)
     } else {
-      tabsKeepAlive.value.push(componentName)
+      keepAliveTabs.value.push(componentName)
     }
   }
 
@@ -187,24 +187,24 @@ export const useTabsStore = defineStore('tabsStore', () => {
   return {
     tabs,
     tabActiveKey,
-    tabsKeepAlive,
-    createTab,
-    getUnlockedTabKeys,
-    getUnlockedTabKeysBefore,
-    getUnlockedTabKeysExcept,
-    getUnlockedTabKeysAfter,
-    hasKeepAlive,
+    keepAliveTabs,
+    getUnlockedKeysBefore,
+    getUnlockedKeysAfter,
+    getUnlockedKeys,
+    getUnlockedKeysExcept,
+    create,
+    remove,
+    update,
+    removeBefore,
+    removeAfter,
+    removeExcept,
+    removeAll,
     isLocked,
     isPinned,
-    removeAllTabs,
-    removeTabsBefore,
-    removeTabsExcept,
-    removeTabsAfter,
-    removeTab,
     setActive,
-    setKeepAlive,
+    setKeepAliveTab,
     setLocked,
-    setTabs,
+    hasKeepAliveTab,
   }
 })
 

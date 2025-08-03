@@ -43,14 +43,14 @@ const textureStyle = computed(() => {
   }
 })
 
-const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
+const signInFormRef = useTemplateRef<InstanceType<typeof NForm>>('signInFormRef')
 
-const signinForm = reactive({
+const signInForm = reactive({
   account: 'admin',
   password: '123456',
 })
 
-const rules: Record<string, FormItemRule[]> = {
+const signInFormRules: Record<string, FormItemRule[]> = {
   account: [{ required: true, message: '请输入账号', trigger: ['input'] }],
   password: [{ required: true, message: '请输入密码', trigger: ['input'] }],
 }
@@ -59,7 +59,7 @@ function toLayout() {
   const { r } = router.currentRoute.value.query
 
   setTimeout(() => {
-    if (signinForm.account.includes('admin')) {
+    if (signInForm.account.includes('admin')) {
       userStore.setToken('admin')
     } else {
       userStore.setToken('user')
@@ -74,7 +74,7 @@ function toLayout() {
 }
 
 const handleSubmitClick = () => {
-  formRef.value?.validate((errors) => {
+  signInFormRef.value?.validate((errors) => {
     if (!errors) {
       loading.value = true
       toLayout()
@@ -144,17 +144,17 @@ onUnmounted(() => {
           </div>
           <div class="mt-12">
             <NForm
-              ref="formRef"
-              :model="signinForm"
+              ref="signInFormRef"
+              :model="signInForm"
               :show-require-mark="false"
-              :rules="rules"
+              :rules="signInFormRules"
             >
               <NFormItem
                 path="account"
                 label="账号"
               >
                 <NInput
-                  v-model:value="signinForm.account"
+                  v-model:value="signInForm.account"
                   placeholder="请输入账号"
                   clearable
                   :input-props="{
@@ -171,7 +171,7 @@ onUnmounted(() => {
                 label="密码"
               >
                 <NInput
-                  v-model:value="signinForm.password"
+                  v-model:value="signInForm.password"
                   placeholder="请输入密码"
                   type="password"
                   clearable

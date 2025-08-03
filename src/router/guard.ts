@@ -42,17 +42,23 @@ export function setupRouterGuard(router: Router) {
     }
 
     if (userStore.token && !router.hasRoute('layout')) {
-      await userStore.resolveUserMenu()
+      try {
+        await userStore.resolveMenuList()
 
-      router.addRoute({
-        path: '/',
-        name: 'layout',
-        component: Layout,
-        redirect: '/dashboard',
-        children: userStore.userRoute,
-      })
+        router.addRoute({
+          path: '/',
+          name: 'layout',
+          component: Layout,
+          redirect: '/dashboard',
+          children: userStore.routeList,
+        })
 
-      next(to.fullPath)
+        next(to.fullPath)
+      } catch (error) {
+        console.error('Error resolving user menu or adding route:', error)
+        userStore.cleanup()
+        next()
+      }
 
       return false
     }

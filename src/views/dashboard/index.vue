@@ -38,7 +38,7 @@ let highestRevenueChartInstance: ECharts | null = null
 let highestRevenueChartResizeHandler: (() => void) | null = null
 
 const CHART_CONFIG = {
-  MONTHS: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+  MONTHS: Array.from({ length: 12 }, (_, i) => `${i + 1}月`),
 }
 
 const getBusinessLinesConfig = () => [
