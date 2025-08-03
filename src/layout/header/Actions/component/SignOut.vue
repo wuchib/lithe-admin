@@ -9,23 +9,24 @@ const userStore = useUserStore()
 const dialog = useDialog()
 
 const { getModalModifier } = useComponentModifier()
-const onSignout = () => {
+
+const handleSignOutClick = () => {
   dialog.info({
     ...getModalModifier(),
     title: '退出登录',
     content: '确定要退出登录吗？',
     positiveText: '确定',
     negativeText: '取消',
-    onPositiveClick: onConfirm,
+    onPositiveClick: clearUserInfo,
   })
 }
 
-const onConfirm = () => {
+function clearUserInfo() {
   userStore.cleanup()
 }
 </script>
 <template>
-  <ButtonAnimation @click="onSignout">
+  <ButtonAnimation @click="handleSignOutClick">
     <span class="iconify size-5 ph--sign-out" />
   </ButtonAnimation>
 </template>

@@ -58,6 +58,7 @@ export function setupRouterGuard(router: Router) {
     }
 
     next()
+    return false
   })
 
   router.beforeResolve((_, __, next) => {

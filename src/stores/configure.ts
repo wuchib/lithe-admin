@@ -71,6 +71,8 @@ export const useConfigureStore = defineStore('configureStore', () => {
         return srcValue
       }
     })
+
+    return null
   }
 
   const reset = () => {

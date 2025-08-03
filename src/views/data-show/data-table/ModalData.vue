@@ -17,8 +17,7 @@ const { selectInPopover, datePickerInPopover } = useComponentThemeOverrides()
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
 
 const emits = defineEmits<{
-  (e: 'submit', value: Partial<UserInfo>): void
-  (e: 'update', value: Partial<UserInfo>): void
+  (e: 'submit' | 'update', value: Partial<UserInfo>): void
   (e: 'cancel'): void
 }>()
 

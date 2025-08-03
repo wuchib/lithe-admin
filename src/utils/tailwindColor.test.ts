@@ -40,7 +40,7 @@ function generateTailwindColor() {
     if (!hexCache.has(value)) {
       hexCache.set(value, chroma(value).hex())
     }
-    return hexCache.get(value)!
+    return hexCache.get(value) || ''
   }
 
   const mixHex = (a: string, b: string, ratio = 0.5): string => chroma.mix(a, b, ratio).hex()
