@@ -340,11 +340,11 @@ onMounted(() => {
         >
           <div
             v-if="tab.key === tabActiveKey && isMounted"
-            class="absolute inset-0 size-full border-t-[1.5px] border-primary bg-primary/6"
+            class="absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6"
           />
         </Transition>
         <div
-          class="flex items-center py-2.5 pl-4"
+          class="relative flex items-center py-2.5 pl-4"
           :class="tab.pinned ? 'pr-4' : 'pr-2.5'"
         >
           <div class="mr-2 grid shrink-0 place-items-center overflow-hidden">
@@ -400,7 +400,7 @@ onMounted(() => {
             >
               <div
                 v-if="tab.key === tabActiveKey && isMounted"
-                class="absolute inset-0 size-full border-t-[1.5px] border-primary bg-primary/6"
+                class="absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6"
               />
             </Transition>
             <div
@@ -408,7 +408,7 @@ onMounted(() => {
               :class="tab.pinned ? 'pr-4' : 'pr-2.5'"
             >
               <div
-                class="flex items-center justify-center gap-x-1.5 overflow-hidden transition-[translate] duration-300 ease-naive-bezier"
+                class="relative flex items-center justify-center gap-x-1.5 overflow-hidden transition-[translate] duration-300 ease-naive-bezier"
                 :class="{
                   'translate-x-2.5': tab.locked || !configureStore.configure.showTabClose,
                   'group-hover:translate-x-0':
