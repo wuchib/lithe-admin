@@ -13,7 +13,7 @@ const dark = {
   borderColor: cdh(twc.neutral[750], 0.22),
 }
 
-const compCloseIcon = (primaryColor: string) => {
+const closeIcon = (primaryColor: string) => {
   return {
     closeIconColorSuccess: twc.lime[600],
     closeIconColorInfo: twc.sky[600],
@@ -102,7 +102,7 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       errorColorSuppl: twc.red[650],
     },
     Alert: {
-      ...compCloseIcon(primaryColor),
+      ...closeIcon(primaryColor),
     },
     Button: {
       textColorSuccess: twc.lime[50],
@@ -152,7 +152,7 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       colorError: cmh(twc.neutral[750], twc.red[950], 0.06),
       colorLoading: cmh(twc.neutral[750], primaryColor, 0.01),
 
-      ...compCloseIcon(primaryColor),
+      ...closeIcon(primaryColor),
     },
 
     Modal: {

@@ -315,13 +315,13 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] duration-300 ease-naive-bezier"
+    class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] duration-300 ease-naive-bezier select-none"
   >
     <div class="flex shrink-0">
       <div
         v-for="tab in tabPinnedList"
         :key="tab.key"
-        class="relative max-w-40 overflow-hidden border-r border-r-naive-border transition-[border-color,max-width] duration-300 ease-naive-bezier select-none"
+        class="relative max-w-40 overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] duration-300 ease-naive-bezier hover:bg-primary/6"
         :class="[
           isTabDragging ? 'cursor-move' : 'cursor-pointer',
           {
@@ -380,7 +380,7 @@ onMounted(() => {
           <div
             v-for="tab in tabList"
             :key="tab.key"
-            class="relative overflow-hidden border-r border-r-naive-border transition-[border-color,max-width] duration-300 ease-naive-bezier select-none [&:not(.max-w-0)]:max-w-40"
+            class="relative overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] duration-300 ease-naive-bezier hover:bg-primary/6 [&:not(.max-w-0)]:max-w-40"
             :class="[
               isTabDragging ? 'cursor-move' : 'cursor-pointer',
               {
@@ -404,7 +404,7 @@ onMounted(() => {
               />
             </Transition>
             <div
-              class="flex items-center gap-x-1 py-2.5 pl-4"
+              class="flex items-center py-2.5 pl-4"
               :class="tab.pinned ? 'pr-4' : 'pr-2.5'"
             >
               <div
@@ -431,7 +431,7 @@ onMounted(() => {
               </div>
 
               <div
-                class="flex transition-[opacity,scale] duration-300 ease-naive-bezier"
+                class="ml-1 flex transition-[opacity,scale] duration-300 ease-naive-bezier"
                 :class="{
                   'scale-0 opacity-0': tab.locked || !configureStore.configure.showTabClose,
                   'group-hover:scale-100 group-hover:opacity-100':
@@ -456,7 +456,7 @@ onMounted(() => {
         </TransitionGroup>
       </VueDraggable>
     </NScrollbar>
-    <div class="flex items-center gap-x-2 px-3.5">
+    <div class="flex items-center px-3">
       <ButtonAnimation
         title="刷新"
         @click="tabsInject?.doRefresh(true)"

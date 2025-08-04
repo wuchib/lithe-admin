@@ -24,7 +24,7 @@ const collapseWidth = computed(() => {
     }"
   >
     <div
-      class="flex items-center justify-center py-4 transition-[opacity,padding] duration-300 ease-naive-bezier"
+      class="flex h-full items-center justify-center transition-[opacity,padding] duration-300 ease-naive-bezier"
       :class="[
         configureStore.configure.menuCollapsed ? 'px-0' : 'px-4',
         {

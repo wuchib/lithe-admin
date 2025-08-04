@@ -11,20 +11,18 @@ defineOptions({
 })
 </script>
 <template>
-  <div class="flex items-center gap-x-4">
-    <div class="flex items-center gap-x-3">
-      <ButtonAnimation
-        :animation="false"
-        tag="a"
-        href="https://github.com/tenianon/lithe-admin"
-        target="_blank"
-      >
-        <span class="iconify-[mdi--github] size-5" />
-      </ButtonAnimation>
-      <FullScreen />
-      <ThemeDropdown />
-      <ConfigureDrawer />
-      <Signout />
-    </div>
+  <div class="flex items-center gap-x-3">
+    <ButtonAnimation
+      :animation="false"
+      tag="a"
+      href="https://github.com/tenianon/lithe-admin"
+      target="_blank"
+    >
+      <span class="iconify-[mdi--github] size-5" />
+    </ButtonAnimation>
+    <FullScreen />
+    <ThemeDropdown />
+    <ConfigureDrawer />
+    <Signout />
   </div>
 </template>
