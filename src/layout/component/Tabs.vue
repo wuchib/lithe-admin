@@ -408,22 +408,25 @@ onMounted(() => {
               :class="tab.pinned ? 'pr-4' : 'pr-2.5'"
             >
               <div
-                class="relative flex items-center justify-center gap-x-1.5 overflow-hidden transition-[translate] duration-300 ease-naive-bezier"
+                class="relative flex items-center justify-center overflow-hidden transition-[translate] duration-300 ease-naive-bezier"
                 :class="{
                   'translate-x-2.5': tab.locked || !configureStore.configure.showTabClose,
                   'group-hover:translate-x-0':
                     !tab.locked && !configureStore.configure.showTabClose,
                 }"
               >
-                <span
-                  :class="[
-                    tab.icon,
-                    {
-                      'text-primary':
-                        tab.componentName && keepAliveTabs.includes(tab.componentName),
-                    },
-                  ]"
-                />
+                <div class="mr-2 grid shrink-0 place-items-center overflow-hidden">
+                  <span
+                    :class="[
+                      tab.icon,
+                      {
+                        'text-primary':
+                          tab.componentName && keepAliveTabs.includes(tab.componentName),
+                      },
+                    ]"
+                  />
+                </div>
+
                 <NEllipsis :tooltip="showTabTooltip">{{ tab.label }}</NEllipsis>
               </div>
 
