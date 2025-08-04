@@ -174,7 +174,7 @@ export const routeRecordRaw: MergeMenuMixedOptions[] = [
       componentName: 'DynamicRoute',
       showTab: true,
       enableMultiTab: true,
-      tabLabel({ id, name }) {
+      renderTabLabel({ id, name }) {
         return `动态路由${id ? `-${id}` : ''}${name ? `-${name}` : ''}`
       },
     },

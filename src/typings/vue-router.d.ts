@@ -8,6 +8,6 @@ declare module 'vue-router' {
     icon?: string
     showTab?: boolean
     enableMultiTab?: boolean
-    tabLabel?: (params: RouteParamsGeneric) => string
+    renderTabLabel?: (params: RouteParamsGeneric) => string
   }
 }

@@ -40,7 +40,7 @@ function createTab(route: RouteLocationNormalizedLoaded) {
     componentName,
     icon = 'iconify ph--browser',
     label: defaultLabel = '未命名标签',
-    tabLabel,
+    renderTabLabel: tabLabel,
   } = route.meta
 
   const { fullPath, name, params } = route
