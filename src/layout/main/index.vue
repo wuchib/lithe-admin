@@ -10,7 +10,7 @@ import { useConfigureStore } from '@/stores/configure'
 import { useTabsStore } from '@/stores/tabs'
 
 import type { Tab } from '@/stores/tabs'
-import type { RouteLocationNormalizedLoaded, RouteParamsGeneric } from 'vue-router'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
 
 defineOptions({
   name: 'MainLayout',
