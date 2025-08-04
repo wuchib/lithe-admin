@@ -10,7 +10,7 @@ import { useConfigureStore } from '@/stores/configure'
 import { useTabsStore } from '@/stores/tabs'
 
 import type { Tab } from '@/stores/tabs'
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouteParamsGeneric } from 'vue-router'
 
 defineOptions({
   name: 'MainLayout',
@@ -22,7 +22,7 @@ const tabsStore = useTabsStore()
 
 const configureStore = useConfigureStore()
 
-const { tabs, tabActiveKey, keepAliveTabs: keepAliveComponents } = storeToRefs(tabsStore)
+const { tabs, tabActiveKey, keepAliveTabs } = storeToRefs(tabsStore)
 
 const { configure, isNavigating } = storeToRefs(configureStore)
 
@@ -32,13 +32,20 @@ const isMounted = ref(false)
 
 const transitionName = ref('')
 
-// snapshots need to be recorded to make accurate judgments
 let oldTabs: Tab[] = []
 
 function createTab(route: RouteLocationNormalizedLoaded) {
-  const { pinned, componentName, icon = 'iconify ph--browser', label = '未命名标签' } = route.meta
+  const {
+    pinned,
+    componentName,
+    icon = 'iconify ph--browser',
+    label: defaultLabel = '未命名标签',
+    tabLabel,
+  } = route.meta
 
-  const { fullPath, name } = route
+  const { fullPath, name, params } = route
+
+  const label = tabLabel ? tabLabel(params) : defaultLabel
 
   create({
     componentName,
@@ -140,7 +147,7 @@ onMounted(() => {
     v-slot="{ Component, route }"
   >
     <Transition :name="transitionName">
-      <KeepAlive :include="keepAliveComponents">
+      <KeepAlive :include="keepAliveTabs">
         <component
           :is="Component"
           v-if="isMounted && !tabsInject?.shouldRefresh.value"

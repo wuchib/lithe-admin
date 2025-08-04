@@ -166,6 +166,21 @@ export const routeRecordRaw: MergeMenuMixedOptions[] = [
     ],
   },
   {
+    path: 'dynamic-route/:id?/:name?',
+    name: 'dynamicRoute',
+    label: '动态路由',
+    icon: 'iconify-[material-symbols--dynamic-feed]',
+    meta: {
+      componentName: 'DynamicRoute',
+      showTab: true,
+      enableMultiTab: true,
+      tabLabel({ id, name }) {
+        return `动态路由${id ? `-${id}` : ''}${name ? `-${name}` : ''}`
+      },
+    },
+    component: 'dynamic-route/index',
+  },
+  {
     path: 'feedback',
     name: 'feedback',
     icon: 'iconify-[ph--messenger-logo]',
