@@ -85,7 +85,7 @@ pnpm format:check
 pnpm format:fix
 ```
 
-## 🗳️ 图标
+## 📦 图标
 
 图标库使用 [Iconify](https://iconify.design)，使用方式如下：
 
@@ -97,7 +97,7 @@ pnpm format:fix
 <span class="iconify-[fluent--data-area-32-regular]"></span>
 ```
 
-上面的 `ph` 前缀需要在 `src/assets/main.css` 中进行配置，详细文档请参考 [Iconify Tailwind 4](https://iconify.design/docs/usage/css/tailwind/tailwind4)
+上面的 `ph` 前缀需要在 `src/assets/base.css` 中进行配置，详细文档请参考 [Iconify Tailwind 4](https://iconify.design/docs/usage/css/tailwind/tailwind4)
 
 ```css
 @plugin "@iconify/tailwind4" {
