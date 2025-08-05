@@ -35,8 +35,33 @@ export default defineConfig((env) => {
                 name: 'lodash-es',
                 test: /\/lodash-es/,
               },
+              {
+                name: 'naive-ui',
+                test: /\/naive-ui/,
+              },
+              {
+                name: 'vue-draggable-plus',
+                test: /\/vue-draggable-plus/,
+              },
+              {
+                name: 'vueuse',
+                test: /\/vueuse/,
+              },
+              {
+                name: 'vue',
+                test: /\/vue/,
+              },
+              {
+                name: 'vue-router',
+                test: /\/vue-router/,
+              },
+              {
+                name: 'pinia',
+                test: /\/pinia/,
+              },
             ],
           },
+
           assetFileNames: (info) => {
             const notHash = ['topography.svg', 'texture.png', 'noise.png']
             if (notHash.includes(info.names[0])) {
