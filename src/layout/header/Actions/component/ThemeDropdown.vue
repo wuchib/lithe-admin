@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NPopselect } from 'naive-ui'
-import { computed, h, ref } from 'vue'
+import { computed, h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
 import { usePersonalization } from '@/composable/usePersonalization'
@@ -8,8 +8,6 @@ import { usePersonalization } from '@/composable/usePersonalization'
 import type { Theme } from '@/composable/usePersonalization'
 
 const { setTheme, theme } = usePersonalization()
-
-const themeKey = ref(theme.value)
 
 const themeDropdownOptions = [
   {
@@ -60,7 +58,7 @@ function renderSelectLabel(option: (typeof themeDropdownOptions)[number]) {
 <template>
   <NPopselect
     trigger="click"
-    v-model:value="themeKey"
+    v-model:value="theme"
     :options="themeDropdownOptions"
     :render-label="renderSelectLabel"
     show-arrow
