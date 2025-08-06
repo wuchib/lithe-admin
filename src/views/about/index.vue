@@ -245,7 +245,7 @@ watch(
         >
           TypeScript
         </NButton>
-        构建的极简而优雅的后台管理模板，主题配色基于 TailwindCSS 的色彩体系设计。
+        构建的一个轻盈而优雅的后台管理模板，主题配色基于 TailwindCSS 的色彩体系设计。
       </p>
     </NCard>
     <div class="flex gap-x-2">
