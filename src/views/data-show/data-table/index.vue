@@ -44,7 +44,7 @@ export interface UserInfo {
 
 interface UserForm extends Partial<UserInfo> {}
 
-defineComponent({
+defineOptions({
   name: 'DataTable',
 })
 
