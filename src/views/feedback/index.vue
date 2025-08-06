@@ -50,7 +50,7 @@ const changeMessageState = () => {
       messageInstance.content = '切换图标了'
       return
     }
-    messageInstance.content = `${counter}秒后 根据状态类更换图标`
+    messageInstance.content = `${counter}秒后 根据状态更换图标`
   }, 1000)
 }
 
