@@ -281,7 +281,9 @@ function scrollToActiveTab() {
 }
 
 const routerAfterEach = router.afterEach(() => {
-  pendingActiveKey.value = tabActiveKey.value
+  nextTick(() => {
+    pendingActiveKey.value = tabActiveKey.value
+  })
 })
 
 watch(
