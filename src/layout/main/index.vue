@@ -24,13 +24,15 @@ const configureStore = useConfigureStore()
 
 const { tabs, tabActiveKey, keepAliveTabs } = storeToRefs(tabsStore)
 
-const { configure, isNavigating } = storeToRefs(configureStore)
+const { configure } = storeToRefs(configureStore)
 
 const { create, setActive } = tabsStore
 
-const isMounted = ref(false)
+const isNavigating = ref(false)
 
-const transitionName = ref('')
+const transitionName = ref('scale')
+
+const isMounted = ref(false)
 
 let oldTabs: Tab[] = []
 
@@ -40,7 +42,7 @@ function createTab(route: RouteLocationNormalizedLoaded) {
     componentName,
     icon = 'iconify ph--browser',
     label: defaultLabel = '未命名标签',
-    renderTabLabel,
+    renderTabLabel
   } = route.meta
 
   const { fullPath, name, params } = route
@@ -57,11 +59,25 @@ function createTab(route: RouteLocationNormalizedLoaded) {
   })
 }
 
+router.beforeEach((_, __, next) => {
+  isNavigating.value = true
+  next()
+})
+
+router.afterEach(() => {
+  isNavigating.value = false
+})
+
+
 watch(
   (): [Tab[], string] => [tabs.value, tabActiveKey.value],
-  ([newTabs, newActive], [, oldActive]) => {
-    if (tabActiveKey.value) {
-      router.push(tabActiveKey.value)
+  ([newTabs, newActiveKey], [, oldActiveKey]) => {
+    if (
+      newActiveKey &&
+      newActiveKey !== oldActiveKey &&
+      newActiveKey !== router.currentRoute.value.fullPath
+    ) {
+      router.push(newActiveKey)
     }
 
     if (!configure.value.enableNavigationTransition) return
@@ -71,15 +87,15 @@ watch(
       return
     }
 
-    const oldActiveIndex = oldTabs.findIndex((item) => item.key === oldActive)
-    const newActiveIndex = newTabs.findIndex((item) => item.key === newActive)
+    const oldActiveIndex = oldTabs.findIndex((item) => item.key === oldActiveKey)
+    const newActiveIndex = newTabs.findIndex((item) => item.key === newActiveKey)
 
     if (oldTabs.length < newTabs.length || oldActiveIndex === -1 || newActiveIndex === -1) {
       transitionName.value = 'scale'
     } else if (oldTabs.length > newTabs.length) {
       transitionName.value =
         oldActiveIndex > newActiveIndex ? 'scale-slider-left' : 'scale-slider-right'
-    } else if (oldActive !== newActive) {
+    } else if (oldActiveKey !== newActiveKey) {
       transitionName.value = oldActiveIndex > newActiveIndex ? 'slider-left' : 'slider-right'
     }
 
@@ -101,44 +117,36 @@ watch(
 
 watch(
   (): [RouteLocationNormalizedLoaded, boolean] => [router.currentRoute.value, isNavigating.value],
-  ([newRoute, isNavigating], [oldRoute]) => {
-    const { name, meta } = newRoute
-    const { showTab, enableMultiTab } = meta
-    const findTab = tabs.value.find((item) => item.name === name)
+  ([newRoute, isNavigating], oldValue) => {
+    if (isNavigating) return
 
-    if (!isNavigating && newRoute.fullPath !== oldRoute?.fullPath) {
-      if (showTab && (!findTab || enableMultiTab)) {
-        createTab(newRoute)
-      } else if (!isEmpty(findTab)) {
+    const oldRoute = oldValue?.[0]
+
+    if (newRoute.fullPath !== oldRoute?.fullPath) {
+      const { showTab, enableMultiTab } = newRoute.meta
+      const findTab = tabs.value.find((item) =>
+        enableMultiTab ? item.key === newRoute.fullPath : item.key === newRoute.path,
+      )
+
+      if (!isEmpty(findTab)) {
         setActive(findTab.key)
+      } else if (showTab) {
+        createTab(newRoute)
       } else {
         setActive('')
       }
     }
   },
+  {
+    immediate: true,
+  }
 )
 
 onMounted(() => {
-  const currentRoute = router.currentRoute.value
-  const { name, meta } = currentRoute
-
-  const findTab = tabs.value.find((item) => item.name === name)
-  const { showTab, enableMultiTab: multiTab } = meta
-
-  if (name === 'layout' && tabActiveKey.value) {
-    router.replace(tabActiveKey.value)
-  } else if (showTab && (!findTab || multiTab)) {
-    createTab(currentRoute)
-  } else if (!isEmpty(findTab)) {
-    setActive(findTab.key)
-  }
-
-  nextTick(() => {
-    isMounted.value = true
-    transitionName.value = 'scale'
-  })
 
   oldTabs = [...tabs.value]
+
+  isMounted.value = true
 })
 </script>
 <template>
