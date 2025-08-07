@@ -18,7 +18,6 @@ import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
 import { tabsInjectionKey } from '@/injection'
-import router from '@/router'
 import { useConfigureStore } from '@/stores/configure'
 import { useTabsStore } from '@/stores/tabs'
 
@@ -55,6 +54,7 @@ const {
   getUnlockedKeys,
   setKeepAliveTab,
   setLocked,
+  setActive,
   update,
   remove,
   removeBefore,
@@ -172,7 +172,7 @@ const dropdownPosition = reactive({
 })
 
 const handleTabClick = (key: string) => {
-  router.push(key)
+  setActive(key)
 }
 
 const handleTabCloseClick = (key: string) => {
@@ -308,9 +308,7 @@ watchEffect(() => {
 })
 
 onMounted(() => {
-  nextTick(() => {
-    isMounted.value = true
-  })
+  isMounted.value = true
 })
 </script>
 <template>
