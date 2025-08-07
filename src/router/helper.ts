@@ -79,7 +79,7 @@ export function resolveMenu(options: MergeMenuMixedOptions[], parentDisabled = f
       } else {
         menu.label = mergedDisabled
           ? label
-          : () => h(RouterLink, { to: { name: name as string } }, { default: () => label })
+          : () => h(RouterLink, { to: { name } }, { default: () => label })
       }
 
       menuOption.push(menu)
