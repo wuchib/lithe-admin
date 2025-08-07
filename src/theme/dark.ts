@@ -138,7 +138,6 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
     Menu: {
       itemColorHover: twc.neutral[800],
     },
-
     Message: {
       textColorSuccess: twc.lime[500],
       textColorInfo: twc.sky[500],
@@ -154,7 +153,6 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
 
       ...closeIcon(primaryColor),
     },
-
     Modal: {
       peers: {
         Scrollbar: {

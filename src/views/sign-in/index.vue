@@ -146,7 +146,11 @@ onUnmounted(() => {
         <div>
           <div>
             <h2 class="text-2xl">登&nbsp;录</h2>
-            <p class="text-neutral-400 dark:text-neutral-500 transition-[color] duration-300 ease-naive-bezier">SIGN IN</p>
+            <p
+              class="text-neutral-400 transition-[color] duration-300 ease-naive-bezier dark:text-neutral-500"
+            >
+              SIGN IN
+            </p>
           </div>
           <div class="mt-12">
             <NForm
