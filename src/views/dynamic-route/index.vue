@@ -43,4 +43,3 @@ const router = useRouter()
     </NCard>
   </div>
 </template>
-<style></style>
