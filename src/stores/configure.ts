@@ -1,7 +1,7 @@
 import { useStorage } from '@vueuse/core'
 import { mergeWith } from 'lodash-es'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 
 import type { WatermarkProps } from 'naive-ui'
 
