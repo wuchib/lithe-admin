@@ -21,8 +21,8 @@ const menuActiveKey = ref('')
 
 watch(
   () => router.currentRoute.value,
-  (newValue) => {
-    menuActiveKey.value = newValue.name as string
+  (newRoute) => {
+    menuActiveKey.value = newRoute.name as string
 
     menuRef.value?.showOption(menuActiveKey.value)
   },
