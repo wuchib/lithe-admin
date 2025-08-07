@@ -237,6 +237,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
       <NInput
         type="textarea"
         v-model:value="configureStore.configure.watermarkOptions.image"
+        @update:value="(value) => updateWatermarkOptions('image', value)"
         clearable
       />
     </NFormItem>
