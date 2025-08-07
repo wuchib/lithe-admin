@@ -10,7 +10,6 @@ import {
   NSwitch,
   NSelect,
 } from 'naive-ui'
-import { ref } from 'vue'
 
 import { HintHelp } from '@/components'
 import { useConfigureStore } from '@/stores/configure'
@@ -19,10 +18,6 @@ import type { ConfigureOptions } from '@/stores/configure'
 
 const configureStore = useConfigureStore()
 
-const watermarkOptions = ref<ConfigureOptions['watermarkOptions']>(
-  configureStore.configure.watermarkOptions,
-)
-
 const modifyWatermarkColor = throttle((color: string) => {
   configureStore.modify({
     watermarkOptions: {
@@ -30,11 +25,22 @@ const modifyWatermarkColor = throttle((color: string) => {
     },
   })
 }, 100)
+
+const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptions']>(
+  key: K,
+  value: ConfigureOptions['watermarkOptions'][K],
+) => {
+  configureStore.modify({
+    watermarkOptions: {
+      [key]: value,
+    },
+  })
+}
 </script>
 <template>
   <NForm
     :label-width="80"
-    :model="watermarkOptions"
+    :model="configureStore.configure.watermarkOptions"
     :show-feedback="false"
     class="space-y-4"
   >
@@ -44,8 +50,9 @@ const modifyWatermarkColor = throttle((color: string) => {
     >
       <NInput
         type="textarea"
-        v-model:value="watermarkOptions.content"
+        v-model:value="configureStore.configure.watermarkOptions.content"
         clearable
+        @update:value="(value) => updateWatermarkOptions('content', value)"
       />
     </NFormItem>
 
@@ -56,9 +63,10 @@ const modifyWatermarkColor = throttle((color: string) => {
         class="w-full"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.fontSize"
+          v-model:value="configureStore.configure.watermarkOptions.fontSize"
           :min="8"
           :max="32"
+          @update:value="(value) => updateWatermarkOptions('fontSize', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -67,7 +75,7 @@ const modifyWatermarkColor = throttle((color: string) => {
         class="w-full"
       >
         <NColorPicker
-          :default-value="watermarkOptions.fontColor"
+          :default-value="configureStore.configure.watermarkOptions.fontColor"
           @update-value="
             (value) => {
               modifyWatermarkColor(value)
@@ -81,12 +89,13 @@ const modifyWatermarkColor = throttle((color: string) => {
         class="w-full"
       >
         <NSelect
-          v-model:value="watermarkOptions.fontStyle"
+          v-model:value="configureStore.configure.watermarkOptions.fontStyle"
           :options="[
             { label: '正常', value: 'normal' },
             { label: '斜体', value: 'italic' },
             { label: '倾斜', value: 'oblique' },
           ]"
+          @update:value="(value) => updateWatermarkOptions('fontStyle', value)"
         />
       </NFormItem>
     </div>
@@ -98,7 +107,7 @@ const modifyWatermarkColor = throttle((color: string) => {
         class="w-full"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.lineHeight"
+          v-model:value="configureStore.configure.watermarkOptions.lineHeight"
           :min="1"
         />
       </NFormItem>
@@ -108,10 +117,11 @@ const modifyWatermarkColor = throttle((color: string) => {
         class="w-full"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.fontWeight"
+          v-model:value="configureStore.configure.watermarkOptions.fontWeight"
           :min="100"
           :max="900"
           :step="100"
+          @update:value="(value) => updateWatermarkOptions('fontWeight', value ?? 0)"
         />
       </NFormItem>
     </div>
@@ -121,9 +131,10 @@ const modifyWatermarkColor = throttle((color: string) => {
         path="width"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.width"
+          v-model:value="configureStore.configure.watermarkOptions.width"
           class="w-full"
           :min="1"
+          @update:value="(value) => updateWatermarkOptions('width', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -131,9 +142,10 @@ const modifyWatermarkColor = throttle((color: string) => {
         path="height"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.height"
+          v-model:value="configureStore.configure.watermarkOptions.height"
           class="w-full"
           :min="1"
+          @update:value="(value) => updateWatermarkOptions('height', value ?? 0)"
         />
       </NFormItem>
     </div>
@@ -144,8 +156,9 @@ const modifyWatermarkColor = throttle((color: string) => {
         path="xGap"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.xGap"
+          v-model:value="configureStore.configure.watermarkOptions.xGap"
           class="w-full"
+          @update:value="(value) => updateWatermarkOptions('xGap', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -153,8 +166,9 @@ const modifyWatermarkColor = throttle((color: string) => {
         path="yGap"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.yGap"
+          v-model:value="configureStore.configure.watermarkOptions.yGap"
           class="w-full"
+          @update:value="(value) => updateWatermarkOptions('yGap', value ?? 0)"
         />
       </NFormItem>
     </div>
@@ -164,8 +178,9 @@ const modifyWatermarkColor = throttle((color: string) => {
         path="xoffset"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.xOffset"
+          v-model:value="configureStore.configure.watermarkOptions.xOffset"
           class="w-full"
+          @update:value="(value) => updateWatermarkOptions('xOffset', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -173,8 +188,9 @@ const modifyWatermarkColor = throttle((color: string) => {
         path="yGap"
       >
         <NInputNumber
-          v-model:value="watermarkOptions.yOffset"
+          v-model:value="configureStore.configure.watermarkOptions.yOffset"
           class="w-full"
+          @update:value="(value) => updateWatermarkOptions('yOffset', value ?? 0)"
         />
       </NFormItem>
     </div>
@@ -185,9 +201,10 @@ const modifyWatermarkColor = throttle((color: string) => {
         class="w-full"
       >
         <NSlider
-          v-model:value="watermarkOptions.rotate"
+          v-model:value="configureStore.configure.watermarkOptions.rotate"
           :min="-90"
           :max="90"
+          @update:value="(value) => updateWatermarkOptions('rotate', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -196,9 +213,10 @@ const modifyWatermarkColor = throttle((color: string) => {
         class="w-full"
       >
         <NSlider
-          v-model:value="watermarkOptions.globalRotate"
+          v-model:value="configureStore.configure.watermarkOptions.globalRotate"
           :min="-180"
           :max="180"
+          @update:value="(value) => updateWatermarkOptions('globalRotate', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -206,7 +224,10 @@ const modifyWatermarkColor = throttle((color: string) => {
         path="cross"
         class="w-full"
       >
-        <NSwitch v-model:value="watermarkOptions.cross" />
+        <NSwitch
+          v-model:value="configureStore.configure.watermarkOptions.cross"
+          @update:value="(value) => updateWatermarkOptions('cross', value)"
+        />
       </NFormItem>
     </div>
     <NFormItem
@@ -215,7 +236,7 @@ const modifyWatermarkColor = throttle((color: string) => {
     >
       <NInput
         type="textarea"
-        v-model:value="watermarkOptions.image"
+        v-model:value="configureStore.configure.watermarkOptions.image"
         clearable
       />
     </NFormItem>
@@ -232,7 +253,10 @@ const modifyWatermarkColor = throttle((color: string) => {
             content="修改后需重新打开水印"
             class="pb-1.5"
           />
-          <NInputNumber v-model:value="watermarkOptions.imageWidth" />
+          <NInputNumber
+            v-model:value="configureStore.configure.watermarkOptions.imageWidth"
+            @update:value="(value) => updateWatermarkOptions('imageWidth', value ?? 0)"
+          />
         </div>
       </NFormItem>
       <NFormItem
@@ -246,7 +270,10 @@ const modifyWatermarkColor = throttle((color: string) => {
             content="修改后需重新打开水印"
             class="pb-1.5"
           />
-          <NInputNumber v-model:value="watermarkOptions.imageHeight" />
+          <NInputNumber
+            v-model:value="configureStore.configure.watermarkOptions.imageHeight"
+            @update:value="(value) => updateWatermarkOptions('imageHeight', value ?? 0)"
+          />
         </div>
       </NFormItem>
 
@@ -262,11 +289,12 @@ const modifyWatermarkColor = throttle((color: string) => {
             class="pb-1.5"
           />
           <NSlider
-            v-model:value="watermarkOptions.imageOpacity"
+            v-model:value="configureStore.configure.watermarkOptions.imageOpacity"
             :min="0"
             :max="1"
             :step="0.01"
             class="mt-2"
+            @update:value="(value) => updateWatermarkOptions('imageOpacity', value ?? 0)"
           />
         </div>
       </NFormItem>
