@@ -167,8 +167,11 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       },
     },
     Popover: {
-      color: twc.neutral[25],
-      textColor: 'rgb(51, 54, 57)',
+      textColor: light.textColor2,
+    },
+    Slider: {
+      indicatorColor: twc.neutral[25],
+      indicatorTextColor: light.textColor2,
     },
     Select: {
       peers: {
