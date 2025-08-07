@@ -28,8 +28,6 @@ const { configure } = storeToRefs(configureStore)
 
 const { create, setActive } = tabsStore
 
-const isNavigating = ref(false)
-
 const transitionName = ref('scale')
 
 const isMounted = ref(false)
@@ -42,7 +40,7 @@ function createTab(route: RouteLocationNormalizedLoaded) {
     componentName,
     icon = 'iconify ph--browser',
     label: defaultLabel = '未命名标签',
-    renderTabLabel
+    renderTabLabel,
   } = route.meta
 
   const { fullPath, name, params } = route
@@ -58,16 +56,6 @@ function createTab(route: RouteLocationNormalizedLoaded) {
     pinned,
   })
 }
-
-router.beforeEach((_, __, next) => {
-  isNavigating.value = true
-  next()
-})
-
-router.afterEach(() => {
-  isNavigating.value = false
-})
-
 
 watch(
   (): [Tab[], string] => [tabs.value, tabActiveKey.value],
@@ -116,12 +104,8 @@ watch(
 )
 
 watch(
-  (): [RouteLocationNormalizedLoaded, boolean] => [router.currentRoute.value, isNavigating.value],
-  ([newRoute, isNavigating], oldValue) => {
-    if (isNavigating) return
-
-    const oldRoute = oldValue?.[0]
-
+  () => router.currentRoute.value,
+  (newRoute, oldRoute) => {
     if (newRoute.fullPath !== oldRoute?.fullPath) {
       const { showTab, enableMultiTab } = newRoute.meta
       const findTab = tabs.value.find((item) =>
@@ -139,11 +123,10 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 )
 
 onMounted(() => {
-
   oldTabs = [...tabs.value]
 
   isMounted.value = true

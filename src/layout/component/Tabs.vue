@@ -7,6 +7,7 @@ import {
   h,
   inject,
   nextTick,
+  onBeforeUnmount,
   onMounted,
   reactive,
   ref,
@@ -18,6 +19,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
 import { tabsInjectionKey } from '@/injection'
+import router from '@/router'
 import { useConfigureStore } from '@/stores/configure'
 import { useTabsStore } from '@/stores/tabs'
 
@@ -66,6 +68,8 @@ const {
 const tabPinnedList = ref<Tab[]>([])
 
 const tabList = ref<Tab[]>([])
+
+const pendingActiveKey = ref(tabActiveKey.value)
 
 const isMounted = ref(false)
 
@@ -276,6 +280,10 @@ function scrollToActiveTab() {
   })
 }
 
+const routerAfterEach = router.afterEach(() => {
+  pendingActiveKey.value = tabActiveKey.value
+})
+
 watch(
   (): [Tab[], string] => [tabs.value, tabActiveKey.value],
   ([newTabs, newActive], [oldTabs, oldActive]) => {
@@ -310,6 +318,10 @@ watchEffect(() => {
 onMounted(() => {
   isMounted.value = true
 })
+
+onBeforeUnmount(() => {
+  routerAfterEach()
+})
 </script>
 <template>
   <div
@@ -323,7 +335,7 @@ onMounted(() => {
         :class="[
           isTabDragging ? 'cursor-move' : 'cursor-pointer',
           {
-            'tab-active bg-primary/6': tab.key === tabActiveKey,
+            'tab-active bg-primary/6': tab.key === pendingActiveKey,
           },
         ]"
         @click="handleTabClick(tab.key)"
@@ -337,7 +349,7 @@ onMounted(() => {
           @after-enter="scrollToActiveTab"
         >
           <div
-            v-if="tab.key === tabActiveKey && isMounted"
+            v-if="tab.key === pendingActiveKey && isMounted"
             class="absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6"
           />
         </Transition>
@@ -382,7 +394,7 @@ onMounted(() => {
             :class="[
               isTabDragging ? 'cursor-move' : 'cursor-pointer',
               {
-                'tab-active': tab.key === tabActiveKey,
+                'tab-active': tab.key === pendingActiveKey,
                 group: !tab.locked && !configureStore.configure.showTabClose,
               },
             ]"
@@ -397,7 +409,7 @@ onMounted(() => {
               @after-enter="scrollToActiveTab"
             >
               <div
-                v-if="tab.key === tabActiveKey && isMounted"
+                v-if="tab.key === pendingActiveKey && isMounted"
                 class="absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6"
               />
             </Transition>
