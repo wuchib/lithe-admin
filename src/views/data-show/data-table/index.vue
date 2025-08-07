@@ -368,7 +368,7 @@ const dropdownOptions = reactive<DropdownProps>({
 })
 
 async function request(pageSize: number): Promise<{ data: UserInfo[]; total: number }> {
-  return fetch(`https://lithe-admin-serverless.vercel.app/api/faker?limit=${pageSize}`, {
+  return fetch(`https://lithe-admin-serverless.havenovelgod.com/api/faker?limit=${pageSize}`, {
     method: 'GET',
   }).then((res) => res.json())
 }
