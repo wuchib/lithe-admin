@@ -63,8 +63,6 @@ const DEFAULT_CONFIGURE_OPTIONS: ConfigureOptions = {
 export const useConfigureStore = defineStore('configureStore', () => {
   const configure = useStorage<ConfigureOptions>('configure', DEFAULT_CONFIGURE_OPTIONS)
 
-  const isNavigating = ref(false)
-
   const modify = (options: Partial<ConfigureOptions>) => {
     configure.value = mergeWith({}, configure.value, options, (objValue, srcValue) => {
       if (Array.isArray(objValue) && Array.isArray(srcValue)) {
@@ -79,10 +77,6 @@ export const useConfigureStore = defineStore('configureStore', () => {
     configure.value = structuredClone(DEFAULT_CONFIGURE_OPTIONS)
   }
 
-  const setNavigating = (value: boolean) => {
-    isNavigating.value = value
-  }
-
   watch(
     () => configure.value.enableTextSelect,
     (newValue) => {
@@ -95,10 +89,8 @@ export const useConfigureStore = defineStore('configureStore', () => {
 
   return {
     configure,
-    isNavigating,
     reset,
     modify,
-    setNavigating,
   }
 })
 
