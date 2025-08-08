@@ -272,10 +272,10 @@ function getTabContextMenuActions(): ContextMenuActions | null {
   }
 }
 
-function scrollToActiveTab() {
+function scrollToActiveTab(behavior: ScrollBehavior = 'auto') {
   nextTick(() => {
     document.querySelector('.tab-active')?.scrollIntoView({
-      behavior: 'smooth',
+      behavior,
     })
   })
 }
@@ -318,6 +318,7 @@ watchEffect(() => {
 })
 
 onMounted(() => {
+  scrollToActiveTab()
   isMounted.value = true
 })
 
@@ -348,7 +349,7 @@ onBeforeUnmount(() => {
           leave-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
           :leave-to-class="tabBackgroundTransitionClasses.leaveToClass"
           :enter-from-class="tabBackgroundTransitionClasses.enterFromClass"
-          @after-enter="scrollToActiveTab"
+          @after-enter="scrollToActiveTab('smooth')"
         >
           <div
             v-if="tab.key === pendingActiveKey && isMounted"
@@ -387,7 +388,7 @@ onBeforeUnmount(() => {
         <TransitionGroup
           enter-from-class="max-w-0"
           leave-to-class="max-w-0"
-          @after-enter="scrollToActiveTab"
+          @after-enter="scrollToActiveTab('smooth')"
         >
           <div
             v-for="tab in tabList"
@@ -408,7 +409,7 @@ onBeforeUnmount(() => {
               leave-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
               :leave-to-class="tabBackgroundTransitionClasses.leaveToClass"
               :enter-from-class="tabBackgroundTransitionClasses.enterFromClass"
-              @after-enter="scrollToActiveTab"
+              @after-enter="scrollToActiveTab('smooth')"
             >
               <div
                 v-if="tab.key === pendingActiveKey && isMounted"
