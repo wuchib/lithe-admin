@@ -73,11 +73,11 @@ const getBusinessLinesConfig = () => [
 ]
 
 const barChartSelectedLegend = ref(getBusinessLinesConfig()[0].name)
-// 收入概览图例选中状态（默认全选）
+
 const revenueChartSelected = ref<Record<string, boolean>>(
   Object.fromEntries(getBusinessLinesConfig().map((line) => [line.name, true])),
 )
-// 年度最高收入图例选中状态（单选：max|min）
+
 const highestChartSelected = ref<'max' | 'min'>('max')
 
 function generateCardData() {
@@ -373,7 +373,6 @@ function initRevenueChart() {
 
   chart.setOption(option)
 
-  // 监听图例变化，持久化选中状态
   chart.on('legendselectchanged', (params: any) => {
     if (params && params.selected) {
       revenueChartSelected.value = params.selected
