@@ -2,9 +2,10 @@
 import chroma from 'chroma-js'
 import * as echarts from 'echarts'
 import { NNumberAnimation } from 'naive-ui'
-import { onMounted, watch, ref, computed, onUnmounted } from 'vue'
+import { onMounted, watch, ref, computed, onUnmounted, nextTick } from 'vue'
 
 import { usePersonalization } from '@/composable/usePersonalization'
+import { useConfigureStore } from '@/stores/configure'
 import twc from '@/utils/tailwindColor'
 
 import type { ECharts } from 'echarts'
@@ -14,6 +15,7 @@ defineOptions({
 })
 
 const { isDark, color } = usePersonalization()
+const configureStore = useConfigureStore()
 
 const cardList = ref(generateCardData())
 
@@ -36,6 +38,7 @@ let monthlyRadarChartResizeHandler: (() => void) | null = null
 const highestRevenueChart = ref<HTMLDivElement | null>(null)
 let highestRevenueChartInstance: ECharts | null = null
 let highestRevenueChartResizeHandler: (() => void) | null = null
+let collapseResizeTimeout: ReturnType<typeof setTimeout> | null = null
 
 const CHART_CONFIG = {
   MONTHS: Array.from({ length: 12 }, (_, i) => `${i + 1}月`),
@@ -70,6 +73,12 @@ const getBusinessLinesConfig = () => [
 ]
 
 const barChartSelectedLegend = ref(getBusinessLinesConfig()[0].name)
+// 收入概览图例选中状态（默认全选）
+const revenueChartSelected = ref<Record<string, boolean>>(
+  Object.fromEntries(getBusinessLinesConfig().map((line) => [line.name, true])),
+)
+// 年度最高收入图例选中状态（单选：max|min）
+const highestChartSelected = ref<'max' | 'min'>('max')
 
 function generateCardData() {
   const now = new Date()
@@ -272,6 +281,7 @@ function initRevenueChart() {
         fontSize: 14,
       },
       data: chartDataManager.getAllNames(),
+      selected: revenueChartSelected.value,
     },
     grid: {
       left: 20,
@@ -363,6 +373,13 @@ function initRevenueChart() {
 
   chart.setOption(option)
 
+  // 监听图例变化，持久化选中状态
+  chart.on('legendselectchanged', (params: any) => {
+    if (params && params.selected) {
+      revenueChartSelected.value = params.selected
+    }
+  })
+
   revenueChartInstance = chart
   revenueChartResizeHandler = () => chart.resize()
   window.addEventListener('resize', revenueChartResizeHandler, { passive: true })
@@ -399,6 +416,12 @@ function initRevenueBarChart() {
         fontSize: 13,
       },
       selectedMode: 'single',
+      selected: Object.fromEntries(
+        businessLinesWithData.value.map((line) => [
+          line.name,
+          line.name === barChartSelectedLegend.value,
+        ]),
+      ),
       data: businessLinesWithData.value.map((line) => ({
         name: line.name,
         icon: 'circle',
@@ -779,7 +802,10 @@ function initHighestRevenueChart() {
 
   const chart = echarts.init(highestRevenueChart.value)
 
-  const legendSelected: Record<string, boolean> = { max: true, min: false }
+  const legendSelected: Record<string, boolean> = {
+    max: highestChartSelected.value === 'max',
+    min: highestChartSelected.value === 'min',
+  }
 
   const option = {
     title: [
@@ -934,6 +960,7 @@ function initHighestRevenueChart() {
     const chartItem = chartData.find((item) => item.legendName === params.name)
     if (!chartItem) return
     const isHighest = chartItem.legendValue === 'max'
+    highestChartSelected.value = isHighest ? 'max' : 'min'
     chart.setOption({
       title: [
         {
@@ -1008,7 +1035,35 @@ onUnmounted(() => {
     highestRevenueChartInstance.dispose()
     highestRevenueChartInstance = null
   }
+
+  if (collapseResizeTimeout !== null) {
+    clearTimeout(collapseResizeTimeout)
+    collapseResizeTimeout = null
+  }
 })
+
+function resizeAllCharts() {
+  if (revenueChartInstance) revenueChartInstance.resize()
+  if (revenueBarChartInstance) revenueBarChartInstance.resize()
+  if (revenueBarChart2Instance) revenueBarChart2Instance.resize()
+  if (monthlyRadarChartInstance) monthlyRadarChartInstance.resize()
+  if (highestRevenueChartInstance) highestRevenueChartInstance.resize()
+}
+
+watch(
+  () => configureStore.configure.menuCollapsed,
+  () => {
+    if (collapseResizeTimeout !== null) {
+      clearTimeout(collapseResizeTimeout)
+      collapseResizeTimeout = null
+    }
+    nextTick(() => {
+      collapseResizeTimeout = setTimeout(() => {
+        resizeAllCharts()
+      }, 350)
+    })
+  },
+)
 
 watch([isDark, color], () => {
   if (revenueChartInstance) {
