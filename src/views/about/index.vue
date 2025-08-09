@@ -181,7 +181,7 @@ watch(
   <div class="flex flex-col gap-y-4 p-4">
     <NCard :title="`关于 ${APP_NAME}`">
       <p class="text-base">
-        {{ APP_NAME }} 是一个基于
+        {{ APP_NAME }} 是一个轻盈而优雅的后台管理模板，主要技术栈由
         <a
           href="https://vuejs.org/"
           target="_blank"
@@ -245,7 +245,7 @@ watch(
         >
           TypeScript
         </NButton>
-        构建的一个轻盈而优雅的后台管理模板，主题配色基于 TailwindCSS 的色彩体系设计。
+        构建。
       </p>
     </NCard>
     <div class="flex gap-x-2">
