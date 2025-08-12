@@ -22,12 +22,7 @@ const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
 const dir = `📂 lithe-admin
-├── 📄 .editorconfig
-├── 📄 .env.development
-├── 📄 .env.production
-├── 📄 .gitattributes
-├── 📄 .gitignore
-├── 📄 .prettierrc.json
+├── 📄 LICENSE
 ├── 📄 README.md
 ├── 📄 eslint.config.ts
 ├── 📄 index.html
@@ -48,24 +43,20 @@ const dir = `📂 lithe-admin
 │  └── 📂 components/
 │    ├── 📄 Avatar.vue
 │    ├── 📄 ButtonAnimation.vue
+│    ├── 📄 EmptyPlaceholder.vue
 │    ├── 📄 HintHelp.vue
 │    ├── 📄 Noise.vue
-│    ├── 📄 EmptyPlaceholder.vue
 │    └── 📂 __tests__/
 │      ├── 📄 comp.test.ts
 │    ├── 📄 index.ts
 │  └── 📂 composable/
-│    └── 📂 comp/
-│      ├── 📄 useComponentModifier.ts
-│      ├── 📄 useComponentThemeOverrides.ts
-│      ├── 📄 useDataTable.ts
+│    ├── 📄 useComponentModifier.ts
+│    ├── 📄 useComponentThemeOverrides.ts
+│    ├── 📄 useDataTable.ts
 │    ├── 📄 useDiscreteApi.ts
 │    ├── 📄 usePersonalization.ts
 │    ├── 📄 useResettable.ts
 │    ├── 📄 useTheme.ts
-│  └── 📂 injection/
-│    ├── 📄 index.ts
-│    ├── 📄 interface.ts
 │  └── 📂 layout/
 │    └── 📂 aside/
 │      └── 📂 component/
@@ -82,6 +73,7 @@ const dir = `📂 lithe-admin
 │          ├── 📄 ConfigureDrawer.vue
 │          ├── 📄 FullScreen.vue
 │          ├── 📄 NoiseModal.vue
+│          ├── 📄 PreferencesDrawer.vue
 │          ├── 📄 SignOut.vue
 │          ├── 📄 ThemeDropdown.vue
 │          ├── 📄 WatermarkModal.vue
@@ -100,7 +92,8 @@ const dir = `📂 lithe-admin
 │    ├── 📄 index.ts
 │    ├── 📄 record.ts
 │  └── 📂 stores/
-│    ├── 📄 configure.ts
+│    ├── 📄 preferences.ts
+│    ├── 📄 system.ts
 │    ├── 📄 tabs.ts
 │    ├── 📄 user.ts
 │  └── 📂 theme/
@@ -125,15 +118,17 @@ const dir = `📂 lithe-admin
 │      └── 📂 data-table/
 │        ├── 📄 ModalData.vue
 │        ├── 📄 index.vue
-│    └── 📂 draggable/
+│    └── 📂 drag-drop/
+│      ├── 📄 index.vue
+│    └── 📂 dynamic-route/
+│      ├── 📄 index.vue
+│    └── 📂 error-page/
+│      ├── 📄 404.vue
 │      ├── 📄 index.vue
 │    └── 📂 feedback/
 │      ├── 📄 discreteApi.ts
 │      ├── 📄 index.vue
 │    └── 📂 multi-level-menu/
-│      ├── 📄 index.vue
-│    └── 📂 not-found/
-│      ├── 📄 404.vue
 │      ├── 📄 index.vue
 │    └── 📂 sign-in/
 │      └── 📂 component/
@@ -148,6 +143,7 @@ const dir = `📂 lithe-admin
 ├── 📄 tsconfig.json
 ├── 📄 tsconfig.node.json
 ├── 📄 tsconfig.vitest.json
+├── 📄 vercel.json
 ├── 📄 vite.config.ts
 └── 📄 vitest.config.ts`
 
