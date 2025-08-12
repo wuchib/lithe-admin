@@ -66,25 +66,22 @@ const { scrollbarInMainLayout } = useComponentThemeOverrides()
               <span class="iconify ph--rectangle" />
             </div>
           </template>
-
-          <template #content>
-            <Transition
-              enter-active-class="transition-[grid-template-rows] duration-300 ease-naive-bezier"
-              leave-active-class="transition-[grid-template-rows] duration-300 ease-naive-bezier"
-              enter-from-class="grid-rows-[0fr]"
-              leave-to-class="grid-rows-[0fr]"
-              enter-to-class="grid-rows-[1fr]"
-              leave-from-class="grid-rows-[1fr]"
-            >
-              <div
-                v-if="preferencesStore.preferences.showFooter"
-                class="grid shrink-0 items-baseline overflow-hidden"
-              >
-                <FooterLayout />
-              </div>
-            </Transition>
-          </template>
         </EmptyPlaceholder>
+        <Transition
+          enter-active-class="transition-[grid-template-rows] duration-300 ease-naive-bezier"
+          leave-active-class="transition-[grid-template-rows] duration-300 ease-naive-bezier"
+          enter-from-class="grid-rows-[0fr]"
+          leave-to-class="grid-rows-[0fr]"
+          enter-to-class="grid-rows-[1fr]"
+          leave-from-class="grid-rows-[1fr]"
+        >
+          <div
+            v-if="preferencesStore.preferences.showFooter"
+            class="grid shrink-0 items-baseline overflow-hidden"
+          >
+            <FooterLayout />
+          </div>
+        </Transition>
       </div>
     </div>
   </div>

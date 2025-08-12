@@ -223,38 +223,35 @@ watch(
               <EmptyPlaceholder
                 :show="cloneTaskList.length <= 0"
                 description="把左边的任务拖拽到这里"
+              />
+              <VueDraggable
+                ref="cloneTaskListDragRef"
+                v-model="cloneTaskList"
+                :animation="150"
+                :scrollSensitivity="100"
+                ghostClass="ghost"
+                group="clone"
+                class="flex h-full flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none"
+                style="min-height: 300px"
               >
-                <template #content>
-                  <VueDraggable
-                    ref="cloneTaskListDragRef"
-                    v-model="cloneTaskList"
-                    :animation="150"
-                    :scrollSensitivity="100"
-                    ghostClass="ghost"
-                    group="clone"
-                    class="flex h-full flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none"
-                    style="min-height: 300px"
+                <div
+                  v-for="item in cloneTaskList"
+                  :key="item.key"
+                  class="flex h-14 cursor-move items-center justify-between rounded bg-neutral-500/8 px-4 py-3"
+                >
+                  <span>{{ item.name }}</span>
+                  <NButton
+                    quaternary
+                    circle
+                    size="small"
+                    @click="removeTask(item)"
                   >
-                    <div
-                      v-for="item in cloneTaskList"
-                      :key="item.key"
-                      class="flex h-14 cursor-move items-center justify-between rounded bg-neutral-500/8 px-4 py-3"
-                    >
-                      <span>{{ item.name }}</span>
-                      <NButton
-                        quaternary
-                        circle
-                        size="small"
-                        @click="removeTask(item)"
-                      >
-                        <template #icon>
-                          <span class="iconify ph--x"></span>
-                        </template>
-                      </NButton>
-                    </div>
-                  </VueDraggable>
-                </template>
-              </EmptyPlaceholder>
+                    <template #icon>
+                      <span class="iconify ph--x"></span>
+                    </template>
+                  </NButton>
+                </div>
+              </VueDraggable>
             </NScrollbar>
           </div>
         </template>
