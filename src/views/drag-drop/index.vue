@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// @ts-ignore
-import { codeToHtml } from 'https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm'
 import { NAlert, NCard, NSplit, NScrollbar, NButton } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
@@ -13,6 +11,8 @@ import type { UseDraggableReturn } from 'vue-draggable-plus'
 defineOptions({
   name: 'DragDrop',
 })
+
+let codeToHtml: any
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -71,18 +71,26 @@ watch(
   [baseList, gridList, cloneTaskList, isDark],
   async (newVal) => {
     const [baseList, gridList, cloneList2, isDark] = newVal
-    baseListCodeHighlight.value = await codeToHtml(JSON.stringify(baseList, null, 2), {
-      lang: 'json',
-      theme: isDark ? 'dark-plus' : 'min-light',
-    })
-    gridListCodeHighlight.value = await codeToHtml(JSON.stringify(gridList, null, 2), {
-      lang: 'json',
-      theme: isDark ? 'dark-plus' : 'min-light',
-    })
-    cloneList2CodeHighlight.value = await codeToHtml(JSON.stringify(cloneList2, null, 2), {
-      lang: 'json',
-      theme: isDark ? 'dark-plus' : 'min-light',
-    })
+
+    if (!codeToHtml) {
+      // @ts-ignore
+      const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm')
+      codeToHtml = shiki.codeToHtml
+    }
+
+    const theme = isDark ? 'dark-plus' : 'min-light'
+
+    codeToHtml(JSON.stringify(baseList, null, 2), { lang: 'json', theme })
+      .then((result: string) => (baseListCodeHighlight.value = result))
+      .catch(() => (baseListCodeHighlight.value = JSON.stringify(baseList, null, 2)))
+
+    codeToHtml(JSON.stringify(gridList, null, 2), { lang: 'json', theme })
+      .then((result: string) => (gridListCodeHighlight.value = result))
+      .catch(() => (gridListCodeHighlight.value = JSON.stringify(gridList, null, 2)))
+
+    codeToHtml(JSON.stringify(cloneList2, null, 2), { lang: 'json', theme })
+      .then((result: string) => (cloneList2CodeHighlight.value = result))
+      .catch(() => (cloneList2CodeHighlight.value = JSON.stringify(cloneList2, null, 2)))
   },
   {
     immediate: true,

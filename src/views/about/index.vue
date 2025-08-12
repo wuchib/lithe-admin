@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// @ts-ignore
-import { codeToHtml } from 'https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm'
 import { NCard, NSplit, NButton, NScrollbar, NTag } from 'naive-ui'
 import { ref, watch } from 'vue'
 
@@ -10,6 +8,8 @@ import { usePersonalization } from '@/composable/usePersonalization'
 defineOptions({
   name: 'About',
 })
+
+let codeToHtml: any
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -149,28 +149,28 @@ const dir = `📂 lithe-admin
 
 watch(
   isDark,
-  async (isDark) => {
-    directoryStructureHighlight.value = await codeToHtml(dir, {
-      lang: 'markdown',
-      theme: isDark ? 'dark-plus' : 'min-light',
-    })
+  async () => {
+    if (!codeToHtml) {
+      // @ts-ignore
+      const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm')
+      codeToHtml = shiki.codeToHtml
+    }
 
-    dependenciesCodeHighlight.value = await codeToHtml(JSON.stringify(dependencies, null, 2), {
-      lang: 'json',
-      theme: isDark ? 'dark-plus' : 'min-light',
-    })
+    const theme = isDark.value ? 'dark-plus' : 'min-light'
 
-    devDependenciesCodeHighlight.value = await codeToHtml(
-      JSON.stringify(devDependencies, null, 2),
-      {
-        lang: 'json',
-        theme: isDark ? 'dark-plus' : 'min-light',
-      },
-    )
+    codeToHtml(dir, { lang: 'markdown', theme })
+      .then((result: string) => (directoryStructureHighlight.value = result))
+      .catch(() => (directoryStructureHighlight.value = dir))
+
+    codeToHtml(JSON.stringify(dependencies, null, 2), { lang: 'json', theme })
+      .then((result: string) => (dependenciesCodeHighlight.value = result))
+      .catch(() => (dependenciesCodeHighlight.value = JSON.stringify(dependencies, null, 2)))
+
+    codeToHtml(JSON.stringify(devDependencies, null, 2), { lang: 'json', theme })
+      .then((result: string) => (devDependenciesCodeHighlight.value = result))
+      .catch(() => (devDependenciesCodeHighlight.value = JSON.stringify(devDependencies, null, 2)))
   },
-  {
-    immediate: true,
-  },
+  { immediate: true },
 )
 </script>
 <template>

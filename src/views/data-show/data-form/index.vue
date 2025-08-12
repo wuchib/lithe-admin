@@ -1,6 +1,5 @@
 <script setup lang="ts">
-// @ts-ignore
-import { codeToHtml } from 'https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm'
+
 import {
   NCard,
   NForm,
@@ -44,6 +43,8 @@ interface BaseForm {
 defineOptions({
   name: 'DataForm',
 })
+
+let codeToHtml: any
 
 const { isDark } = usePersonalization()
 
@@ -190,15 +191,21 @@ watch(
   async (newVal) => {
     const [form, isDark] = newVal
 
-    formCodeHighlight.value = await codeToHtml(JSON.stringify(form, null, 2), {
-      lang: 'json',
-      theme: isDark ? 'dark-plus' : 'min-light',
-    })
+    if (!codeToHtml) {
+      // @ts-ignore
+      const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm')
+      codeToHtml = shiki.codeToHtml
+    }
 
-    rulesCodeHighlight.value = await codeToHtml(JSON.stringify(rules, null, 2), {
-      lang: 'json',
-      theme: isDark ? 'dark-plus' : 'min-light',
-    })
+    const theme = isDark ? 'dark-plus' : 'min-light'
+
+    codeToHtml(JSON.stringify(form, null, 2), { lang: 'json', theme })
+      .then((result: string) => (formCodeHighlight.value = result))
+      .catch(() => (formCodeHighlight.value = JSON.stringify(form, null, 2)))
+
+    codeToHtml(JSON.stringify(rules, null, 2), { lang: 'json', theme })
+      .then((result: string) => (rulesCodeHighlight.value = result))
+      .catch(() => (rulesCodeHighlight.value = JSON.stringify(rules, null, 2)))
   },
   {
     immediate: true,
