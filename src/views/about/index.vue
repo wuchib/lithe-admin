@@ -70,7 +70,6 @@ const dir = `📂 lithe-admin
 │    └── 📂 header/
 │      └── 📂 Actions/
 │        └── 📂 component/
-│          ├── 📄 ConfigureDrawer.vue
 │          ├── 📄 FullScreen.vue
 │          ├── 📄 NoiseModal.vue
 │          ├── 📄 PreferencesDrawer.vue
