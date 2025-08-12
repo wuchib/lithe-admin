@@ -55,9 +55,21 @@ const {
   getRemovableIds,
 } = tabsStore
 
-const tabList = ref<Tab[]>([])
+const tabPinnedList = computed({
+  get: () => tabsStore.tabs.filter((tab) => tab.pinned),
+  set: (newPinnedTabs: Tab[]) => {
+    const currentUnpinnedTabs = tabsStore.tabs.filter((tab) => !tab.pinned)
+    setTabs([...newPinnedTabs, ...currentUnpinnedTabs])
+  },
+})
 
-const tabPinnedList = ref<Tab[]>([])
+const tabUnPinnedList = computed({
+  get: () => tabsStore.tabs.filter((tab) => !tab.pinned),
+  set: (newUnpinnedTabs: Tab[]) => {
+    const currentPinnedTabs = tabsStore.tabs.filter((tab) => tab.pinned)
+    setTabs([...currentPinnedTabs, ...newUnpinnedTabs])
+  },
+})
 
 const pendingActiveKey = ref('')
 
@@ -186,7 +198,6 @@ const onTabDraggableStart = () => {
 }
 
 const onTabDraggableEnd = () => {
-  setTabs([...tabPinnedList.value, ...tabList.value])
   showTabTooltip.value = true
 }
 
@@ -211,6 +222,16 @@ const onScrollbarWheeled = (e: WheelEvent) => {
   scrollbarRef.value.scrollBy({
     left: (e.deltaY || e.deltaX) * 3,
     behavior: 'smooth',
+  })
+}
+
+function makeTabList(isPinned: boolean) {
+  return computed({
+    get: () => tabsStore.tabs.filter((tab) => tab.pinned === isPinned),
+    set: (newTabs: Tab[]) => {
+      const others = tabsStore.tabs.filter((tab) => tab.pinned !== isPinned)
+      setTabs(isPinned ? [...newTabs, ...others] : [...others, ...newTabs])
+    },
   })
 }
 
@@ -288,8 +309,8 @@ const CompTabs = defineComponent({
       <VueDraggable
         class='flex'
         modelValue={props.modelValue}
-        animation={150}
-        delay={300}
+        animation={200}
+        delay={100}
         direction='horizontal'
         ghostClass='bg-primary/30'
         forceFallback
@@ -337,9 +358,10 @@ const CompTabs = defineComponent({
                   class={[
                     'relative flex items-center justify-center overflow-hidden transition-[translate] duration-300 ease-naive-bezier',
                     {
-                      'translate-x-2.5': tab.locked || !preferencesStore.preferences.showTabClose,
+                      'translate-x-2.5':
+                        !tab.pinned && (tab.locked || !preferencesStore.preferences.showTabClose),
                       'group-hover:translate-x-0':
-                        !tab.locked && !preferencesStore.preferences.showTabClose,
+                        !tab.pinned && !tab.locked && !preferencesStore.preferences.showTabClose,
                     },
                   ]}
                 >
@@ -422,11 +444,6 @@ watch(
   },
 )
 
-watchEffect(() => {
-  tabList.value = tabsStore.tabs.filter((tab) => !tab.pinned)
-  tabPinnedList.value = tabsStore.tabs.filter((tab) => tab.pinned)
-})
-
 onMounted(() => {
   scrollToActiveTab()
   pendingActiveKey.value = tabsStore.tabActivePath
@@ -447,7 +464,7 @@ onBeforeUnmount(() => {
       x-scrollable
       @wheel.passive="onScrollbarWheeled"
     >
-      <CompTabs v-model="tabList" />
+      <CompTabs v-model="tabUnPinnedList" />
     </NScrollbar>
     <div class="flex items-center px-3">
       <ButtonAnimation

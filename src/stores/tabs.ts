@@ -38,7 +38,6 @@ export const useTabsStore = defineStore('tabsStore', () => {
     if (!tabs.value.some(({ path }) => path === tab.path)) {
       const id = Date.now()
       tabs.value.push({ ...tab, id })
-      sortTabs()
     }
 
     setTabActivePath(tab.path)
