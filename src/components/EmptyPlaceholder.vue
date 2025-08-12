@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { NEmpty } from 'naive-ui'
 
-import type { EmptyProps, EmptySlots } from 'naive-ui'
-import type { VNode } from 'vue'
+import type { EmptyProps } from 'naive-ui'
 
 export interface EmptyPlaceholderProps extends /* @vue-ignore */ EmptyProps {
   show?: boolean
-}
-
-export interface EmptyPlaceholderSlots extends EmptySlots {
-  content?: () => VNode[]
 }
 
 defineOptions({
@@ -17,14 +12,6 @@ defineOptions({
 })
 
 const props = defineProps<EmptyPlaceholderProps>()
-
-const slots = defineSlots<EmptyPlaceholderSlots>()
-
-function getEmptySlots() {
-  return (Object.keys(slots) as (keyof EmptyPlaceholderSlots)[]).filter(
-    (name) => name !== 'content',
-  )
-}
 </script>
 <template>
   <Transition
@@ -32,12 +19,12 @@ function getEmptySlots() {
     enter-from-class="scale-50 opacity-0"
   >
     <div
-      v-if="props.show"
+      v-show="props.show"
       class="absolute inset-0 grid size-full place-items-center"
     >
       <NEmpty v-bind="$attrs">
         <template
-          v-for="slot of getEmptySlots()"
+          v-for="slot of $slots"
           :key="slot"
           #[slot]
         >
@@ -46,5 +33,4 @@ function getEmptySlots() {
       </NEmpty>
     </div>
   </Transition>
-  <slot name="content" />
 </template>
