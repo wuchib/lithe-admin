@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ButtonAnimation } from '@/components'
 
-import ConfigureDrawer from './component/ConfigureDrawer.vue'
 import FullScreen from './component/FullScreen.vue'
-import Signout from './component/SignOut.vue'
+import PreferencesDrawer from './component/PreferencesDrawer.vue'
+import SignOut from './component/SignOut.vue'
 import ThemeDropdown from './component/ThemeDropdown.vue'
 
 defineOptions({
@@ -22,7 +22,7 @@ defineOptions({
     </ButtonAnimation>
     <FullScreen />
     <ThemeDropdown />
-    <ConfigureDrawer />
-    <Signout />
+    <PreferencesDrawer />
+    <SignOut />
   </div>
 </template>

@@ -5,8 +5,13 @@ import { watch } from 'vue'
 
 import type { WatermarkProps } from 'naive-ui'
 
-export interface ConfigureOptions {
-  menuCollapsed: boolean
+export interface PreferencesOptions {
+  menu: Partial<{
+    collapsed: boolean
+    width: number
+    maxWidth: number
+  }>
+  shouldRefreshTab: boolean
   showFooter: boolean
   showLogo: boolean
   showTabs: boolean
@@ -22,8 +27,13 @@ export interface ConfigureOptions {
   noiseOpacity: number
 }
 
-const DEFAULT_CONFIGURE_OPTIONS: ConfigureOptions = {
-  menuCollapsed: false,
+const DEFAULT_PREFERENCES_OPTIONS: PreferencesOptions = {
+  menu: {
+    collapsed: false,
+    width: 64,
+    maxWidth: 272,
+  },
+  shouldRefreshTab: false,
   showFooter: true,
   showTabs: true,
   showTabClose: true,
@@ -60,25 +70,23 @@ const DEFAULT_CONFIGURE_OPTIONS: ConfigureOptions = {
   noiseOpacity: 0.02,
 }
 
-export const useConfigureStore = defineStore('configureStore', () => {
-  const configure = useStorage<ConfigureOptions>('configure', DEFAULT_CONFIGURE_OPTIONS)
+export const usePreferencesStore = defineStore('preferencesStore', () => {
+  const preferences = useStorage<PreferencesOptions>('preferences', DEFAULT_PREFERENCES_OPTIONS)
 
-  const modify = (options: Partial<ConfigureOptions>) => {
-    configure.value = mergeWith({}, configure.value, options, (objValue, srcValue) => {
+  const modify = (options: Partial<PreferencesOptions>) => {
+    preferences.value = mergeWith({}, preferences.value, options, (objValue, srcValue) => {
       if (Array.isArray(objValue) && Array.isArray(srcValue)) {
         return srcValue
       }
     })
-
-    return null
   }
 
   const reset = () => {
-    configure.value = structuredClone(DEFAULT_CONFIGURE_OPTIONS)
+    preferences.value = structuredClone(DEFAULT_PREFERENCES_OPTIONS)
   }
 
   watch(
-    () => configure.value.enableTextSelect,
+    () => preferences.value.enableTextSelect,
     (newValue) => {
       document.documentElement.style.userSelect = newValue ? 'auto' : 'none'
     },
@@ -88,12 +96,12 @@ export const useConfigureStore = defineStore('configureStore', () => {
   )
 
   return {
-    configure,
+    preferences,
     reset,
     modify,
   }
 })
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useConfigureStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(usePreferencesStore, import.meta.hot))
 }

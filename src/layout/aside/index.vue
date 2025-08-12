@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 
-import { menuInjectionKey } from '@/injection'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 
 import Menu from './component/Menu.vue'
 import UserCard from './component/UserCard.vue'
@@ -11,18 +10,20 @@ defineOptions({
   name: 'AsideLayout',
 })
 
-const menuInject = inject(menuInjectionKey, null)
+const preferencesStore = usePreferencesStore()
 
-const configureStore = useConfigureStore()
-
-const menuCollapseWidth = computed(() =>
-  configureStore.configure.menuCollapsed
-    ? menuInject?.collapse.width
-    : menuInject?.collapse.maxWidth,
-)
+const menuCollapseWidth = computed(() => {
+  return preferencesStore.preferences.menu.collapsed
+    ? preferencesStore.preferences.menu.width
+    : preferencesStore.preferences.menu.maxWidth
+})
 
 function handleCollapseClick() {
-  configureStore.modify({ menuCollapsed: !configureStore.configure.menuCollapsed })
+  preferencesStore.modify({
+    menu: {
+      collapsed: !preferencesStore.preferences.menu.collapsed,
+    },
+  })
 }
 </script>
 <template>
@@ -41,7 +42,7 @@ function handleCollapseClick() {
       <span
         class="iconify size-4.5 transition-[color,rotate] duration-300 ease-naive-bezier ph--caret-left dark:text-neutral-400"
         :class="{
-          'rotate-180': configureStore.configure.menuCollapsed,
+          'rotate-180': preferencesStore.preferences.menu.collapsed,
         }"
       />
     </div>

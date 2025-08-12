@@ -27,7 +27,7 @@ export const routeRecordRaw: MergeMenuMixedOptions[] = [
         label: '数据表格',
         meta: {
           componentName: 'DataTable',
-          label: '数据表格',
+          title: '数据表格',
           showTab: true,
         },
         component: 'data-show/data-table/index',
@@ -39,7 +39,7 @@ export const routeRecordRaw: MergeMenuMixedOptions[] = [
         label: '数据表单',
         meta: {
           componentName: 'DataForm',
-          label: '数据表单',
+          title: '数据表单',
           showTab: true,
         },
         component: 'data-show/data-form/index',
@@ -174,7 +174,7 @@ export const routeRecordRaw: MergeMenuMixedOptions[] = [
       componentName: 'DynamicRoute',
       showTab: true,
       enableMultiTab: true,
-      renderTabLabel({ id, name }) {
+      renderTabTitle({ id, name }) {
         return `动态路由${id ? `-${id}` : ''}${name ? `-${name}` : ''}`
       },
     },

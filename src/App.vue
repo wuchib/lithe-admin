@@ -13,9 +13,9 @@ import { RouterView } from 'vue-router'
 
 import Noise from '@/components/Noise.vue'
 import { getConfigProviderProps } from '@/composable/useDiscreteApi'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 const configProviderProps = getConfigProviderProps()
 </script>
 
@@ -29,11 +29,11 @@ const configProviderProps = getConfigProviderProps()
             <NDialogProvider>
               <RouterView />
               <NWatermark
-                v-if="configureStore.configure.showWatermark"
+                v-if="preferencesStore.preferences.showWatermark"
                 fullscreen
-                v-bind="configureStore.configure.watermarkOptions"
+                v-bind="preferencesStore.preferences.watermarkOptions"
               />
-              <Noise v-if="configureStore.configure.showNoise" />
+              <Noise v-if="preferencesStore.preferences.showNoise" />
             </NDialogProvider>
           </NMessageProvider>
         </NNotificationProvider>

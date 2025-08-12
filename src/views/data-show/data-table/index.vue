@@ -19,8 +19,8 @@ import {
 } from 'naive-ui'
 import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
 
-import { useComponentModifier } from '@/composable/comp/useComponentModifier'
-import { useDataTable } from '@/composable/comp/useDataTable'
+import { useComponentModifier } from '@/composable/useComponentModifier'
+import { useDataTable } from '@/composable/useDataTable'
 import { useResettableReactive } from '@/composable/useResettable'
 
 import ModalData from './ModalData.vue'

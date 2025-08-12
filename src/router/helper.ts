@@ -58,12 +58,12 @@ export function resolveMenu(options: MergeMenuMixedOptions[], parentDisabled = f
 
       const mergedDisabled = parentDisabled || disabled
 
-      const createIcon = icon ? () => h('span', { class: `${icon} size-6` }) : null
+      const renderIcon = icon ? () => h('span', { class: `${icon} size-6` }) : null
 
       const menu = pickBy(
         {
           key: key || (name as string) || (path as string),
-          icon: createIcon,
+          icon: renderIcon,
           label,
           disabled,
           extra,
@@ -133,7 +133,7 @@ export function resolveRoute(options: MergeMenuMixedOptions[]) {
           ...(compModule ? { component: compModule } : {}),
           meta: {
             ...meta,
-            label: meta?.label || label,
+            title: meta?.title || label,
             icon,
           },
         },

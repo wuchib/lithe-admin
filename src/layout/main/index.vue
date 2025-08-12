@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
-import { storeToRefs } from 'pinia'
-import { inject, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 
-import { tabsInjectionKey } from '@/injection'
 import router from '@/router'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 import { useTabsStore } from '@/stores/tabs'
 
 import type { Tab } from '@/stores/tabs'
@@ -16,75 +14,84 @@ defineOptions({
   name: 'MainLayout',
 })
 
-const tabsInject = inject(tabsInjectionKey, null)
+const layoutRedirect = router.getRoutes().find((item) => item.name === 'layout')?.redirect
 
 const tabsStore = useTabsStore()
 
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 
-const { tabs, tabActiveKey, keepAliveTabs } = storeToRefs(tabsStore)
+const { createTab, setTabActivePath } = tabsStore
 
-const { configure } = storeToRefs(configureStore)
-
-const { create, setActive } = tabsStore
-
-const transitionName = ref('scale')
+const navigationTransitionName = ref('scale')
 
 const isMounted = ref(false)
 
+const keepAliveTabs = computed(() => {
+  return tabsStore.tabs.filter((tab) => tab.keepAlived).map((tab) => tab.componentName ?? '')
+})
+
 let oldTabs: Tab[] = []
 
-function createTab(route: RouteLocationNormalizedLoaded) {
+function createTabFromRoute(route: RouteLocationNormalizedLoaded) {
   const {
-    pinned,
-    componentName,
     icon = 'iconify ph--browser',
-    label: defaultLabel = '未命名标签',
-    renderTabLabel,
+    title: label = '未命名标签',
+    renderTabTitle,
+    componentName,
+    pinned,
   } = route.meta
 
   const { fullPath, name, params } = route
 
-  const label = renderTabLabel ? renderTabLabel(params) : defaultLabel
+  const title = renderTabTitle ? renderTabTitle(params) : label
 
-  create({
-    componentName,
+  createTab({
+    path: fullPath,
     icon,
+    title,
     name,
-    key: fullPath,
-    label,
+    componentName,
     pinned,
   })
 }
 
 watch(
-  (): [Tab[], string] => [tabs.value, tabActiveKey.value],
-  ([newTabs, newActiveKey], [, oldActiveKey]) => {
+  (): [Tab[], string] => [tabsStore.tabs, tabsStore.tabActivePath],
+  ([newTabs, newTabActivePath], [, oldTabActivePath]) => {
     if (
-      newActiveKey &&
-      newActiveKey !== oldActiveKey &&
-      newActiveKey !== router.currentRoute.value.fullPath
+      newTabActivePath &&
+      newTabActivePath !== oldTabActivePath &&
+      newTabActivePath !== router.currentRoute.value.fullPath
     ) {
-      router.push(newActiveKey)
+      if (
+        layoutRedirect &&
+        layoutRedirect === router.currentRoute.value.path &&
+        newTabActivePath === '/'
+      ) {
+        router.go(0)
+      } else {
+        router.push(newTabActivePath)
+      }
     }
 
-    if (!configure.value.enableNavigationTransition) return
+    if (!preferencesStore.preferences.enableNavigationTransition) return
 
-    if (!configure.value.showTabs) {
-      transitionName.value = 'scale'
+    if (!preferencesStore.preferences.showTabs) {
+      navigationTransitionName.value = 'scale'
       return
     }
 
-    const oldActiveIndex = oldTabs.findIndex((item) => item.key === oldActiveKey)
-    const newActiveIndex = newTabs.findIndex((item) => item.key === newActiveKey)
+    const oldActiveIndex = oldTabs.findIndex((item) => item.path === oldTabActivePath)
+    const newActiveIndex = newTabs.findIndex((item) => item.path === newTabActivePath)
 
     if (oldTabs.length < newTabs.length || oldActiveIndex === -1 || newActiveIndex === -1) {
-      transitionName.value = 'scale'
+      navigationTransitionName.value = 'scale'
     } else if (oldTabs.length > newTabs.length) {
-      transitionName.value =
+      navigationTransitionName.value =
         oldActiveIndex > newActiveIndex ? 'scale-slider-left' : 'scale-slider-right'
-    } else if (oldActiveKey !== newActiveKey) {
-      transitionName.value = oldActiveIndex > newActiveIndex ? 'slider-left' : 'slider-right'
+    } else if (oldTabActivePath !== newTabActivePath) {
+      navigationTransitionName.value =
+        oldActiveIndex > newActiveIndex ? 'slider-left' : 'slider-right'
     }
 
     oldTabs = [...newTabs]
@@ -92,32 +99,40 @@ watch(
 )
 
 watch(
-  () => tabsInject?.shouldRefresh.value,
+  () => preferencesStore.preferences.shouldRefreshTab,
   (shouldRefresh) => {
     if (shouldRefresh) {
-      transitionName.value = 'shake'
+      navigationTransitionName.value = 'shake'
       nextTick(() => {
-        tabsInject?.doRefresh(false)
+        preferencesStore.modify({
+          shouldRefreshTab: false,
+        })
       })
     }
   },
 )
 
+/**
+ * create tab when router changed
+ * example:
+ * 1. click the menu RouterLink to push to the operation
+ * 2. refresh the page to perform tab and highlight correction
+ */
 watch(
   () => router.currentRoute.value,
   (newRoute, oldRoute) => {
     if (newRoute.fullPath !== oldRoute?.fullPath) {
       const { showTab, enableMultiTab } = newRoute.meta
-      const findTab = tabs.value.find((item) =>
-        enableMultiTab ? item.key === newRoute.fullPath : item.key === newRoute.path,
-      )
+      const targetPath = enableMultiTab ? newRoute.fullPath : newRoute.path
+
+      const findTab = tabsStore.tabs.find((item) => item.path === targetPath)
 
       if (!isEmpty(findTab)) {
-        setActive(findTab.key)
+        setTabActivePath(findTab.path)
       } else if (showTab) {
-        createTab(newRoute)
+        createTabFromRoute(newRoute)
       } else {
-        setActive('')
+        setTabActivePath('')
       }
     }
   },
@@ -127,21 +142,20 @@ watch(
 )
 
 onMounted(() => {
-  oldTabs = [...tabs.value]
-
+  oldTabs = [...tabsStore.tabs]
   isMounted.value = true
 })
 </script>
 <template>
   <RouterView
-    v-if="configure.enableNavigationTransition"
+    v-if="preferencesStore.preferences.enableNavigationTransition"
     v-slot="{ Component, route }"
   >
-    <Transition :name="transitionName">
+    <Transition :name="navigationTransitionName">
       <KeepAlive :include="keepAliveTabs">
         <component
           :is="Component"
-          v-if="isMounted && !tabsInject?.shouldRefresh.value"
+          v-if="isMounted && !preferencesStore.preferences.shouldRefreshTab"
           :key="route.path + JSON.stringify(route.query)"
         />
       </KeepAlive>
@@ -220,7 +234,6 @@ onMounted(() => {
   opacity: 0;
 }
 
-/* shake */
 .shake-enter-active {
   animation: shake var(--cubic-bezier-ease-in-out) 500ms;
 }

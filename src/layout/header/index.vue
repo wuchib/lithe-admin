@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 
 import Actions from './Actions/index.vue'
 import Breadcrumb from './Breadcrumb.vue'
@@ -10,7 +10,7 @@ defineOptions({
   name: 'HeaderLayout',
 })
 
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 </script>
 <template>
   <header class="flex">
@@ -26,7 +26,7 @@ const configureStore = useConfigureStore()
           leave-from-class="grid-cols-[1fr]"
         >
           <div
-            v-if="configureStore.configure.showNavigation"
+            v-if="preferencesStore.preferences.showNavigation"
             class="grid overflow-hidden"
           >
             <Navigation />
@@ -42,7 +42,7 @@ const configureStore = useConfigureStore()
           leave-from-class="grid-cols-[1fr]"
         >
           <div
-            v-if="configureStore.configure.showBreadcrumb"
+            v-if="preferencesStore.preferences.showBreadcrumb"
             class="grid overflow-hidden"
           >
             <Breadcrumb />

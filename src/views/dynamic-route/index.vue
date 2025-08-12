@@ -14,7 +14,7 @@ const router = useRouter()
       type="info"
       closable
     >
-      在路由配置的 meta 中添加 enableMultiTab 属性，访问不同的动态路径时都创建一个 tab
+      在路由配置的 meta 中添加 enableMultiTab 属性，访问不同的动态路径时都会创建新的 tab
     </NAlert>
     <NCard>
       <div class="grid grid-cols-5 gap-4">

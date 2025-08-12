@@ -2,11 +2,11 @@
 import { NSlider, NInputNumber } from 'naive-ui'
 import { reactive, ref, watchEffect } from 'vue'
 
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 
 import type { SliderProps } from 'naive-ui'
 
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 
 const opacity = ref(0)
 
@@ -17,13 +17,13 @@ const sliderRange = reactive({
 })
 
 const onSliderUpdata: SliderProps['onUpdateValue'] = (opacity) => {
-  configureStore.modify({
+  preferencesStore.modify({
     noiseOpacity: opacity,
   })
 }
 
 watchEffect(() => {
-  opacity.value = configureStore.configure.noiseOpacity
+  opacity.value = preferencesStore.preferences.noiseOpacity
 })
 </script>
 <template>

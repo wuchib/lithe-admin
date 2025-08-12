@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 
-import { menuInjectionKey } from '@/injection'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
-const menuInject = inject(menuInjectionKey, null)
-
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 
 const collapseWidth = computed(() => {
-  return configureStore.configure.menuCollapsed
-    ? menuInject?.collapse.width
-    : menuInject?.collapse.maxWidth
+  return preferencesStore.preferences.menu.collapsed
+    ? preferencesStore.preferences.menu.width
+    : preferencesStore.preferences.menu.maxWidth
 })
 </script>
 <template>
@@ -26,9 +23,9 @@ const collapseWidth = computed(() => {
     <div
       class="flex h-full items-center justify-center transition-[opacity,padding] duration-300 ease-naive-bezier"
       :class="[
-        configureStore.configure.menuCollapsed ? 'px-0' : 'px-4',
+        preferencesStore.preferences.menu.collapsed ? 'px-0' : 'px-4',
         {
-          'opacity-0': !configureStore.configure.showLogo,
+          'opacity-0': !preferencesStore.preferences.showLogo,
         },
       ]"
     >
@@ -37,7 +34,7 @@ const collapseWidth = computed(() => {
       </div>
       <div
         class="flex-1 overflow-hidden transition-[margin-left,max-width] duration-300"
-        :class="configureStore.configure.menuCollapsed ? 'ml-0 max-w-0' : 'ml-4 max-w-44'"
+        :class="preferencesStore.preferences.menu.collapsed ? 'ml-0 max-w-0' : 'ml-4 max-w-44'"
       >
         <h1 class="truncate text-xl">
           {{ APP_NAME }}

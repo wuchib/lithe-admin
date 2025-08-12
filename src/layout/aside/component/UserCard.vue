@@ -4,10 +4,10 @@ import { h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
 import DefaultAvatar from '@/components/Avatar.vue'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 import { useUserStore } from '@/stores/user'
 
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 const userStore = useUserStore()
 const message = useMessage()
 
@@ -43,7 +43,7 @@ const onUserDropdownSelected = (key: string) => {
   <div
     class="mb-4 flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] duration-300 hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
     :class="
-      configureStore.configure.menuCollapsed
+      preferencesStore.preferences.menu.collapsed
         ? 'mx-2 rounded'
         : 'mx-4 rounded-xl bg-neutral-150 py-3.5 pr-2.5 pl-3.5 dark:bg-neutral-800'
     "
@@ -54,15 +54,15 @@ const onUserDropdownSelected = (key: string) => {
       show-arrow
       @select="onUserDropdownSelected"
       placement="right-end"
-      :disabled="!configureStore.configure.menuCollapsed"
+      :disabled="!preferencesStore.preferences.menu.collapsed"
     >
       <div
         class="grid place-items-center overflow-hidden rounded-full transition-[margin,padding] duration-300 ease-naive-bezier"
-        :class="configureStore.configure.menuCollapsed ? 'mr-0 px-2 py-1.5' : 'mr-2'"
+        :class="preferencesStore.preferences.menu.collapsed ? 'mr-0 px-2 py-1.5' : 'mr-2'"
       >
         <div
           class="flex items-center justify-center overflow-hidden transition-[height,width] duration-300 ease-naive-bezier"
-          :class="configureStore.configure.menuCollapsed ? 'size-8' : 'size-10'"
+          :class="preferencesStore.preferences.menu.collapsed ? 'size-8' : 'size-10'"
         >
           <NAvatar
             round
@@ -88,7 +88,7 @@ const onUserDropdownSelected = (key: string) => {
     >
       <div
         class="grid flex-1 overflow-hidden"
-        v-show="!configureStore.configure.menuCollapsed"
+        v-show="!preferencesStore.preferences.menu.collapsed"
       >
         <div class="flex min-w-0 items-center overflow-hidden">
           <div class="flex flex-1 flex-col gap-y-px">

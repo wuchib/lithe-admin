@@ -15,7 +15,7 @@ const routerBreadcrumb = computed(() => {
 function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options'] {
   return route.map((item) => {
     return {
-      label: item.meta?.label,
+      label: item.meta?.title || item.meta?.label,
       key: (item.name as string) || item.path,
       icon: () => h('span', { class: `${item.meta?.icon} size-5` }),
       children: !isEmpty(item.children)
@@ -72,7 +72,7 @@ function isCurrentRoute(name: RouteRecordNameGeneric) {
                 class="size-5"
                 :class="item.meta?.icon"
               />
-              {{ item.meta?.label }}
+              {{ item.meta?.title }}
             </div>
           </NDropdown>
           <span

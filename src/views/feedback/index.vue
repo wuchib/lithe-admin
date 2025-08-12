@@ -14,7 +14,7 @@ const message = useMessage()
 
 const modal = useModal()
 
-import { useComponentModifier } from '@/composable/comp/useComponentModifier'
+import { useComponentModifier } from '@/composable/useComponentModifier'
 
 import { useMessageDiscrete, useModalDiscrete, useNotificationDiscrete } from './discreteApi'
 

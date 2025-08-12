@@ -5,7 +5,7 @@ import { NNumberAnimation } from 'naive-ui'
 import { onMounted, watch, ref, computed, onUnmounted, nextTick } from 'vue'
 
 import { usePersonalization } from '@/composable/usePersonalization'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 import twc from '@/utils/tailwindColor'
 
 import type { ECharts } from 'echarts'
@@ -15,7 +15,7 @@ defineOptions({
 })
 
 const { isDark, color } = usePersonalization()
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 
 const cardList = ref(generateCardData())
 
@@ -1050,7 +1050,7 @@ function resizeAllCharts() {
 }
 
 watch(
-  () => configureStore.configure.menuCollapsed,
+  () => preferencesStore.preferences.menu.collapsed,
   () => {
     if (collapseResizeTimeout !== null) {
       clearTimeout(collapseResizeTimeout)

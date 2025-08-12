@@ -12,25 +12,25 @@ import {
 } from 'naive-ui'
 
 import { HintHelp } from '@/components'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 
-import type { ConfigureOptions } from '@/stores/configure'
+import type { PreferencesOptions } from '@/stores/preferences'
 
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 
 const modifyWatermarkColor = throttle((color: string) => {
-  configureStore.modify({
+  preferencesStore.modify({
     watermarkOptions: {
       fontColor: color,
     },
   })
 }, 100)
 
-const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptions']>(
+const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOptions']>(
   key: K,
-  value: ConfigureOptions['watermarkOptions'][K],
+  value: PreferencesOptions['watermarkOptions'][K],
 ) => {
-  configureStore.modify({
+  preferencesStore.modify({
     watermarkOptions: {
       [key]: value,
     },
@@ -40,7 +40,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
 <template>
   <NForm
     :label-width="80"
-    :model="configureStore.configure.watermarkOptions"
+    :model="preferencesStore.preferences.watermarkOptions"
     :show-feedback="false"
     class="space-y-4"
   >
@@ -50,7 +50,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
     >
       <NInput
         type="textarea"
-        v-model:value="configureStore.configure.watermarkOptions.content"
+        v-model:value="preferencesStore.preferences.watermarkOptions.content"
         clearable
         @update:value="(value) => updateWatermarkOptions('content', value)"
       />
@@ -63,7 +63,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         class="w-full"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.fontSize"
+          v-model:value="preferencesStore.preferences.watermarkOptions.fontSize"
           :min="8"
           :max="32"
           @update:value="(value) => updateWatermarkOptions('fontSize', value ?? 0)"
@@ -75,7 +75,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         class="w-full"
       >
         <NColorPicker
-          :default-value="configureStore.configure.watermarkOptions.fontColor"
+          :default-value="preferencesStore.preferences.watermarkOptions.fontColor"
           @update-value="
             (value) => {
               modifyWatermarkColor(value)
@@ -89,7 +89,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         class="w-full"
       >
         <NSelect
-          v-model:value="configureStore.configure.watermarkOptions.fontStyle"
+          v-model:value="preferencesStore.preferences.watermarkOptions.fontStyle"
           :options="[
             { label: '正常', value: 'normal' },
             { label: '斜体', value: 'italic' },
@@ -107,7 +107,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         class="w-full"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.lineHeight"
+          v-model:value="preferencesStore.preferences.watermarkOptions.lineHeight"
           :min="1"
         />
       </NFormItem>
@@ -117,7 +117,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         class="w-full"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.fontWeight"
+          v-model:value="preferencesStore.preferences.watermarkOptions.fontWeight"
           :min="100"
           :max="900"
           :step="100"
@@ -131,7 +131,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         path="width"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.width"
+          v-model:value="preferencesStore.preferences.watermarkOptions.width"
           class="w-full"
           :min="1"
           @update:value="(value) => updateWatermarkOptions('width', value ?? 0)"
@@ -142,7 +142,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         path="height"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.height"
+          v-model:value="preferencesStore.preferences.watermarkOptions.height"
           class="w-full"
           :min="1"
           @update:value="(value) => updateWatermarkOptions('height', value ?? 0)"
@@ -156,7 +156,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         path="xGap"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.xGap"
+          v-model:value="preferencesStore.preferences.watermarkOptions.xGap"
           class="w-full"
           @update:value="(value) => updateWatermarkOptions('xGap', value ?? 0)"
         />
@@ -166,7 +166,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         path="yGap"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.yGap"
+          v-model:value="preferencesStore.preferences.watermarkOptions.yGap"
           class="w-full"
           @update:value="(value) => updateWatermarkOptions('yGap', value ?? 0)"
         />
@@ -178,7 +178,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         path="xoffset"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.xOffset"
+          v-model:value="preferencesStore.preferences.watermarkOptions.xOffset"
           class="w-full"
           @update:value="(value) => updateWatermarkOptions('xOffset', value ?? 0)"
         />
@@ -188,7 +188,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         path="yGap"
       >
         <NInputNumber
-          v-model:value="configureStore.configure.watermarkOptions.yOffset"
+          v-model:value="preferencesStore.preferences.watermarkOptions.yOffset"
           class="w-full"
           @update:value="(value) => updateWatermarkOptions('yOffset', value ?? 0)"
         />
@@ -201,7 +201,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         class="w-full"
       >
         <NSlider
-          v-model:value="configureStore.configure.watermarkOptions.rotate"
+          v-model:value="preferencesStore.preferences.watermarkOptions.rotate"
           :min="-90"
           :max="90"
           @update:value="(value) => updateWatermarkOptions('rotate', value ?? 0)"
@@ -213,7 +213,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         class="w-full"
       >
         <NSlider
-          v-model:value="configureStore.configure.watermarkOptions.globalRotate"
+          v-model:value="preferencesStore.preferences.watermarkOptions.globalRotate"
           :min="-180"
           :max="180"
           @update:value="(value) => updateWatermarkOptions('globalRotate', value ?? 0)"
@@ -225,7 +225,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
         class="w-full"
       >
         <NSwitch
-          v-model:value="configureStore.configure.watermarkOptions.cross"
+          v-model:value="preferencesStore.preferences.watermarkOptions.cross"
           @update:value="(value) => updateWatermarkOptions('cross', value)"
         />
       </NFormItem>
@@ -236,7 +236,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
     >
       <NInput
         type="textarea"
-        v-model:value="configureStore.configure.watermarkOptions.image"
+        v-model:value="preferencesStore.preferences.watermarkOptions.image"
         @update:value="(value) => updateWatermarkOptions('image', value)"
         clearable
       />
@@ -255,7 +255,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
             class="pb-1.5"
           />
           <NInputNumber
-            v-model:value="configureStore.configure.watermarkOptions.imageWidth"
+            v-model:value="preferencesStore.preferences.watermarkOptions.imageWidth"
             @update:value="(value) => updateWatermarkOptions('imageWidth', value ?? 0)"
           />
         </div>
@@ -272,7 +272,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
             class="pb-1.5"
           />
           <NInputNumber
-            v-model:value="configureStore.configure.watermarkOptions.imageHeight"
+            v-model:value="preferencesStore.preferences.watermarkOptions.imageHeight"
             @update:value="(value) => updateWatermarkOptions('imageHeight', value ?? 0)"
           />
         </div>
@@ -290,7 +290,7 @@ const updateWatermarkOptions = <K extends keyof ConfigureOptions['watermarkOptio
             class="pb-1.5"
           />
           <NSlider
-            v-model:value="configureStore.configure.watermarkOptions.imageOpacity"
+            v-model:value="preferencesStore.preferences.watermarkOptions.imageOpacity"
             :min="0"
             :max="1"
             :step="0.01"

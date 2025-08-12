@@ -4,10 +4,10 @@ declare module 'vue-router' {
   interface RouteMeta {
     componentName?: string
     pinned?: boolean
-    label?: string
+    title?: string
     icon?: string
     showTab?: boolean
     enableMultiTab?: boolean
-    renderTabLabel?: (params: RouteParamsGeneric) => string
+    renderTabTitle?: (params: RouteParamsGeneric) => string
   }
 }

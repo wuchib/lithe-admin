@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
 import { NScrollbar } from 'naive-ui'
-import { provide, reactive, ref } from 'vue'
 
 import texturePng from '@/assets/texture.png'
 import { EmptyPlaceholder } from '@/components'
-import { useComponentThemeOverrides } from '@/composable/comp/useComponentThemeOverrides'
-import { menuInjectionKey, tabsInjectionKey } from '@/injection'
-import { useConfigureStore } from '@/stores/configure'
+import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
+import { usePreferencesStore } from '@/stores/preferences'
 import { useTabsStore } from '@/stores/tabs'
 
 import AsideLayout from './aside/index.vue'
@@ -16,35 +14,13 @@ import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
 import MainLayout from './main/index.vue'
 
-import type { TabsInjection } from '@/injection'
-
 defineOptions({
   name: 'Layout',
 })
 
 const tabsStore = useTabsStore()
-const configureStore = useConfigureStore()
+const preferencesStore = usePreferencesStore()
 const { scrollbarInMainLayout } = useComponentThemeOverrides()
-
-const shouldRefresh = ref(false)
-
-const menuCollapse = reactive({
-  width: 64,
-  maxWidth: 272,
-})
-
-const doRefresh: TabsInjection['doRefresh'] = (value) => {
-  shouldRefresh.value = value
-}
-
-provide(menuInjectionKey, {
-  collapse: menuCollapse,
-})
-
-provide(tabsInjectionKey, {
-  shouldRefresh,
-  doRefresh,
-})
 </script>
 <template>
   <div class="flex h-dvh flex-col overflow-hidden">
@@ -65,7 +41,7 @@ provide(tabsInjectionKey, {
           leave-from-class="grid-rows-[1fr]"
         >
           <div
-            v-if="!isEmpty(tabsStore.tabs) && configureStore.configure.showTabs"
+            v-if="!isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs"
             class="grid shrink-0 items-baseline overflow-hidden"
           >
             <Tabs />
@@ -86,7 +62,7 @@ provide(tabsInjectionKey, {
           size="huge"
         >
           <template #icon>
-            <div class="grid place-items-center">
+            <div class="flex items-center justify-center">
               <span class="iconify ph--rectangle" />
             </div>
           </template>
@@ -101,7 +77,7 @@ provide(tabsInjectionKey, {
               leave-from-class="grid-rows-[1fr]"
             >
               <div
-                v-if="configureStore.configure.showFooter"
+                v-if="preferencesStore.preferences.showFooter"
                 class="grid shrink-0 items-baseline overflow-hidden"
               >
                 <FooterLayout />

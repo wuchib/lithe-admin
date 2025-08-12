@@ -1,16 +1,16 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { isEmpty } from 'lodash-es'
 import { NButton, NDropdown, NEllipsis, NScrollbar } from 'naive-ui'
-import { storeToRefs } from 'pinia'
 import {
   computed,
-  h,
-  inject,
+  defineComponent,
   nextTick,
   onBeforeUnmount,
   onMounted,
   reactive,
   ref,
+  Transition,
+  TransitionGroup,
   useTemplateRef,
   watch,
   watchEffect,
@@ -18,13 +18,13 @@ import {
 import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
-import { tabsInjectionKey } from '@/injection'
 import router from '@/router'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 import { useTabsStore } from '@/stores/tabs'
 
-import type { Tab } from '@/stores/tabs'
+import type { Tab, Key } from '@/stores/tabs'
 import type { DropdownOption } from 'naive-ui'
+import type { PropType } from 'vue'
 
 type ContextMenuActions = {
   close: () => void
@@ -32,50 +32,38 @@ type ContextMenuActions = {
   closeLeft: () => void
   closeOther: () => void
   closeRight: () => void
-  keepAlive: () => void
+  pin: () => void
+  cache: () => void
   lock: () => void
 }
-
-const tabsInject = inject(tabsInjectionKey, null)
 
 const scrollbarRef = useTemplateRef<InstanceType<typeof NScrollbar>>('scrollbarRef')
 
 const tabsStore = useTabsStore()
 
-const configureStore = useConfigureStore()
-
-const { tabs, tabActiveKey, keepAliveTabs } = storeToRefs(tabsStore)
+const preferencesStore = usePreferencesStore()
 
 const {
-  isLocked,
-  isPinned,
-  hasKeepAliveTab,
-  getUnlockedKeysBefore,
-  getUnlockedKeysAfter,
-  getUnlockedKeysExcept,
-  getUnlockedKeys,
-  setKeepAliveTab,
-  setLocked,
-  setActive,
-  update,
-  remove,
-  removeBefore,
-  removeAfter,
-  removeExcept,
-  removeAll,
+  setTabActivePath,
+  getTab,
+  removeTab,
+  updateTab,
+  setTabs,
+  getRemovableIdsBefore,
+  getRemovableIdsAfter,
+  getRemovableIdsOther,
+  getRemovableIds,
 } = tabsStore
-
-const tabPinnedList = ref<Tab[]>([])
 
 const tabList = ref<Tab[]>([])
 
-const pendingActiveKey = ref(tabActiveKey.value)
+const tabPinnedList = ref<Tab[]>([])
 
-const isMounted = ref(false)
+const pendingActiveKey = ref('')
 
 const tabBackgroundTransitionClasses = reactive({
   leaveToClass: '',
-  enterFromClass: 'scale-0 opacity-0',
+  enterFromClass: '',
 })
 
 const isTabDragging = ref(false)
@@ -87,85 +75,75 @@ const showTabDropdown = ref(false)
 const tabContextMenu = ref<Tab | null>(null)
 
 const tabDropdownOptions = computed<DropdownOption[]>(() => {
-  const currentTab = tabContextMenu.value
+  const targetTab = tabContextMenu.value
 
-  if (!currentTab) {
+  if (isEmpty(targetTab)) {
     return []
   }
 
-  const { key, componentName } = currentTab
+  const { id, componentName } = targetTab
+
+  const { pinned, locked, keepAlived } = getTab(id) ?? {}
 
   return [
     {
-      disabled: isLocked(key) || isPinned(key),
-      icon: () =>
-        h('span', {
-          class: 'iconify ph--x',
-        }),
       key: 'close',
+      icon: () => <span class='iconify ph--x' />,
       label: '关闭',
+      disabled: locked,
     },
     {
-      disabled: isEmpty(getUnlockedKeysExcept(key)),
-      icon: () =>
-        h('span', {
-          class: 'iconify ph--arrows-out-line-horizontal',
-        }),
       key: 'closeOther',
+      icon: () => <span class='iconify ph--arrows-out-line-horizontal' />,
       label: '关闭其他',
+      disabled: isEmpty(getRemovableIdsOther(id)),
     },
     {
-      disabled: isEmpty(getUnlockedKeysBefore(key)),
-      icon: () =>
-        h('span', {
-          class: 'iconify ph--arrow-line-left',
-        }),
       key: 'closeLeft',
+      icon: () => <span class='iconify ph--arrow-line-left' />,
       label: '关闭左侧',
+      disabled: isEmpty(getRemovableIdsBefore(id)),
     },
     {
-      disabled: isEmpty(getUnlockedKeysAfter(key)),
-      icon: () =>
-        h('span', {
-          class: 'iconify ph--arrow-line-right',
-        }),
       key: 'closeRight',
+      icon: () => <span class='iconify ph--arrow-line-right' />,
       label: '关闭右侧',
+      disabled: isEmpty(getRemovableIdsAfter(id)),
     },
     {
-      disabled: isEmpty(getUnlockedKeys()),
-      icon: () =>
-        h('span', {
-          class: 'iconify ph--arrows-horizontal',
-        }),
       key: 'closeAll',
+      icon: () => <span class='iconify ph--arrows-horizontal' />,
       label: '关闭所有',
+      disabled: isEmpty(getRemovableIds()),
     },
     {
+      key: 'pin',
+      icon: () => (
+        <span
+          class={pinned ? 'iconify ph--push-pin-simple-slash' : 'iconify ph--push-pin-simple'}
+        />
+      ),
+      label: pinned ? '取消固定' : '固定标签页',
+    },
+    {
+      key: 'cache',
+      icon: () => (
+        <span
+          class={
+            keepAlived ? 'iconify-[hugeicons--database-02]' : 'iconify-[hugeicons--database-locked]'
+          }
+        />
+      ),
+      label: keepAlived ? '取消缓存' : '缓存标签页',
       disabled: isEmpty(componentName),
-      icon: () =>
-        hasKeepAliveTab(componentName)
-          ? h('span', {
-              class: 'iconify-[hugeicons--database-02]',
-            })
-          : h('span', {
-              class: 'iconify-[hugeicons--database-locked]',
-            }),
-      key: 'keepAlive',
-      label: hasKeepAliveTab(componentName) ? '取消缓存' : '缓存标签页',
     },
     {
-      disabled: isPinned(key),
-      icon: () =>
-        isLocked(key)
-          ? h('span', {
-              class: 'iconify ph--lock-simple-open',
-            })
-          : h('span', {
-              class: 'iconify ph--lock-simple',
-            }),
       key: 'lock',
-      label: isLocked(key) ? '解锁标签页' : '锁定标签页',
+      icon: () => (
+        <span class={locked ? 'iconify ph--lock-simple-open' : 'iconify ph--lock-simple'} />
+      ),
+      label: locked ? '解锁标签页' : '锁定标签页',
+      disabled: pinned,
     },
   ]
 })
@@ -175,12 +153,12 @@ const dropdownPosition = reactive({
   y: 0,
 })
 
-const handleTabClick = (key: string) => {
-  setActive(key)
+const handleTabClick = (path: string) => {
+  setTabActivePath(path)
 }
 
-const handleTabCloseClick = (key: string) => {
-  remove(key)
+const handleTabCloseClick = (id: Key) => {
+  removeTab(id)
 }
 
 const handleTabContextMenuClick = (e: MouseEvent, tab: Tab) => {
@@ -208,7 +186,7 @@ const onTabDraggableStart = () => {
 }
 
 const onTabDraggableEnd = () => {
-  update([...tabPinnedList.value, ...tabList.value])
+  setTabs([...tabPinnedList.value, ...tabList.value])
   showTabTooltip.value = true
 }
 
@@ -243,31 +221,34 @@ function getTabContextMenuActions(): ContextMenuActions | null {
     return null
   }
 
-  const { key, componentName } = tabValue
+  const { id } = tabValue
+
+  const { locked, keepAlived, pinned } = getTab(id) ?? {}
 
   return {
     close: () => {
-      remove(key)
-    },
-    closeAll: () => {
-      removeAll()
-    },
-    closeLeft: () => {
-      removeBefore(key)
+      removeTab(id)
     },
     closeOther: () => {
-      removeExcept(key)
+      removeTab(getRemovableIdsOther(id))
+    },
+    closeLeft: () => {
+      removeTab(getRemovableIdsBefore(id))
     },
     closeRight: () => {
-      removeAfter(key)
+      removeTab(getRemovableIdsAfter(id))
     },
-    keepAlive: () => {
-      if (componentName) {
-        setKeepAliveTab(componentName)
-      }
+    closeAll: () => {
+      removeTab(getRemovableIds())
+    },
+    pin: () => {
+      updateTab(id, { pinned: !pinned })
+    },
+    cache: () => {
+      updateTab(id, { keepAlived: !keepAlived })
     },
     lock: () => {
-      setLocked(key)
+      updateTab(id, { locked: !locked })
     },
   }
 }
@@ -280,27 +261,156 @@ function scrollToActiveTab(behavior: ScrollBehavior = 'auto') {
   })
 }
 
+function handleTabRefresh() {
+  if (!preferencesStore.preferences.shouldRefreshTab) {
+    preferencesStore.modify({
+      shouldRefreshTab: true,
+    })
+  }
+}
+
 const routerAfterEach = router.afterEach(() => {
   nextTick(() => {
-    pendingActiveKey.value = tabActiveKey.value
+    pendingActiveKey.value = tabsStore.tabActivePath
   })
 })
 
+const CompTabs = defineComponent({
+  props: {
+    modelValue: {
+      type: Array as PropType<Tab[]>,
+      required: true,
+    },
+  },
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    return () => (
+      <VueDraggable
+        class='flex'
+        modelValue={props.modelValue}
+        animation={150}
+        delay={300}
+        direction='horizontal'
+        ghostClass='bg-primary/30'
+        forceFallback
+        onStart={onTabDraggableStart}
+        onEnd={onTabDraggableEnd}
+        onChoose={onTabDraggableChoose}
+        onUnchoose={onTabDraggableUnchoose}
+        {...{
+          'onUpdate:modelValue': (value: Tab[]) => emit('update:modelValue', value),
+        }}
+      >
+        <TransitionGroup
+          enterFromClass='max-w-0'
+          leaveToClass='max-w-0'
+          onAfterEnter={() => scrollToActiveTab('smooth')}
+        >
+          {props.modelValue.map((tab) => (
+            <div
+              key={tab.id}
+              class={[
+                'relative overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] duration-300 ease-naive-bezier hover:bg-primary/6 [&:not(.max-w-0)]:max-w-40',
+                isTabDragging.value ? 'cursor-move' : 'cursor-pointer',
+                {
+                  'tab-active': tab.path === pendingActiveKey.value,
+                  group: !tab.locked && !preferencesStore.preferences.showTabClose,
+                },
+              ]}
+              onClick={() => handleTabClick(tab.path)}
+              onContextmenu={(e) => handleTabContextMenuClick(e, tab)}
+            >
+              <Transition
+                enterActiveClass='transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]'
+                leaveActiveClass='transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]'
+                leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
+                enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
+                onAfterEnter={() => scrollToActiveTab('smooth')}
+              >
+                {tab.path === pendingActiveKey.value && (
+                  <div class='absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6' />
+                )}
+              </Transition>
+
+              <div class={['flex items-center py-2.5 pl-4', tab.pinned ? 'pr-4' : 'pr-2.5']}>
+                <div
+                  class={[
+                    'relative flex items-center justify-center overflow-hidden transition-[translate] duration-300 ease-naive-bezier',
+                    {
+                      'translate-x-2.5': tab.locked || !preferencesStore.preferences.showTabClose,
+                      'group-hover:translate-x-0':
+                        !tab.locked && !preferencesStore.preferences.showTabClose,
+                    },
+                  ]}
+                >
+                  <div class='mr-2 grid shrink-0 place-items-center overflow-hidden'>
+                    <span
+                      class={[
+                        tab.icon,
+                        {
+                          'text-primary': tab.componentName && getTab(tab.id)?.keepAlived,
+                        },
+                      ]}
+                    />
+                  </div>
+                  <div class='min-w-0 overflow-hidden'>
+                    <NEllipsis tooltip={showTabTooltip.value}>{tab.title}</NEllipsis>
+                  </div>
+                </div>
+
+                {!tab.pinned && (
+                  <div
+                    class={[
+                      'overflow-hidden',
+                      'ml-1 flex transition-[opacity,scale] duration-300 ease-naive-bezier',
+                      {
+                        'scale-0 opacity-0':
+                          tab.locked || !preferencesStore.preferences.showTabClose,
+                        'group-hover:scale-100 group-hover:opacity-100':
+                          !tab.locked && !preferencesStore.preferences.showTabClose,
+                      },
+                    ]}
+                  >
+                    <NButton
+                      quaternary
+                      circle
+                      size='tiny'
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleTabCloseClick(tab.id)
+                      }}
+                      disabled={tab.locked}
+                    >
+                      {{
+                        icon: () => <span class='iconify ph--x' />,
+                      }}
+                    </NButton>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </TransitionGroup>
+      </VueDraggable>
+    )
+  },
+})
+
 watch(
-  (): [Tab[], string] => [tabs.value, tabActiveKey.value],
-  ([newTabs, newActive], [oldTabs, oldActive]) => {
-    if (!newActive) {
+  (): [Tab[], string] => [tabsStore.tabs, tabsStore.tabActivePath],
+  ([newTabs, newTabActivePath], [oldTabs, oldTabActivePath]) => {
+    if (!newTabActivePath) {
       tabBackgroundTransitionClasses.leaveToClass = 'scale-0 opacity-0'
       return
     }
 
-    if (!oldActive) {
+    if (!oldTabActivePath) {
       tabBackgroundTransitionClasses.enterFromClass = 'scale-0 opacity-0'
       return
     }
 
-    const oldActiveIndex = oldTabs.findIndex((item) => item.key === oldActive)
-    const newActiveIndex = newTabs.findIndex((item) => item.key === newActive)
+    const oldActiveIndex = oldTabs.findIndex((item) => item.path === oldTabActivePath)
+    const newActiveIndex = newTabs.findIndex((item) => item.path === newTabActivePath)
 
     if (oldActiveIndex > newActiveIndex && newActiveIndex !== -1) {
       tabBackgroundTransitionClasses.leaveToClass = '-translate-x-full'
@@ -313,13 +423,14 @@ watch(
 )
 
 watchEffect(() => {
-  tabList.value = tabs.value.filter((tab) => !tab.pinned)
-  tabPinnedList.value = tabs.value.filter((tab) => tab.pinned)
+  tabList.value = tabsStore.tabs.filter((tab) => !tab.pinned)
+  tabPinnedList.value = tabsStore.tabs.filter((tab) => tab.pinned)
 })
 
 onMounted(() => {
   scrollToActiveTab()
-  isMounted.value = true
+  pendingActiveKey.value = tabsStore.tabActivePath
+  tabBackgroundTransitionClasses.enterFromClass = 'scale-0 opacity-0'
 })
 
 onBeforeUnmount(() => {
@@ -330,149 +441,18 @@ onBeforeUnmount(() => {
   <div
     class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] duration-300 ease-naive-bezier select-none"
   >
-    <div class="flex shrink-0">
-      <div
-        v-for="tab in tabPinnedList"
-        :key="tab.key"
-        class="relative max-w-40 overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] duration-300 ease-naive-bezier hover:bg-primary/6"
-        :class="[
-          isTabDragging ? 'cursor-move' : 'cursor-pointer',
-          {
-            'tab-active bg-primary/6': tab.key === pendingActiveKey,
-          },
-        ]"
-        @click="handleTabClick(tab.key)"
-        @contextmenu="(e) => handleTabContextMenuClick(e, tab)"
-      >
-        <Transition
-          enter-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
-          leave-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
-          :leave-to-class="tabBackgroundTransitionClasses.leaveToClass"
-          :enter-from-class="tabBackgroundTransitionClasses.enterFromClass"
-          @after-enter="scrollToActiveTab('smooth')"
-        >
-          <div
-            v-if="tab.key === pendingActiveKey && isMounted"
-            class="absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6"
-          />
-        </Transition>
-        <div
-          class="relative flex items-center py-2.5 pl-4"
-          :class="tab.pinned ? 'pr-4' : 'pr-2.5'"
-        >
-          <div class="mr-2 grid shrink-0 place-items-center overflow-hidden">
-            <span :class="tab.icon" />
-          </div>
-          <NEllipsis :tooltip="showTabTooltip">{{ tab.label }}</NEllipsis>
-        </div>
-      </div>
-    </div>
+    <CompTabs v-model="tabPinnedList" />
     <NScrollbar
       ref="scrollbarRef"
       x-scrollable
       @wheel.passive="onScrollbarWheeled"
     >
-      <VueDraggable
-        class="flex"
-        v-model="tabList"
-        :animation="150"
-        direction="horizontal"
-        force-fallback
-        :delay="300"
-        ghost-class="bg-primary/30"
-        @start="onTabDraggableStart"
-        @end="onTabDraggableEnd"
-        @choose="onTabDraggableChoose"
-        @unchoose="onTabDraggableUnchoose"
-      >
-        <TransitionGroup
-          enter-from-class="max-w-0"
-          leave-to-class="max-w-0"
-          @after-enter="scrollToActiveTab('smooth')"
-        >
-          <div
-            v-for="tab in tabList"
-            :key="tab.key"
-            class="relative overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] duration-300 ease-naive-bezier hover:bg-primary/6 [&:not(.max-w-0)]:max-w-40"
-            :class="[
-              isTabDragging ? 'cursor-move' : 'cursor-pointer',
-              {
-                'tab-active': tab.key === pendingActiveKey,
-                group: !tab.locked && !configureStore.configure.showTabClose,
-              },
-            ]"
-            @click="handleTabClick(tab.key)"
-            @contextmenu="(e) => handleTabContextMenuClick(e, tab)"
-          >
-            <Transition
-              enter-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
-              leave-active-class="transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]"
-              :leave-to-class="tabBackgroundTransitionClasses.leaveToClass"
-              :enter-from-class="tabBackgroundTransitionClasses.enterFromClass"
-              @after-enter="scrollToActiveTab('smooth')"
-            >
-              <div
-                v-if="tab.key === pendingActiveKey && isMounted"
-                class="absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6"
-              />
-            </Transition>
-            <div
-              class="flex items-center py-2.5 pl-4"
-              :class="tab.pinned ? 'pr-4' : 'pr-2.5'"
-            >
-              <div
-                class="relative flex items-center justify-center overflow-hidden transition-[translate] duration-300 ease-naive-bezier"
-                :class="{
-                  'translate-x-2.5': tab.locked || !configureStore.configure.showTabClose,
-                  'group-hover:translate-x-0':
-                    !tab.locked && !configureStore.configure.showTabClose,
-                }"
-              >
-                <div class="mr-2 grid shrink-0 place-items-center overflow-hidden">
-                  <span
-                    :class="[
-                      tab.icon,
-                      {
-                        'text-primary':
-                          tab.componentName && keepAliveTabs.includes(tab.componentName),
-                      },
-                    ]"
-                  />
-                </div>
-
-                <NEllipsis :tooltip="showTabTooltip">{{ tab.label }}</NEllipsis>
-              </div>
-
-              <div
-                class="ml-1 flex transition-[opacity,scale] duration-300 ease-naive-bezier"
-                :class="{
-                  'scale-0 opacity-0': tab.locked || !configureStore.configure.showTabClose,
-                  'group-hover:scale-100 group-hover:opacity-100':
-                    !tab.locked && !configureStore.configure.showTabClose,
-                }"
-              >
-                <NButton
-                  v-if="!tab.pinned"
-                  quaternary
-                  circle
-                  size="tiny"
-                  @click.stop="handleTabCloseClick(tab.key)"
-                  :disabled="tab.locked"
-                >
-                  <template #icon>
-                    <span class="iconify ph--x" />
-                  </template>
-                </NButton>
-              </div>
-            </div>
-          </div>
-        </TransitionGroup>
-      </VueDraggable>
+      <CompTabs v-model="tabList" />
     </NScrollbar>
     <div class="flex items-center px-3">
       <ButtonAnimation
         title="刷新"
-        @click="tabsInject?.doRefresh(true)"
+        @click="handleTabRefresh"
         animation="rotate"
       >
         <span class="iconify size-5 ph--arrows-clockwise"></span>

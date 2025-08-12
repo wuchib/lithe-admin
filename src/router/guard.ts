@@ -1,7 +1,7 @@
 import { createPinia } from 'pinia'
 
 import { useDiscreteApi } from '@/composable/useDiscreteApi'
-import { useConfigureStore } from '@/stores/configure'
+import { usePreferencesStore } from '@/stores/preferences'
 import { useUserStore } from '@/stores/user'
 
 import type { Router } from 'vue-router'
@@ -10,11 +10,11 @@ const Layout = () => import('@/layout/index.vue')
 
 const { loadingBar } = useDiscreteApi()
 
-const configureStore = useConfigureStore(createPinia())
+const preferencesStore = usePreferencesStore(createPinia())
 
 export function setupRouterGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
-    if (configureStore.configure.showTopLoadingBar) {
+    if (preferencesStore.preferences.showTopLoadingBar) {
       loadingBar.start()
     }
 
@@ -26,15 +26,12 @@ export function setupRouterGuard(router: Router) {
       } else {
         next(from.fullPath)
       }
+
       return false
     }
 
     if (!userStore.token) {
-      if (to.path === '/') {
-        userStore.cleanup()
-      } else {
-        userStore.cleanup(to.fullPath)
-      }
+      userStore.cleanup()
       next()
       return false
     }
@@ -47,6 +44,7 @@ export function setupRouterGuard(router: Router) {
           path: '/',
           name: 'layout',
           component: Layout,
+          // if you need to have a redirect when accessing / routing
           redirect: '/dashboard',
           children: userStore.routeList,
         })
@@ -70,7 +68,7 @@ export function setupRouterGuard(router: Router) {
   })
 
   router.afterEach(() => {
-    if (configureStore.configure.showTopLoadingBar) {
+    if (preferencesStore.preferences.showTopLoadingBar) {
       loadingBar.finish()
     }
   })

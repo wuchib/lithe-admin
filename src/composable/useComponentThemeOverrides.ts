@@ -2,7 +2,7 @@ import { computed } from 'vue'
 
 import twc from '@/utils/tailwindColor'
 
-import { usePersonalization } from '../usePersonalization'
+import { usePersonalization } from './usePersonalization'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
