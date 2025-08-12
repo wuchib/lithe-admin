@@ -112,12 +112,6 @@ watch(
   },
 )
 
-/**
- * create tab when router changed
- * example:
- * 1. click the menu RouterLink to push to the operation
- * 2. refresh the page to perform tab and highlight correction
- */
 watch(
   () => router.currentRoute.value,
   (newRoute, oldRoute) => {
