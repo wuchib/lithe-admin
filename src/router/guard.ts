@@ -36,13 +36,13 @@ export function setupRouterGuard(router: Router) {
       return false
     }
 
-    if (userStore.token && !router.hasRoute('Layouts')) {
+    if (userStore.token && !router.hasRoute('layouts')) {
       try {
         await userStore.resolveMenuList()
 
         router.addRoute({
           path: '/',
-          name: 'Layouts',
+          name: 'layouts',
           component: Layouts,
           // if you need to have a redirect when accessing / routing
           redirect: '/dashboard',

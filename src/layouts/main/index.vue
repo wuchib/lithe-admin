@@ -14,7 +14,7 @@ defineOptions({
   name: 'MainLayout',
 })
 
-const layoutRedirect = router.getRoutes().find((item) => item.name === 'layout')?.redirect
+const layoutsRedirect = router.getRoutes().find((item) => item.name === 'layouts')?.redirect
 
 const tabsStore = useTabsStore()
 
@@ -64,8 +64,8 @@ watch(
       newTabActivePath !== router.currentRoute.value.fullPath
     ) {
       if (
-        layoutRedirect &&
-        layoutRedirect === router.currentRoute.value.path &&
+        layoutsRedirect &&
+        layoutsRedirect === router.currentRoute.value.path &&
         newTabActivePath === '/'
       ) {
         router.go(0)

@@ -57,7 +57,7 @@ const dir = `📂 lithe-admin
 │    ├── 📄 usePersonalization.ts
 │    ├── 📄 useResettable.ts
 │    ├── 📄 useTheme.ts
-│  └── 📂 layout/
+│  └── 📂 layouts/
 │    └── 📂 aside/
 │      └── 📂 component/
 │        ├── 📄 Menu.vue

@@ -9,7 +9,7 @@ import type { DropdownProps } from 'naive-ui'
 import type { RouteRecordNameGeneric, RouteRecordRaw } from 'vue-router'
 
 const routerBreadcrumb = computed(() => {
-  return router.currentRoute.value.matched.filter((item) => item.name !== 'layout')
+  return router.currentRoute.value.matched.filter((item) => item.name !== 'layouts')
 })
 
 function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options'] {
