@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores/user'
 
 import type { Router } from 'vue-router'
 
-const Layout = () => import('@/layout/index.vue')
+const Layouts = () => import('@/layouts/index.vue')
 
 const { loadingBar } = useDiscreteApi()
 
@@ -36,14 +36,14 @@ export function setupRouterGuard(router: Router) {
       return false
     }
 
-    if (userStore.token && !router.hasRoute('layout')) {
+    if (userStore.token && !router.hasRoute('Layouts')) {
       try {
         await userStore.resolveMenuList()
 
         router.addRoute({
           path: '/',
-          name: 'layout',
-          component: Layout,
+          name: 'Layouts',
+          component: Layouts,
           // if you need to have a redirect when accessing / routing
           redirect: '/dashboard',
           children: userStore.routeList,
