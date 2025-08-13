@@ -13,7 +13,6 @@ import {
   TransitionGroup,
   useTemplateRef,
   watch,
-  watchEffect,
 } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
@@ -33,7 +32,7 @@ type ContextMenuActions = {
   closeOther: () => void
   closeRight: () => void
   pin: () => void
-  cache: () => void
+  keepalive: () => void
   lock: () => void
 }
 
@@ -71,7 +70,7 @@ const tabUnPinnedList = computed({
   },
 })
 
-const pendingActiveKey = ref('')
+const pendingActivePath = ref('')
 
 const tabBackgroundTransitionClasses = reactive({
   leaveToClass: '',
@@ -138,7 +137,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       label: pinned ? '取消固定' : '固定标签页',
     },
     {
-      key: 'cache',
+      key: 'keepalive',
       icon: () => (
         <span
           class={
@@ -154,7 +153,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       icon: () => (
         <span class={locked ? 'iconify ph--lock-simple-open' : 'iconify ph--lock-simple'} />
       ),
-      label: locked ? '解锁标签页' : '锁定标签页',
+      label: locked ? '取消锁定' : '锁定标签页',
       disabled: pinned,
     },
   ]
@@ -225,16 +224,6 @@ const onScrollbarWheeled = (e: WheelEvent) => {
   })
 }
 
-function makeTabList(isPinned: boolean) {
-  return computed({
-    get: () => tabsStore.tabs.filter((tab) => tab.pinned === isPinned),
-    set: (newTabs: Tab[]) => {
-      const others = tabsStore.tabs.filter((tab) => tab.pinned !== isPinned)
-      setTabs(isPinned ? [...newTabs, ...others] : [...others, ...newTabs])
-    },
-  })
-}
-
 function getTabContextMenuActions(): ContextMenuActions | null {
   const tabValue = tabContextMenu.value
 
@@ -265,7 +254,7 @@ function getTabContextMenuActions(): ContextMenuActions | null {
     pin: () => {
       updateTab(id, { pinned: !pinned })
     },
-    cache: () => {
+    keepalive: () => {
       updateTab(id, { keepAlived: !keepAlived })
     },
     lock: () => {
@@ -292,7 +281,7 @@ function handleTabRefresh() {
 
 const routerAfterEach = router.afterEach(() => {
   nextTick(() => {
-    pendingActiveKey.value = tabsStore.tabActivePath
+    pendingActivePath.value = tabsStore.tabActivePath
   })
 })
 
@@ -309,11 +298,11 @@ const CompTabs = defineComponent({
       <VueDraggable
         class='flex'
         modelValue={props.modelValue}
-        animation={200}
-        delay={100}
+        animation={150}
+        easing='cubic-bezier(0, 0, 1, 1)'
         direction='horizontal'
+        scrollSensitivity={100}
         ghostClass='bg-primary/30'
-        forceFallback
         onStart={onTabDraggableStart}
         onEnd={onTabDraggableEnd}
         onChoose={onTabDraggableChoose}
@@ -331,10 +320,9 @@ const CompTabs = defineComponent({
             <div
               key={tab.id}
               class={[
-                'relative overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] duration-300 ease-naive-bezier hover:bg-primary/6 [&:not(.max-w-0)]:max-w-40',
-                isTabDragging.value ? 'cursor-move' : 'cursor-pointer',
+                'relative cursor-pointer overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] duration-300 ease-naive-bezier hover:bg-primary/6 [&:not(.max-w-0)]:max-w-40',
                 {
-                  'tab-active': tab.path === pendingActiveKey.value,
+                  'tab-active': tab.path === pendingActivePath.value,
                   group: !tab.locked && !preferencesStore.preferences.showTabClose,
                 },
               ]}
@@ -348,7 +336,7 @@ const CompTabs = defineComponent({
                 enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
                 onAfterEnter={() => scrollToActiveTab('smooth')}
               >
-                {tab.path === pendingActiveKey.value && (
+                {tab.path === pendingActivePath.value && (
                   <div class='absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6' />
                 )}
               </Transition>
@@ -446,7 +434,7 @@ watch(
 
 onMounted(() => {
   scrollToActiveTab()
-  pendingActiveKey.value = tabsStore.tabActivePath
+  pendingActivePath.value = tabsStore.tabActivePath
   tabBackgroundTransitionClasses.enterFromClass = 'scale-0 opacity-0'
 })
 
