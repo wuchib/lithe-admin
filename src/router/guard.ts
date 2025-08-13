@@ -20,7 +20,7 @@ export function setupRouterGuard(router: Router) {
 
     const userStore = useUserStore()
 
-    if (to.name === 'signin') {
+    if (to.name === 'signIn') {
       if (!userStore.token) {
         next()
       } else {

@@ -56,7 +56,7 @@ export const useUserStore = defineStore('userStore', () => {
 
   function cleanup(redirectPath?: string) {
     router.replace({
-      name: 'signin',
+      name: 'signIn',
       ...(redirectPath ? { query: { r: redirectPath } } : {}),
     })
 

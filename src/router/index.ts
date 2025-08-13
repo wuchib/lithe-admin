@@ -5,7 +5,7 @@ import { setupRouterGuard } from './guard'
 import type { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/sign-in', name: 'signin', component: () => import('@/views/sign-in/index.vue') },
+  { path: '/sign-in', name: 'signIn', component: () => import('@/views/sign-in/index.vue') },
   {
     name: 'errorPage',
     path: '/:pathMatch(.*)*',
