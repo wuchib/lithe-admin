@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { NCard, NSplit, NButton, NScrollbar, NTag } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import packageJson from '@/../package.json'
-import { usePersonalization } from '@/composable/usePersonalization'
 
 defineOptions({
   name: 'About',
@@ -12,8 +11,6 @@ defineOptions({
 let codeToHtml: any
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
-
-const { isDark } = usePersonalization()
 
 const { dependencies, devDependencies } = packageJson
 
@@ -146,31 +143,43 @@ const dir = `📂 lithe-admin
 ├── 📄 vite.config.ts
 └── 📄 vitest.config.ts`
 
-watch(
-  isDark,
-  async () => {
-    if (!codeToHtml) {
-      // @ts-ignore
-      const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm')
-      codeToHtml = shiki.codeToHtml
-    }
+onMounted(async () => {
+  if (!codeToHtml) {
+    // @ts-ignore
+    const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm')
+    codeToHtml = shiki.codeToHtml
+  }
 
-    const theme = isDark.value ? 'dark-plus' : 'min-light'
+  codeToHtml(dir, {
+    lang: 'markdown',
+    themes: {
+      light: 'min-light',
+      dark: 'dark-plus',
+    },
+  })
+    .then((result: string) => (directoryStructureHighlight.value = result))
+    .catch(() => (directoryStructureHighlight.value = dir))
 
-    codeToHtml(dir, { lang: 'markdown', theme })
-      .then((result: string) => (directoryStructureHighlight.value = result))
-      .catch(() => (directoryStructureHighlight.value = dir))
+  codeToHtml(JSON.stringify(dependencies, null, 2), {
+    lang: 'json',
+    themes: {
+      light: 'min-light',
+      dark: 'dark-plus',
+    },
+  })
+    .then((result: string) => (dependenciesCodeHighlight.value = result))
+    .catch(() => (dependenciesCodeHighlight.value = JSON.stringify(dependencies, null, 2)))
 
-    codeToHtml(JSON.stringify(dependencies, null, 2), { lang: 'json', theme })
-      .then((result: string) => (dependenciesCodeHighlight.value = result))
-      .catch(() => (dependenciesCodeHighlight.value = JSON.stringify(dependencies, null, 2)))
-
-    codeToHtml(JSON.stringify(devDependencies, null, 2), { lang: 'json', theme })
-      .then((result: string) => (devDependenciesCodeHighlight.value = result))
-      .catch(() => (devDependenciesCodeHighlight.value = JSON.stringify(devDependencies, null, 2)))
-  },
-  { immediate: true },
-)
+  codeToHtml(JSON.stringify(devDependencies, null, 2), {
+    lang: 'json',
+    themes: {
+      light: 'min-light',
+      dark: 'dark-plus',
+    },
+  })
+    .then((result: string) => (devDependenciesCodeHighlight.value = result))
+    .catch(() => (devDependenciesCodeHighlight.value = JSON.stringify(devDependencies, null, 2)))
+})
 </script>
 <template>
   <div class="flex flex-col gap-y-4 p-4">

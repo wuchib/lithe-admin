@@ -4,7 +4,6 @@ import { ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
 import { EmptyPlaceholder } from '@/components'
-import { usePersonalization } from '@/composable/usePersonalization'
 
 import type { UseDraggableReturn } from 'vue-draggable-plus'
 
@@ -15,8 +14,6 @@ defineOptions({
 let codeToHtml: any
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
-
-const { isDark } = usePersonalization()
 
 const baseListCodeHighlight = ref()
 
@@ -68,9 +65,9 @@ function removeTask(element: Record<'name' | 'id' | 'key', string>) {
 }
 
 watch(
-  [baseList, gridList, cloneTaskList, isDark],
+  [baseList, gridList, cloneTaskList],
   async (newVal) => {
-    const [baseList, gridList, cloneList2, isDark] = newVal
+    const [baseList, gridList, cloneList2] = newVal
 
     if (!codeToHtml) {
       // @ts-ignore
@@ -78,17 +75,33 @@ watch(
       codeToHtml = shiki.codeToHtml
     }
 
-    const theme = isDark ? 'dark-plus' : 'min-light'
-
-    codeToHtml(JSON.stringify(baseList, null, 2), { lang: 'json', theme })
+    codeToHtml(JSON.stringify(baseList, null, 2), {
+      lang: 'json',
+      themes: {
+        dark: 'dark-plus',
+        light: 'min-light',
+      },
+    })
       .then((result: string) => (baseListCodeHighlight.value = result))
       .catch(() => (baseListCodeHighlight.value = JSON.stringify(baseList, null, 2)))
 
-    codeToHtml(JSON.stringify(gridList, null, 2), { lang: 'json', theme })
+    codeToHtml(JSON.stringify(gridList, null, 2), {
+      lang: 'json',
+      themes: {
+        dark: 'dark-plus',
+        light: 'min-light',
+      },
+    })
       .then((result: string) => (gridListCodeHighlight.value = result))
       .catch(() => (gridListCodeHighlight.value = JSON.stringify(gridList, null, 2)))
 
-    codeToHtml(JSON.stringify(cloneList2, null, 2), { lang: 'json', theme })
+    codeToHtml(JSON.stringify(cloneList2, null, 2), {
+      lang: 'json',
+      themes: {
+        dark: 'dark-plus',
+        light: 'min-light',
+      },
+    })
       .then((result: string) => (cloneList2CodeHighlight.value = result))
       .catch(() => (cloneList2CodeHighlight.value = JSON.stringify(cloneList2, null, 2)))
   },

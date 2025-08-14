@@ -22,7 +22,6 @@ import {
 } from 'naive-ui'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 
-import { usePersonalization } from '@/composable/usePersonalization'
 import { useResettableReactive } from '@/composable/useResettable'
 
 import type { FormRules } from 'naive-ui'
@@ -44,8 +43,6 @@ defineOptions({
 })
 
 let codeToHtml: any
-
-const { isDark } = usePersonalization()
 
 const message = useMessage()
 
@@ -186,9 +183,9 @@ function removePhoneField(index: number) {
 }
 
 watch(
-  [form, isDark],
+  [form],
   async (newVal) => {
-    const [form, isDark] = newVal
+    const [form] = newVal
 
     if (!codeToHtml) {
       // @ts-ignore
@@ -196,13 +193,23 @@ watch(
       codeToHtml = shiki.codeToHtml
     }
 
-    const theme = isDark ? 'dark-plus' : 'min-light'
-
-    codeToHtml(JSON.stringify(form, null, 2), { lang: 'json', theme })
+    codeToHtml(JSON.stringify(form, null, 2), {
+      lang: 'json',
+      themes: {
+        dark: 'dark-plus',
+        light: 'min-light',
+      },
+    })
       .then((result: string) => (formCodeHighlight.value = result))
       .catch(() => (formCodeHighlight.value = JSON.stringify(form, null, 2)))
 
-    codeToHtml(JSON.stringify(rules, null, 2), { lang: 'json', theme })
+    codeToHtml(JSON.stringify(rules, null, 2), {
+      lang: 'json',
+      themes: {
+        dark: 'dark-plus',
+        light: 'min-light',
+      },
+    })
       .then((result: string) => (rulesCodeHighlight.value = result))
       .catch(() => (rulesCodeHighlight.value = JSON.stringify(rules, null, 2)))
   },
