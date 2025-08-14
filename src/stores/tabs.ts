@@ -14,7 +14,7 @@ export interface Tab {
   componentName?: string
   locked?: boolean
   pinned?: boolean
-  keepAlived?: boolean
+  keepAlive?: boolean
 }
 
 export const useTabsStore = defineStore('tabsStore', () => {

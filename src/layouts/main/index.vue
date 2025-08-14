@@ -27,7 +27,7 @@ const navigationTransitionName = ref('scale')
 const isMounted = ref(false)
 
 const keepAliveTabs = computed(() => {
-  return tabsStore.tabs.filter((tab) => tab.keepAlived).map((tab) => tab.componentName ?? '')
+  return tabsStore.tabs.filter((tab) => tab.keepAlive).map((tab) => tab.componentName ?? '')
 })
 
 let oldTabs: Tab[] = []
@@ -145,7 +145,10 @@ onMounted(() => {
     v-if="preferencesStore.preferences.enableNavigationTransition"
     v-slot="{ Component, route }"
   >
-    <Transition :name="navigationTransitionName">
+    <Transition
+      type="transition"
+      :name="navigationTransitionName"
+    >
       <KeepAlive :include="keepAliveTabs">
         <component
           :is="Component"
