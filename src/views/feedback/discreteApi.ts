@@ -10,7 +10,7 @@ const { getModalModifier } = useComponentModifier()
 export const useMessageDiscrete = (type: MessageType = 'info') => {
   message.create(`${type} - 与Setup里调用单独分开显示`, {
     type,
-    duration: 0,
+    duration: 5000,
     closable: true,
   })
 }
@@ -32,5 +32,6 @@ export const useNotificationDiscrete = (type: NotificationType = 'info') => {
     type,
     content: '又要说点啥呢',
     meta: '我是 Setup 外的 Notification， 出现位置当然可以不一样',
+    duration: 5000,
   })
 }

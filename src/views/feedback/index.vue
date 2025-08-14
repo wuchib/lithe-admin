@@ -314,7 +314,7 @@ const createDialogApi = (type: ModalProps['type'] = 'success') => {
             notification.success({
               content: '说点啥呢',
               meta: '我不到啊',
-              duration: 0,
+              duration: 5000,
             })
           "
         >
