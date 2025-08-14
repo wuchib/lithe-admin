@@ -15,13 +15,13 @@ const collapseWidth = computed(() => {
 </script>
 <template>
   <div
-    class="shrink-0 border-r border-naive-border transition-[border-color,width] duration-300 ease-naive-bezier"
+    class="shrink-0 border-r border-naive-border transition-[border-color,width]"
     :style="{
       width: `${collapseWidth}px`,
     }"
   >
     <div
-      class="flex h-full items-center justify-center transition-[opacity,padding] duration-300 ease-naive-bezier"
+      class="flex h-full items-center justify-center transition-[opacity,padding]"
       :class="[
         preferencesStore.preferences.menu.collapsed ? 'px-0' : 'px-4',
         {
@@ -33,7 +33,7 @@ const collapseWidth = computed(() => {
         <div class="size-full rounded bg-primary/10"></div>
       </div>
       <div
-        class="flex-1 overflow-hidden transition-[margin-left,max-width] duration-300"
+        class="flex-1 overflow-hidden transition-[margin-left,max-width]"
         :class="preferencesStore.preferences.menu.collapsed ? 'ml-0 max-w-0' : 'ml-4 max-w-44'"
       >
         <h1 class="truncate text-xl">

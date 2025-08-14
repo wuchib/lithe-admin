@@ -15,7 +15,8 @@ const props = defineProps<EmptyPlaceholderProps>()
 </script>
 <template>
   <Transition
-    enter-active-class="transition-[opacity,scale] duration-300 ease-naive-bezier"
+    type="transition"
+    enter-active-class="transition-[opacity,scale]"
     enter-from-class="scale-50 opacity-0"
   >
     <div

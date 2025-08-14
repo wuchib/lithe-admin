@@ -36,10 +36,12 @@ function isCurrentRoute(name: RouteRecordNameGeneric) {
 <template>
   <nav class="min-w-0">
     <TransitionGroup
+      :duration="300"
       tag="ul"
       class="flex"
-      enter-active-class="transition-[grid-template-columns] duration-300 ease-naive-bezier"
-      leave-active-class="transition-[grid-template-columns] duration-300 ease-naive-bezier"
+      type="transition"
+      enter-active-class="transition-[grid-template-columns]"
+      leave-active-class="transition-[grid-template-columns]"
       enter-from-class="grid-cols-[0fr]"
       leave-to-class="grid-cols-[0fr]"
       enter-to-class="grid-cols-[1fr]"

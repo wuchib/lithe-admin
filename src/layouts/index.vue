@@ -25,7 +25,7 @@ const { scrollbarInMainLayout } = useComponentThemeOverrides()
 <template>
   <div class="flex h-dvh flex-col overflow-hidden">
     <div
-      class="border-b border-naive-border bg-naive-card transition-[background-color,border-color] duration-300 ease-naive-bezier"
+      class="border-b border-naive-border bg-naive-card transition-[background-color,border-color]"
     >
       <HeaderLayout />
     </div>
@@ -33,8 +33,9 @@ const { scrollbarInMainLayout } = useComponentThemeOverrides()
       <AsideLayout />
       <div class="relative flex flex-1 flex-col overflow-x-hidden">
         <Transition
-          enter-active-class="transition-[grid-template-rows] duration-300 ease-naive-bezier"
-          leave-active-class="transition-[grid-template-rows] duration-300 ease-naive-bezier"
+          type="transition"
+          enter-active-class="transition-[grid-template-rows]"
+          leave-active-class="transition-[grid-template-rows]"
           enter-from-class="grid-rows-[0fr]"
           leave-to-class="grid-rows-[0fr]"
           enter-to-class="grid-rows-[1fr]"
@@ -68,8 +69,9 @@ const { scrollbarInMainLayout } = useComponentThemeOverrides()
           </template>
         </EmptyPlaceholder>
         <Transition
-          enter-active-class="transition-[grid-template-rows] duration-300 ease-naive-bezier"
-          leave-active-class="transition-[grid-template-rows] duration-300 ease-naive-bezier"
+          type="transition"
+          enter-active-class="transition-[grid-template-rows]"
+          leave-active-class="transition-[grid-template-rows]"
           enter-from-class="grid-rows-[0fr]"
           leave-to-class="grid-rows-[0fr]"
           enter-to-class="grid-rows-[1fr]"

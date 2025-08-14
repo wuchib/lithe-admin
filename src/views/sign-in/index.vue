@@ -96,10 +96,10 @@ onUnmounted(() => {
 </script>
 <template>
   <div
-    class="relative flex h-screen items-center justify-center bg-neutral-50 transition-[background-color] duration-300 ease-naive-bezier dark:bg-neutral-900"
+    class="relative flex h-screen items-center justify-center bg-neutral-50 transition-[background-color] dark:bg-neutral-900"
   >
     <div
-      class="absolute top-0 left-0 size-full bg-neutral-200/45 transition-[background-color] duration-300 ease-naive-bezier dark:bg-neutral-800/50"
+      class="absolute top-0 left-0 size-full bg-neutral-200/45 transition-[background-color] dark:bg-neutral-800/50"
       :style="{
         'mask-image': `url(${topographySvg})`,
         '-webkit-mask-image': `url(${topographySvg})`,
@@ -110,7 +110,7 @@ onUnmounted(() => {
       }"
     />
     <div
-      class="pointer-events-none absolute inset-0 z-10 transition-[filter] duration-300 ease-naive-bezier"
+      class="pointer-events-none absolute inset-0 z-10 transition-[filter]"
       :style="{
         'background-image': `url(${topographySvg})`,
         'background-size': textureMaskParams.size,
@@ -121,7 +121,7 @@ onUnmounted(() => {
     />
     <div class="relative z-50 flex h-[480px] w-[800px] rounded shadow-lg">
       <div
-        class="flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] duration-300 ease-naive-bezier dark:bg-neutral-850"
+        class="flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] dark:bg-neutral-850"
       >
         <NCarousel
           draggable
@@ -137,7 +137,7 @@ onUnmounted(() => {
         </NCarousel>
       </div>
       <div
-        class="relative flex w-[340px] flex-col bg-white px-10 py-12 transition-[background-color] duration-300 ease-naive-bezier dark:bg-neutral-800"
+        class="relative flex w-[340px] flex-col bg-white px-10 py-12 transition-[background-color] dark:bg-neutral-800"
       >
         <div class="absolute top-0 left-0 z-50 flex w-full items-center justify-end gap-x-4 p-4">
           <ThemeColorPopover />
@@ -146,11 +146,7 @@ onUnmounted(() => {
         <div>
           <div>
             <h2 class="text-2xl">登&nbsp;录</h2>
-            <p
-              class="text-neutral-400 transition-[color] duration-300 ease-naive-bezier dark:text-neutral-500"
-            >
-              SIGN IN
-            </p>
+            <p class="text-neutral-400 transition-[color] dark:text-neutral-500">SIGN IN</p>
           </div>
           <div class="mt-12">
             <NForm

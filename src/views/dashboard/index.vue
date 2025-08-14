@@ -98,7 +98,7 @@ function generateCardData() {
       percentage: parseFloat((3.2 + Math.random() * 4).toFixed(2)),
       iconClass: 'iconify ph--users-bold text-indigo-50 dark:text-indigo-150',
       iconBgClass:
-        'text-indigo-500/5 bg-indigo-400 ring-4 ring-indigo-200 duration-300 dark:bg-indigo-650 dark:ring-indigo-500/30',
+        'text-indigo-500/5 bg-indigo-400 ring-4 ring-indigo-200 dark:bg-indigo-650 dark:ring-indigo-500/30 transition-all',
       precision: 0,
       description: `${currentMonth}月新增 ${Math.floor(100 + Math.random() * 200)} 人`,
     },
@@ -108,7 +108,7 @@ function generateCardData() {
       percentage: parseFloat((-2 + Math.random() * 20).toFixed(2)),
       iconClass: 'iconify ph--eye-bold text-blue-50 dark:text-blue-150',
       iconBgClass:
-        'text-blue-500/5 bg-blue-400 ring-4 ring-blue-200 duration-300 dark:bg-blue-650 dark:ring-blue-500/30',
+        'text-blue-500/5 bg-blue-400 ring-4 ring-blue-200 dark:bg-blue-650 dark:ring-blue-500/30 transition-all',
       precision: 0,
       description: '较昨日变化',
     },
@@ -118,7 +118,7 @@ function generateCardData() {
       percentage: parseFloat((5 + Math.random() * 10).toFixed(2)),
       iconClass: 'iconify ph--currency-dollar-bold text-emerald-50 dark:text-emerald-150',
       iconBgClass:
-        'text-emerald-500/5 bg-emerald-400 ring-4 ring-emerald-200 duration-300 dark:bg-emerald-650 dark:ring-emerald-500/30',
+        'text-emerald-500/5 bg-emerald-400 ring-4 ring-emerald-200 dark:bg-emerald-650 dark:ring-emerald-500/30 transition-all',
       precision: 2,
       description: '本月累计收入',
     },
@@ -128,7 +128,7 @@ function generateCardData() {
       percentage: parseFloat((-8 + Math.random() * 6).toFixed(2)),
       iconClass: 'iconify ph--shopping-cart-bold text-orange-50 dark:text-orange-150',
       iconBgClass:
-        'text-orange-500/5 bg-orange-400 ring-4 ring-orange-200 duration-300 dark:bg-orange-650 dark:ring-orange-500/30',
+        'text-orange-500/5 bg-orange-400 ring-4 ring-orange-200 dark:bg-orange-650 dark:ring-orange-500/30 transition-all',
       precision: 0,
       description: '需要及时处理',
     },
@@ -1123,7 +1123,7 @@ watch([isDark, color], () => {
       <div
         v-for="item in cardList"
         :key="item.title"
-        class="flex items-center justify-between gap-x-4 overflow-hidden rounded bg-naive-card p-6 shadow-xs duration-300 ease-naive-bezier"
+        class="flex items-center justify-between gap-x-4 overflow-hidden rounded bg-naive-card p-6 shadow-xs transition-[background-color]"
       >
         <div class="flex-1">
           <span class="text-sm font-medium text-neutral-450">{{ item.title }}</span>
@@ -1136,7 +1136,7 @@ watch([isDark, color], () => {
           </div>
           <div class="flex items-center">
             <div
-              class="flex items-center gap-x-0.5 rounded-xs px-1.5 py-0.5 text-xs duration-300"
+              class="flex items-center gap-x-0.5 rounded-xs px-1.5 py-0.5 text-xs transition-[background-color,color]"
               :class="
                 item.percentage > 0
                   ? 'bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400'
@@ -1168,7 +1168,7 @@ watch([isDark, color], () => {
     <div class="grid grid-cols-1 gap-4 overflow-hidden lg:grid-cols-12">
       <div class="col-span-1 lg:col-span-8">
         <div
-          class="rounded bg-naive-card px-5 pt-5 pb-4.5 shadow-xs transition-[background-color] duration-300 ease-naive-bezier"
+          class="rounded bg-naive-card px-5 pt-5 pb-4.5 shadow-xs transition-[background-color]"
           style="height: 400px"
         >
           <div
@@ -1179,7 +1179,7 @@ watch([isDark, color], () => {
       </div>
       <div class="col-span-1 lg:col-span-4">
         <div
-          class="flex flex-col rounded bg-naive-card px-5 pt-5 pb-4.5 shadow-xs transition-[background-color] duration-300 ease-naive-bezier"
+          class="flex flex-col rounded bg-naive-card px-5 pt-5 pb-4.5 shadow-xs transition-[background-color]"
           style="height: 400px"
         >
           <div
@@ -1196,7 +1196,7 @@ watch([isDark, color], () => {
     <div class="grid grid-cols-1 gap-4 overflow-hidden lg:grid-cols-12">
       <div class="col-span-1 lg:col-span-5">
         <div
-          class="rounded bg-naive-card px-5 pt-5 pb-3 shadow-xs transition-[background-color] duration-300 ease-naive-bezier"
+          class="rounded bg-naive-card px-5 pt-5 pb-3 shadow-xs transition-[background-color]"
           style="height: 340px"
         >
           <div
@@ -1207,7 +1207,7 @@ watch([isDark, color], () => {
       </div>
       <div class="col-span-1 lg:col-span-7">
         <div
-          class="rounded bg-naive-card p-5 shadow-xs transition-[background-color] duration-300 ease-naive-bezier"
+          class="rounded bg-naive-card p-5 shadow-xs transition-[background-color]"
           style="height: 340px; position: relative"
         >
           <div

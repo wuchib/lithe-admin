@@ -94,7 +94,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
 
   const { id, componentName } = targetTab
 
-  const { pinned, locked, keepAlived } = getTab(id) ?? {}
+  const { pinned, locked, keepAlive } = getTab(id) ?? {}
 
   return [
     {
@@ -141,11 +141,11 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       icon: () => (
         <span
           class={
-            keepAlived ? 'iconify-[hugeicons--database-02]' : 'iconify-[hugeicons--database-locked]'
+            keepAlive ? 'iconify-[hugeicons--database-02]' : 'iconify-[hugeicons--database-locked]'
           }
         />
       ),
-      label: keepAlived ? '取消缓存' : '缓存标签页',
+      label: keepAlive ? '取消缓存' : '缓存标签页',
       disabled: isEmpty(componentName),
     },
     {
@@ -233,7 +233,7 @@ function getTabContextMenuActions(): ContextMenuActions | null {
 
   const { id } = tabValue
 
-  const { locked, keepAlived, pinned } = getTab(id) ?? {}
+  const { locked, keepAlive: keepAlived, pinned } = getTab(id) ?? {}
 
   return {
     close: () => {
@@ -255,7 +255,7 @@ function getTabContextMenuActions(): ContextMenuActions | null {
       updateTab(id, { pinned: !pinned })
     },
     keepalive: () => {
-      updateTab(id, { keepAlived: !keepAlived })
+      updateTab(id, { keepAlive: !keepAlived })
     },
     lock: () => {
       updateTab(id, { locked: !locked })
@@ -312,6 +312,8 @@ const CompTabs = defineComponent({
         }}
       >
         <TransitionGroup
+          duration={300}
+          type='transition'
           enterFromClass='max-w-0'
           leaveToClass='max-w-0'
           onAfterEnter={() => scrollToActiveTab('smooth')}
@@ -320,7 +322,7 @@ const CompTabs = defineComponent({
             <div
               key={tab.id}
               class={[
-                'relative cursor-pointer overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] duration-300 ease-naive-bezier hover:bg-primary/6 [&:not(.max-w-0)]:max-w-40',
+                'relative cursor-pointer overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] hover:bg-primary/6 [&:not(.max-w-0)]:max-w-48',
                 {
                   'tab-active': tab.path === pendingActivePath.value,
                   group: !tab.locked && !preferencesStore.preferences.showTabClose,
@@ -330,11 +332,14 @@ const CompTabs = defineComponent({
               onContextmenu={(e) => handleTabContextMenuClick(e, tab)}
             >
               <Transition
-                enterActiveClass='transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]'
-                leaveActiveClass='transition-[opacity,scale,translate] duration-300 ease-naive-bezier will-change-[opacity,transform,scale]'
+                type='transition'
+                leaveActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
+                enterActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
                 leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
                 enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
-                onAfterEnter={() => scrollToActiveTab('smooth')}
+                onAfterEnter={() => {
+                  scrollToActiveTab('smooth')
+                }}
               >
                 {tab.path === pendingActivePath.value && (
                   <div class='absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6' />
@@ -344,7 +349,7 @@ const CompTabs = defineComponent({
               <div class={['flex items-center py-2.5 pl-4', tab.pinned ? 'pr-4' : 'pr-2.5']}>
                 <div
                   class={[
-                    'relative flex items-center justify-center overflow-hidden transition-[translate] duration-300 ease-naive-bezier',
+                    'flex flex-1 items-center overflow-hidden transition-[translate]',
                     {
                       'translate-x-2.5':
                         !tab.pinned && (tab.locked || !preferencesStore.preferences.showTabClose),
@@ -358,21 +363,17 @@ const CompTabs = defineComponent({
                       class={[
                         tab.icon,
                         {
-                          'text-primary': tab.componentName && getTab(tab.id)?.keepAlived,
+                          'text-primary': tab.componentName && getTab(tab.id)?.keepAlive,
                         },
                       ]}
                     />
                   </div>
-                  <div class='min-w-0 overflow-hidden'>
-                    <NEllipsis tooltip={showTabTooltip.value}>{tab.title}</NEllipsis>
-                  </div>
+                  <NEllipsis tooltip={showTabTooltip.value}>{tab.title}</NEllipsis>
                 </div>
-
                 {!tab.pinned && (
                   <div
                     class={[
-                      'overflow-hidden',
-                      'ml-1 flex transition-[opacity,scale] duration-300 ease-naive-bezier',
+                      'ml-1 flex overflow-hidden transition-[opacity,scale]',
                       {
                         'scale-0 opacity-0':
                           tab.locked || !preferencesStore.preferences.showTabClose,
@@ -444,7 +445,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div
-    class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] duration-300 ease-naive-bezier select-none"
+    class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] select-none"
   >
     <CompTabs v-model="tabPinnedList" />
     <NScrollbar

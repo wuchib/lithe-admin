@@ -41,7 +41,7 @@ const onUserDropdownSelected = (key: string) => {
 </script>
 <template>
   <div
-    class="mb-4 flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] duration-300 hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
+    class="mb-4 flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
     :class="
       preferencesStore.preferences.menu.collapsed
         ? 'mx-2 rounded'
@@ -57,11 +57,11 @@ const onUserDropdownSelected = (key: string) => {
       :disabled="!preferencesStore.preferences.menu.collapsed"
     >
       <div
-        class="grid place-items-center overflow-hidden rounded-full transition-[margin,padding] duration-300 ease-naive-bezier"
+        class="grid place-items-center overflow-hidden rounded-full transition-[margin,padding]"
         :class="preferencesStore.preferences.menu.collapsed ? 'mr-0 px-2 py-1.5' : 'mr-2'"
       >
         <div
-          class="flex items-center justify-center overflow-hidden transition-[height,width] duration-300 ease-naive-bezier"
+          class="flex items-center justify-center overflow-hidden transition-[height,width]"
           :class="preferencesStore.preferences.menu.collapsed ? 'size-8' : 'size-10'"
         >
           <NAvatar
@@ -79,8 +79,9 @@ const onUserDropdownSelected = (key: string) => {
       </div>
     </NDropdown>
     <Transition
-      enter-active-class="transition-[grid-template-columns] duration-150 ease-naive-bezier"
-      leave-active-class="transition-[grid-template-columns] duration-150 ease-naive-bezier"
+      type="transition"
+      enter-active-class="transition-[grid-template-columns] duration-150"
+      leave-active-class="transition-[grid-template-columns] duration-150"
       enter-from-class="grid-cols-[0fr]"
       leave-to-class="grid-cols-[0fr]"
       enter-to-class="grid-cols-[1fr]"
