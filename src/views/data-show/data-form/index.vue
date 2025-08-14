@@ -527,12 +527,12 @@ watch(
               </NScrollbar>
             </template>
             <template #resize-trigger>
-              <div class="h-px w-full cursor-col-resize bg-neutral-200 dark:bg-neutral-700"></div>
+              <div class="h-px w-full cursor-col-resize bg-neutral-200 dark:bg-neutral-700 transition-[background-color]"></div>
             </template>
           </NSplit>
         </template>
         <template #resize-trigger>
-          <div class="h-full w-px cursor-col-resize bg-neutral-200 dark:bg-neutral-700"></div>
+          <div class="h-full w-px cursor-col-resize bg-neutral-200 dark:bg-neutral-700 transition-[background-color]"></div>
         </template>
       </NSplit>
     </NCard>

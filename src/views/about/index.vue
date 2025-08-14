@@ -291,7 +291,7 @@ onMounted(async () => {
             </NScrollbar>
           </template>
           <template #resize-trigger>
-            <div class="h-px w-full cursor-col-resize bg-neutral-200 dark:bg-neutral-700"></div>
+            <div class="h-px w-full cursor-col-resize bg-neutral-200 dark:bg-neutral-700 transition-[background-color]"></div>
           </template>
         </NSplit>
       </NCard>
