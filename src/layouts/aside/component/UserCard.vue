@@ -19,7 +19,7 @@ const userDropdownOptions = [
   },
   {
     icon: () => h('span', { class: 'iconify ph--sign-out size-5' }),
-    key: 'signout',
+    key: 'signOut',
     label: '退出登录',
   },
 ]
@@ -33,7 +33,7 @@ const onUserDropdownSelected = (key: string) => {
     case 'user':
       message.info('点击了个人中心')
       break
-    case 'signout':
+    case 'signOut':
       userStore.cleanup()
       break
   }
