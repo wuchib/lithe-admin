@@ -107,7 +107,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div
-    class="relative flex h-svh items-center justify-center overflow-hidden bg-neutral-50 p-8 transition-[background-color] dark:bg-neutral-900"
+    class="relative flex h-svh items-center justify-center overflow-hidden bg-neutral-50 p-6 transition-[background-color] dark:bg-neutral-900"
   >
     <div
       class="absolute top-0 left-0 size-full bg-neutral-200/45 transition-[background-color] dark:bg-neutral-800/50"
@@ -156,8 +156,8 @@ onUnmounted(() => {
         class="relative flex w-full flex-col bg-white px-10 py-12 transition-[background-color] sm:w-[340px] dark:bg-neutral-800"
       >
         <div class="absolute top-0 left-0 z-50 flex w-full items-center justify-end gap-x-4 p-4">
-          <ThemeDropdown />
           <ThemeColorPopover />
+          <ThemeDropdown />
         </div>
         <div>
           <div>
