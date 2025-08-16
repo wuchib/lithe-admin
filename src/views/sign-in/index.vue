@@ -12,7 +12,6 @@ import twc from '@/utils/tailwindColor'
 import Illustration1 from './component/Illustration1.vue'
 import Illustration2 from './component/Illustration2.vue'
 import Illustration3 from './component/Illustration3.vue'
-import Illustration4 from './component/Illustration4.vue'
 import ThemeColorPopover from './component/ThemeColorPopover.vue'
 
 import type { FormItemRule } from 'naive-ui'
@@ -82,16 +81,28 @@ const handleSubmitClick = () => {
   })
 }
 
-const updateTexturePosition = (e: MouseEvent) => {
-  textureMaskParams.x = e.clientX
-  textureMaskParams.y = e.clientY
+function updateTexturePosition(x: number, y: number) {
+  textureMaskParams.x = x
+  textureMaskParams.y = y
+}
+
+function onMouseMove(e: MouseEvent) {
+  updateTexturePosition(e.clientX, e.clientY)
+}
+
+function onTouchMove(e: TouchEvent) {
+  if (e.touches.length > 0) {
+    updateTexturePosition(e.touches[0].clientX, e.touches[0].clientY)
+  }
 }
 
 onMounted(() => {
-  window.addEventListener('mousemove', updateTexturePosition)
+  window.addEventListener('mousemove', onMouseMove)
+  window.addEventListener('touchmove', onTouchMove)
 })
 onUnmounted(() => {
-  window.removeEventListener('mousemove', updateTexturePosition)
+  window.removeEventListener('mousemove', onMouseMove)
+  window.removeEventListener('touchmove', onTouchMove)
 })
 </script>
 <template>
@@ -119,9 +130,9 @@ onUnmounted(() => {
         ...textureStyle,
       }"
     />
-    <div class="relative z-50 flex justify-center h-[480px] w-[800px] rounded shadow-lg">
+    <div class="relative z-50 flex h-[480px] w-[800px] justify-center rounded shadow-lg">
       <div
-        class="max-sm:hidden flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] dark:bg-neutral-850"
+        class="flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] max-sm:hidden dark:bg-neutral-850"
       >
         <NCarousel
           draggable
@@ -130,9 +141,6 @@ onUnmounted(() => {
           loop
           autoplay
         >
-          <div class="flex h-full items-center p-5">
-            <Illustration4 />
-          </div>
           <div class="flex h-full items-center p-5">
             <Illustration1 />
           </div>
@@ -145,11 +153,11 @@ onUnmounted(() => {
         </NCarousel>
       </div>
       <div
-        class="relative flex sm:w-[340px] w-full flex-col bg-white px-10 py-12 transition-[background-color] dark:bg-neutral-800"
+        class="relative flex w-full flex-col bg-white px-10 py-12 transition-[background-color] sm:w-[340px] dark:bg-neutral-800"
       >
         <div class="absolute top-0 left-0 z-50 flex w-full items-center justify-end gap-x-4 p-4">
-          <ThemeColorPopover />
           <ThemeDropdown />
+          <ThemeColorPopover />
         </div>
         <div>
           <div>

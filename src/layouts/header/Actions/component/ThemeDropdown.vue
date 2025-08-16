@@ -6,6 +6,11 @@ import { ButtonAnimation } from '@/components'
 import { usePersonalization } from '@/composable/usePersonalization'
 
 import type { Theme } from '@/composable/usePersonalization'
+import type { PopoverProps } from 'naive-ui'
+
+interface ThemeDropdownProps extends /* @vue-ignore */ PopoverProps {}
+
+const props = defineProps<ThemeDropdownProps>()
 
 const { setTheme, theme } = usePersonalization()
 
@@ -57,11 +62,11 @@ function renderSelectLabel(option: (typeof themeDropdownOptions)[number]) {
 </script>
 <template>
   <NPopselect
+    v-bind="props"
     trigger="click"
     v-model:value="theme"
     :options="themeDropdownOptions"
     :render-label="renderSelectLabel"
-    show-arrow
     :to="false"
     @update-value="onThemePopselectUpdated"
   >
