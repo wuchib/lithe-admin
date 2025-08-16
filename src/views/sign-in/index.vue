@@ -96,7 +96,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div
-    class="relative flex h-screen items-center justify-center bg-neutral-50 transition-[background-color] dark:bg-neutral-900"
+    class="relative flex h-svh items-center justify-center overflow-hidden bg-neutral-50 p-8 transition-[background-color] dark:bg-neutral-900"
   >
     <div
       class="absolute top-0 left-0 size-full bg-neutral-200/45 transition-[background-color] dark:bg-neutral-800/50"
@@ -119,9 +119,9 @@ onUnmounted(() => {
         ...textureStyle,
       }"
     />
-    <div class="relative z-50 flex h-[480px] w-[800px] rounded shadow-lg">
+    <div class="relative z-50 flex justify-center h-[480px] w-[800px] rounded shadow-lg">
       <div
-        class="flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] dark:bg-neutral-850"
+        class="max-sm:hidden flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] dark:bg-neutral-850"
       >
         <NCarousel
           draggable
@@ -130,14 +130,22 @@ onUnmounted(() => {
           loop
           autoplay
         >
-          <Illustration4 class="p-5" />
-          <Illustration1 class="p-5" />
-          <Illustration2 class="p-5" />
-          <Illustration3 class="p-5" />
+          <div class="flex h-full items-center p-5">
+            <Illustration4 />
+          </div>
+          <div class="flex h-full items-center p-5">
+            <Illustration1 />
+          </div>
+          <div class="flex h-full items-center p-5">
+            <Illustration2 />
+          </div>
+          <div class="flex h-full items-center p-5">
+            <Illustration3 />
+          </div>
         </NCarousel>
       </div>
       <div
-        class="relative flex w-[340px] flex-col bg-white px-10 py-12 transition-[background-color] dark:bg-neutral-800"
+        class="relative flex sm:w-[340px] w-full flex-col bg-white px-10 py-12 transition-[background-color] dark:bg-neutral-800"
       >
         <div class="absolute top-0 left-0 z-50 flex w-full items-center justify-end gap-x-4 p-4">
           <ThemeColorPopover />
