@@ -36,7 +36,7 @@ const mainLayoutStyle = computed<CSSProperties | null>(() => {
       }
     : preferencesStore.layoutSlideDirection === 'left'
       ? {
-          transform: `translate(-${52}px) scale(0.88)`,
+          transform: `translate(-${62}px) scale(0.88)`,
         }
       : null
 })
