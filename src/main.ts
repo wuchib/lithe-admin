@@ -16,7 +16,7 @@ function clearSystemData() {
   const userStore = useUserStore()
 
   const oldLocalStorage = localStorage.getItem('configure')
-  if (oldLocalStorage && haveSameKeys(preferencesStore.preferences, DEFAULT_PREFERENCES_OPTIONS)) {
+  if (oldLocalStorage || haveSameKeys(preferencesStore.preferences, DEFAULT_PREFERENCES_OPTIONS)) {
     tabsStore.clearTabs()
     preferencesStore.reset()
     userStore.cleanup()
