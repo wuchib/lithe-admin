@@ -17,7 +17,6 @@ import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverri
 import { usePersonalization } from '@/composable/usePersonalization'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores/preferences'
-import { useSystemStore } from '@/stores/system'
 import twColors from '@/utils/tailwindColor'
 
 import NoiseModal from './NoiseModal.vue'
@@ -26,7 +25,6 @@ import WatermarkModal from './WatermarkModal.vue'
 const mediaQuery = inject(mediaQueryInjectionKey, null)
 
 const preferencesStore = usePreferencesStore()
-const systemStore = useSystemStore()
 
 const { color, setColor } = usePersonalization()
 
