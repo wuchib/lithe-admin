@@ -46,13 +46,14 @@ const changeStateCode200 = () => {
       </div>
     </NAlert>
     <div
-      class="absolute flex h-screen w-full items-center justify-center"
+      class="absolute left-0 flex h-screen w-full items-center justify-center"
       style="padding-bottom: 240px"
     >
       <ErrorPage
         v-bind="errorState"
-        container-class="w-full"
-        container-style="width: 500px"
+        :container-style="{
+          maxWidth: '500px',
+        }"
       >
         <NButton
           size="large"

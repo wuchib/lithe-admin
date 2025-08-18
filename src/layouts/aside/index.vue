@@ -28,7 +28,7 @@ function handleCollapseClick() {
 </script>
 <template>
   <div
-    class="relative flex h-full flex-col justify-between gap-y-4 border-r border-naive-border bg-naive-card transition-[background-color,border-color,width]"
+    class="relative flex h-full flex-col justify-between gap-y-4 border-r border-naive-border bg-naive-card pb-4 transition-[background-color,border-color,width] max-sm:hidden"
     :style="{
       width: `${menuCollapseWidth}px`,
     }"

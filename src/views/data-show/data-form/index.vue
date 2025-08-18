@@ -20,9 +20,10 @@ import {
   NRadio,
   useMessage,
 } from 'naive-ui'
-import { computed, ref, useTemplateRef, watch } from 'vue'
+import { computed, ref, useTemplateRef, watch, inject } from 'vue'
 
 import { useResettableReactive } from '@/composable/useResettable'
+import { mediaQueryInjectionKey } from '@/injection'
 
 import type { FormRules } from 'naive-ui'
 
@@ -43,6 +44,8 @@ defineOptions({
 })
 
 let codeToHtml: any
+
+const mediaQuery = inject(mediaQueryInjectionKey, null)
 
 const message = useMessage()
 
@@ -226,11 +229,12 @@ watch(
     >
       一个数据表单的例子，做了一些验证的限制，右边是规则和表单的数据，你可以拖动它们之间的分割线
     </NAlert>
-    <NCard>
+    <NCard :size="mediaQuery?.md.value ? 'small' : undefined">
       <NSplit
-        pane1-class="pr-8"
-        pane2-class="pl-8"
+        :pane1-class="mediaQuery?.lg.value ? 'pb-4' : 'pr-8'"
+        :pane2-class="mediaQuery?.lg.value ? 'pt-4' : 'pl-8'"
         :default-size="0.6"
+        :direction="mediaQuery?.xl.value ? 'vertical' : 'horizontal'"
       >
         <template #1>
           <NScrollbar>
@@ -239,10 +243,10 @@ watch(
               :model="form"
               :rules="rules"
               label-placement="left"
-              :label-width="100"
+              :label-width="78"
               :disabled="formDisabled"
             >
-              <div class="flex gap-x-8">
+              <div class="flex gap-x-8 max-lg:flex-col">
                 <div class="flex-1">
                   <NFormItem
                     label="姓名"
@@ -467,7 +471,7 @@ watch(
                 </div>
               </div>
             </NForm>
-            <div class="flex items-center">
+            <div class="flex items-center max-lg:flex-col">
               <NFormItem
                 label="禁用表单"
                 label-placement="left"
@@ -476,7 +480,7 @@ watch(
                 <NSwitch v-model:value="formDisabled" />
               </NFormItem>
 
-              <div class="ml-8 flex gap-x-4">
+              <div class="flex gap-4 max-md:flex-wrap max-md:gap-2 md:ml-8">
                 <NButton
                   type="success"
                   :disabled="formDisabled"
@@ -535,7 +539,7 @@ watch(
         </template>
         <template #resize-trigger>
           <div
-            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] dark:bg-neutral-700"
+            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] max-lg:h-px max-lg:w-full dark:bg-neutral-700"
           ></div>
         </template>
       </NSplit>

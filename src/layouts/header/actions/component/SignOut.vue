@@ -27,6 +27,6 @@ function cleanupUserInfo() {
 </script>
 <template>
   <ButtonAnimation @click="handleSignOutClick">
-    <span class="iconify size-5 ph--sign-out" />
+    <span class="iconify ph--sign-out" />
   </ButtonAnimation>
 </template>

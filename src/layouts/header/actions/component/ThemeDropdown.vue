@@ -71,10 +71,7 @@ function renderSelectLabel(option: (typeof themeDropdownOptions)[number]) {
     @update-value="onThemePopselectUpdated"
   >
     <ButtonAnimation title="主题">
-      <span
-        :class="themeIconName"
-        class="size-5"
-      />
+      <span :class="themeIconName" />
     </ButtonAnimation>
   </NPopselect>
 </template>

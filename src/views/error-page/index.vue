@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { NNumberAnimation, NButton } from 'naive-ui'
-import { ref, type StyleValue } from 'vue'
+import { ref } from 'vue'
 
 import router from '@/router'
+
+import type { StyleValue } from 'vue'
 
 interface ErrorPageProps {
   code?: number
@@ -28,9 +30,9 @@ const prevCode = ref(0)
 <template>
   <div class="grid h-dvh w-full flex-col place-items-center">
     <div
-      class="flex flex-col"
+      class="flex w-full flex-col"
       :class="containerClass"
-      style="width: 600px"
+      style="max-width: 600px"
       :style="containerStyle"
     >
       <svg
@@ -39,6 +41,7 @@ const prevCode = ref(0)
         xml:space="preserve"
         class="text-primary"
         viewBox="0 0 500 500"
+        width="100%"
       >
         <path
           fill="currentColor"

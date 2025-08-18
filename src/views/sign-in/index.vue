@@ -4,7 +4,7 @@ import { computed, onMounted, onUnmounted, reactive, ref, useTemplateRef } from 
 
 import topographySvg from '@/assets/topography.svg'
 import { usePersonalization } from '@/composable/usePersonalization'
-import ThemeDropdown from '@/layouts/header/Actions/component/ThemeDropdown.vue'
+import ThemeDropdown from '@/layouts/header/actions/component/ThemeDropdown.vue'
 import router from '@/router'
 import { useUserStore } from '@/stores/user'
 import twc from '@/utils/tailwindColor'

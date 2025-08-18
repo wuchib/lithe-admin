@@ -11,6 +11,9 @@ export interface PreferencesOptions {
     width: number
     maxWidth: number
   }>
+  mobile: {
+    mainLayoutSlider: 'left' | 'right' | null
+  }
   shouldRefreshTab: boolean
   showFooter: boolean
   showLogo: boolean
@@ -32,6 +35,9 @@ const DEFAULT_PREFERENCES_OPTIONS: PreferencesOptions = {
     collapsed: false,
     width: 64,
     maxWidth: 272,
+  },
+  mobile: {
+    mainLayoutSlider: null,
   },
   shouldRefreshTab: false,
   showFooter: true,

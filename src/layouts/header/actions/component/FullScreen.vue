@@ -11,10 +11,7 @@ const { isFullscreen, enter, exit } = useFullscreen()
       @click="isFullscreen ? exit() : enter()"
       :title="isFullscreen ? '退出全屏' : '全屏'"
     >
-      <span
-        class="size-5"
-        :class="isFullscreen ? 'iconify ph--arrows-in' : 'iconify ph--arrows-out'"
-      />
+      <span :class="isFullscreen ? 'iconify ph--arrows-in' : 'iconify ph--arrows-out'" />
     </ButtonAnimation>
   </div>
 </template>

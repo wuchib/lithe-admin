@@ -11,14 +11,14 @@ defineOptions({
 })
 </script>
 <template>
-  <div class="flex items-center gap-x-3">
+  <div class="flex items-center">
     <ButtonAnimation
       :animation="false"
       tag="a"
       href="https://github.com/tenianon/lithe-admin"
       target="_blank"
     >
-      <span class="iconify-[mdi--github] size-5" />
+      <span class="iconify-[mdi--github]" />
     </ButtonAnimation>
     <FullScreen />
     <ThemeDropdown />

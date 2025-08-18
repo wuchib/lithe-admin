@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { NCard, NSplit, NButton, NScrollbar, NTag } from 'naive-ui'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, inject } from 'vue'
 
 import packageJson from '@/../package.json'
+import { mediaQueryInjectionKey } from '@/injection'
 
 defineOptions({
   name: 'About',
 })
 
 let codeToHtml: any
+
+const mediaQuery = inject(mediaQueryInjectionKey, null)
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -183,7 +186,10 @@ onMounted(async () => {
 </script>
 <template>
   <div class="flex flex-col gap-y-4 p-4">
-    <NCard :title="`关于 ${APP_NAME}`">
+    <NCard
+      :title="`关于 ${APP_NAME}`"
+      :size="mediaQuery?.md.value ? 'small' : undefined"
+    >
       <p class="text-base">
         {{ APP_NAME }} 是一个轻盈而优雅的后台管理模板，主要技术栈由
         <a
@@ -252,13 +258,19 @@ onMounted(async () => {
         构建。
       </p>
     </NCard>
-    <div class="flex gap-x-2">
-      <NCard title="目录结构">
+    <div class="flex gap-x-2 max-lg:flex-col">
+      <NCard
+        title="目录结构"
+        :size="mediaQuery?.md.value ? 'small' : undefined"
+      >
         <NScrollbar container-style="max-height: 1100px;">
           <div v-html="directoryStructureHighlight"></div>
         </NScrollbar>
       </NCard>
-      <NCard title="依赖信息">
+      <NCard
+        title="依赖信息"
+        :size="mediaQuery?.md.value ? 'small' : undefined"
+      >
         <NSplit
           direction="vertical"
           pane1-class="pb-4"

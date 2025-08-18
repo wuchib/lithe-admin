@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { mergeWith } from 'lodash-es'
 import { NButton } from 'naive-ui'
-import { ref } from 'vue'
+import { ref, inject, computed, useAttrs } from 'vue'
 
 import type { ButtonProps } from 'naive-ui'
 
@@ -11,9 +12,17 @@ interface ButtonAnimationProps extends /* @vue-ignore */ ButtonProps {
   animation?: Animation | boolean
 }
 
+const injectButtonAnimation = inject('ButtonAnimationInject', null) as ButtonProps | null
+
 const { duration = 600, animation = 'beat' } = defineProps<ButtonAnimationProps>()
 
+const buttonAnimationAttrs = useAttrs() as ButtonProps
+
 const isAnimating = ref(false)
+
+const buttonAnimationProps = computed<ButtonProps>(() => {
+  return mergeWith({}, injectButtonAnimation, buttonAnimationAttrs)
+})
 
 const onButtonClicked = () => {
   if (isAnimating.value) return
@@ -30,7 +39,7 @@ const onButtonClicked = () => {
   <NButton
     quaternary
     circle
-    v-bind="$attrs"
+    v-bind="buttonAnimationProps"
     @click.stop="onButtonClicked"
   >
     <template #icon>

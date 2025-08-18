@@ -17,7 +17,12 @@ import {
   NNumberAnimation,
   NAlert,
 } from 'naive-ui'
-import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
+
+import { mediaQueryInjectionKey } from '@/injection'
+
+const mediaQuery = inject(mediaQueryInjectionKey, null)
+
+import { defineComponent, reactive, ref, useTemplateRef, nextTick, inject } from 'vue'
 
 import { useComponentModifier } from '@/composable/useComponentModifier'
 import { useDataTable } from '@/composable/useDataTable'
@@ -447,14 +452,16 @@ getDataList()
     >
       一个数据表格的例子，不算复杂，有一个高度的计算，也许对你有帮助
     </NAlert>
-    <NCard>
-      <div class="mb-2 flex gap-x-4">
+    <NCard :size="mediaQuery?.md.value ? 'small' : undefined">
+      <div class="mb-2 flex justify-end gap-x-4 max-xl:mb-4 max-xl:flex-wrap">
         <NForm
           ref="formRef"
           :model="form"
           :rules="rules"
-          inline
+          :inline="!mediaQuery?.lg.value"
           label-placement="left"
+          class="max-lg:w-full max-lg:flex-col"
+          :label-width="mediaQuery?.lg.value ? 70 : undefined"
         >
           <NFormItem
             label="姓名"
@@ -462,7 +469,6 @@ getDataList()
           >
             <NInput
               v-model:value="form.fullName"
-              style="width: 120px"
               clearable
             />
           </NFormItem>
@@ -473,7 +479,7 @@ getDataList()
             <NSelect
               v-model:value="form.sex"
               :options="sexOptions"
-              style="width: 88px"
+              style="min-width: 88px"
               clearable
             />
           </NFormItem>
@@ -534,7 +540,7 @@ getDataList()
           ref="dataTableRef"
           v-model:checked-row-keys="checkedRowKeys"
           :remote="true"
-          :max-height="maxHeight"
+          :max-height="mediaQuery?.md.value ? undefined : maxHeight"
           :scroll-x="enableScrollX ? 1800 : 0"
           :min-height="166.6"
           :columns="columns"
@@ -545,8 +551,8 @@ getDataList()
           :row-props="rowProps"
           :single-line="enableSingleLine"
         />
-        <div class="mt-3 flex items-end justify-between">
-          <div class="flex items-center gap-x-3">
+        <div class="mt-3 flex items-end justify-between max-xl:flex-col max-xl:gap-y-2">
+          <div class="flex items-center justify-between gap-x-3">
             <span>已选择&nbsp;{{ checkedRowKeys.length }}&nbsp; 条</span>
             <NButtonGroup
               size="small"
@@ -575,6 +581,7 @@ getDataList()
               </NButton>
 
               <NButton
+                v-show="!mediaQuery?.md.value"
                 @click="enableContextmenu = !enableContextmenu"
                 :type="enableContextmenu ? 'primary' : 'default'"
                 secondary
@@ -582,6 +589,7 @@ getDataList()
                 右键菜单
               </NButton>
               <NButton
+                v-show="!mediaQuery?.md.value"
                 @click="handleDownloadCsvClick"
                 secondary
                 type="info"
@@ -593,6 +601,10 @@ getDataList()
           <NPagination
             v-bind="pagination"
             :prefix="paginationPrefix"
+            :page-slot="mediaQuery?.md.value ? 5 : undefined"
+            :show-quick-jump-dropdown="!mediaQuery?.md.value"
+            :show-quick-jumper="!mediaQuery?.md.value"
+            :show-size-picker="!mediaQuery?.md.value"
           />
         </div>
       </div>

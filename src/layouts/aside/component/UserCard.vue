@@ -41,7 +41,7 @@ const onUserDropdownSelected = (key: string) => {
 </script>
 <template>
   <div
-    class="mb-4 flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
+    class="flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
     :class="
       preferencesStore.preferences.menu.collapsed
         ? 'mx-2 rounded'

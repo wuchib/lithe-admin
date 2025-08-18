@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { NAlert, NCard, NSplit, NScrollbar, NButton } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { ref, watch, inject } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
 import { EmptyPlaceholder } from '@/components'
+import { mediaQueryInjectionKey } from '@/injection'
 
 import type { UseDraggableReturn } from 'vue-draggable-plus'
 
@@ -12,6 +13,8 @@ defineOptions({
 })
 
 let codeToHtml: any
+
+const mediaQuery = inject(mediaQueryInjectionKey, null)
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -119,12 +122,17 @@ watch(
       {{ APP_NAME }} 的 Tabs 栏的拖拽模块使用了
       vue-draggable-plus，在一些拖拽的场景下，它也许可以帮助到你
     </NAlert>
-    <NCard title="基础使用">
+    <NCard
+      title="基础使用"
+      :size="mediaQuery?.md.value ? 'small' : undefined"
+    >
       <NSplit
-        direction="horizontal"
-        pane1-class="pr-8"
-        pane2-class="pl-8"
-        style="height: 280px"
+        :direction="mediaQuery?.md.value ? 'vertical' : 'horizontal'"
+        :pane1-class="mediaQuery?.md.value ? 'pb-4' : 'pr-8'"
+        :pane2-class="mediaQuery?.md.value ? 'pt-4' : 'pl-8'"
+        :style="{
+          height: mediaQuery?.md.value ? '580px' : '280px',
+        }"
       >
         <template #1>
           <NScrollbar>
@@ -154,24 +162,27 @@ watch(
         </template>
         <template #resize-trigger>
           <div
-            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] dark:bg-neutral-700"
+            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] max-lg:h-px max-lg:w-full dark:bg-neutral-700"
           ></div>
         </template>
       </NSplit>
     </NCard>
-    <NCard title="网格布局">
-      <template #header-extra>
-        <div>
-          你可以把<span class="text-primary">网格布局</span>的元素拖进<span class="text-primary"
-            >基础使用</span
-          >中，它们可以相互拖放
-        </div>
-      </template>
+    <NCard
+      title="网格布局"
+      :size="mediaQuery?.md.value ? 'small' : undefined"
+    >
+      <div class="mb-4">
+        你可以把<span class="text-primary">网格布局</span>的元素拖进<span class="text-primary"
+          >基础使用</span
+        >中，它们可以相互拖放
+      </div>
       <NSplit
-        direction="horizontal"
-        pane1-class="pr-8"
-        pane2-class="pl-8"
-        style="height: 280px"
+        :direction="mediaQuery?.md.value ? 'vertical' : 'horizontal'"
+        :pane1-class="mediaQuery?.md.value ? 'pb-4' : 'pr-8'"
+        :pane2-class="mediaQuery?.md.value ? 'pt-4' : 'pl-8'"
+        :style="{
+          height: mediaQuery?.md.value ? '680px' : '280px',
+        }"
         :default-size="0.7"
       >
         <template #1>
@@ -182,7 +193,7 @@ watch(
               :animation="150"
               ghostClass="ghost"
               group="drag1"
-              class="m-auto grid grid-cols-8 gap-2 rounded bg-neutral-500/5 p-4 select-none"
+              class="m-auto grid grid-cols-8 gap-2 rounded bg-neutral-500/5 p-4 select-none max-lg:grid-cols-4"
             >
               <div
                 v-for="item in gridList"
@@ -201,21 +212,26 @@ watch(
         </template>
         <template #resize-trigger>
           <div
-            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] dark:bg-neutral-700"
+            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] max-lg:h-px max-lg:w-full dark:bg-neutral-700"
           ></div>
         </template>
       </NSplit>
     </NCard>
-    <NCard title="克隆使用">
+    <NCard
+      title="克隆使用"
+      :size="mediaQuery?.md.value ? 'small' : undefined"
+    >
       <NSplit
-        direction="horizontal"
-        pane1-class="pr-8"
-        pane2-class="pl-8"
-        style="height: 300px"
+        :direction="mediaQuery?.md.value ? 'vertical' : 'horizontal'"
+        :pane1-class="mediaQuery?.md.value ? 'pb-4' : 'pr-8'"
+        :pane2-class="mediaQuery?.md.value ? 'pt-4' : 'pl-8'"
+        :style="{
+          height: mediaQuery?.md.value ? '780px' : '280px',
+        }"
         :default-size="0.7"
       >
         <template #1>
-          <div class="flex h-full gap-x-4">
+          <div class="flex h-full gap-4 max-lg:flex-col">
             <NScrollbar>
               <VueDraggable
                 ref="taskDragRef"
@@ -239,7 +255,7 @@ watch(
             <NScrollbar>
               <EmptyPlaceholder
                 :show="cloneTaskList.length <= 0"
-                description="把左边的任务拖拽到这里"
+                :description="`把${mediaQuery?.md.value ? '上' : '左'}边的任务拖拽到这里`"
               />
               <VueDraggable
                 ref="cloneTaskListDragRef"

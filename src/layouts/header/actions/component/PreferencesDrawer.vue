@@ -9,17 +9,20 @@ import {
   useModal,
   NScrollbar,
 } from 'naive-ui'
-import { h, ref } from 'vue'
+import { h, ref, inject, watch } from 'vue'
 
 import { ButtonAnimation } from '@/components'
 import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
 import { usePersonalization } from '@/composable/usePersonalization'
+import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores/preferences'
 import { useSystemStore } from '@/stores/system'
 import twColors from '@/utils/tailwindColor'
 
 import NoiseModal from './NoiseModal.vue'
 import WatermarkModal from './WatermarkModal.vue'
+
+const mediaQuery = inject(mediaQueryInjectionKey, null)
 
 const preferencesStore = usePreferencesStore()
 const systemStore = useSystemStore()
@@ -93,6 +96,24 @@ const showNoiseModal = () => {
     zIndex: 99999,
   })
 }
+
+watch(
+  () => mediaQuery?.sm.value,
+  (newVal) => {
+    if (newVal) {
+      modify({
+        menu: {
+          collapsed: false,
+        },
+        showTabs: false,
+        showFooter: false,
+      })
+    }
+  },
+  {
+    immediate: true,
+  },
+)
 </script>
 <template>
   <div>
@@ -140,6 +161,7 @@ const showNoiseModal = () => {
                 :value="preferencesStore.preferences.menu.collapsed"
                 :checked-value="false"
                 :unchecked-value="true"
+                :disabled="mediaQuery?.sm.value"
                 @update-value="
                   (value) =>
                     modify({
@@ -178,6 +200,7 @@ const showNoiseModal = () => {
               <span>显示导航按钮</span>
               <NSwitch
                 :value="preferencesStore.preferences.showNavigation"
+                :disabled="mediaQuery?.sm.value"
                 @update-value="
                   (value) =>
                     modify({
@@ -190,6 +213,7 @@ const showNoiseModal = () => {
               <span>显示面包屑</span>
               <NSwitch
                 :value="preferencesStore.preferences.showBreadcrumb"
+                :disabled="mediaQuery?.sm.value"
                 @update-value="
                   (value) =>
                     modify({
@@ -202,6 +226,7 @@ const showNoiseModal = () => {
               <span>显示标签页</span>
               <NSwitch
                 :value="preferencesStore.preferences.showTabs"
+                :disabled="mediaQuery?.sm.value"
                 @update-value="
                   (value) =>
                     modify({
@@ -226,6 +251,7 @@ const showNoiseModal = () => {
               <span>显示底部</span>
               <NSwitch
                 :value="preferencesStore.preferences.showFooter"
+                :disabled="mediaQuery?.sm.value"
                 @update-value="
                   (value) =>
                     modify({
