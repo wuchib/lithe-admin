@@ -4,25 +4,20 @@ import Logo from '@/components/Logo.vue'
 import router from '@/router'
 import { usePreferencesStore } from '@/stores/preferences'
 
-import type { PreferencesOptions } from '@/stores/preferences'
+import type { LayoutSlideDirection } from '@/stores/preferences'
 
 const preferencesStore = usePreferencesStore()
-const { modify } = preferencesStore
+const { setLayoutSlideDirection } = preferencesStore
 
-const mainLayoutSliderToRight = (direction: PreferencesOptions['mobile']['mainLayoutSlider']) => {
-  modify({
-    mobile: {
-      mainLayoutSlider:
-        preferencesStore.preferences.mobile.mainLayoutSlider === direction ? null : direction,
-    },
-  })
+const toggleLayoutSlideDirection = (direction: LayoutSlideDirection) => {
+  setLayoutSlideDirection(direction === preferencesStore.layoutSlideDirection ? null : direction)
 }
 </script>
 <template>
   <div class="flex items-center justify-between px-4 py-3 sm:hidden">
     <div
       class="size-9"
-      @click="mainLayoutSliderToRight('right')"
+      @click="toggleLayoutSlideDirection('right')"
     >
       <Logo />
     </div>
@@ -34,7 +29,7 @@ const mainLayoutSliderToRight = (direction: PreferencesOptions['mobile']['mainLa
       <span class="text-base">{{ router.currentRoute.value.meta.title }}</span>
     </div>
     <div class="flex items-center gap-x-2">
-      <ButtonAnimation @click="mainLayoutSliderToRight('left')">
+      <ButtonAnimation @click="toggleLayoutSlideDirection('left')">
         <span class="iconify ph--list" />
       </ButtonAnimation>
     </div>

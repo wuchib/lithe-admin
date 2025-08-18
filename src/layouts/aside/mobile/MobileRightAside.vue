@@ -20,7 +20,7 @@ provide('ButtonAnimationInject', provideButtonAnimation)
   <div
     class="absolute top-0 right-0 h-svh p-4 transition-[translate] sm:hidden"
     :class="{
-      'translate-x-full': preferencesStore.preferences.mobile.mainLayoutSlider !== 'left',
+      'translate-x-full': preferencesStore.layoutSlideDirection !== 'left',
     }"
   >
     <div class="flex h-full items-center justify-between">

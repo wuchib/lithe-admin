@@ -30,11 +30,11 @@ const preferencesStore = usePreferencesStore()
 const { scrollbarInMainLayout } = useComponentThemeOverrides()
 
 const mainLayoutStyle = computed<CSSProperties | null>(() => {
-  return preferencesStore.preferences.mobile.mainLayoutSlider === 'right'
+  return preferencesStore.layoutSlideDirection === 'right'
     ? {
         transform: `translate(${preferencesStore.preferences.menu.maxWidth || 0}px) scale(0.88)`,
       }
-    : preferencesStore.preferences.mobile.mainLayoutSlider === 'left'
+    : preferencesStore.layoutSlideDirection === 'left'
       ? {
           transform: `translate(-${52}px) scale(0.88)`,
         }

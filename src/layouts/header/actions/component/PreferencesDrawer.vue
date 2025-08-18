@@ -11,6 +11,7 @@ import {
 } from 'naive-ui'
 import { h, ref, inject, watch } from 'vue'
 
+import packageJson from '@/../package.json'
 import { ButtonAnimation } from '@/components'
 import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
 import { usePersonalization } from '@/composable/usePersonalization'
@@ -339,7 +340,7 @@ watch(
               <span class="iconify size-5 ph--gear-fine" />
               <span class="leading-4">当前版本</span>
             </div>
-            <span class="leading-4">{{ systemStore.systemInfo.version }}</span>
+            <span class="leading-4">{{ packageJson.version }}</span>
           </div>
         </template>
       </NDrawerContent>

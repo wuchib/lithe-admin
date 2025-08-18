@@ -11,7 +11,7 @@ const preferencesStore = usePreferencesStore()
   <div
     class="absolute top-0 left-0 flex h-svh flex-col gap-y-4 py-4 transition-[translate] sm:hidden"
     :class="{
-      '-translate-x-full': preferencesStore.preferences.mobile.mainLayoutSlider !== 'right',
+      '-translate-x-full': preferencesStore.layoutSlideDirection !== 'right',
     }"
   >
     <LogoArea />
