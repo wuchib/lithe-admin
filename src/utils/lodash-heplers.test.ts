@@ -4,7 +4,6 @@ import { getAllKeys, haveSameKeys, mergeWithArrayReplace } from './lodash-helper
 
 describe('lodash-helpers', () => {
   it('should be mergeWithArrayReplace', () => {
-
     const obj1 = {
       a: 1,
       b: 2,
@@ -13,7 +12,7 @@ describe('lodash-helpers', () => {
         e: 4,
         f: 5,
       },
-      g: [1, 2]
+      g: [1, 2],
     }
 
     const obj2 = {

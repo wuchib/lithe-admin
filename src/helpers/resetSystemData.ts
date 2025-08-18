@@ -8,7 +8,6 @@ const tabsStore = useTabsStore()
 const userStore = useUserStore()
 
 export function resetSystemData() {
-
   const oldLocalStorage = localStorage.getItem('configure')
   if (oldLocalStorage || !haveSameKeys(preferencesStore.preferences, DEFAULT_PREFERENCES_OPTIONS)) {
     tabsStore.clearTabs()
