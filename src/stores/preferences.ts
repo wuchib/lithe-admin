@@ -65,7 +65,7 @@ export const DEFAULT_PREFERENCES_OPTIONS: PreferencesOptions = {
     fontStyle: 'normal',
     fontWeight: 400,
     lineHeight: 16,
-    image: undefined,
+    image: '',
     imageHeight: 64,
     imageWidth: 64,
     imageOpacity: 0.5,
