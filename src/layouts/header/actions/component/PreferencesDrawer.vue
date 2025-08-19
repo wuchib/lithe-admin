@@ -9,23 +9,23 @@ import {
   useModal,
   NScrollbar,
 } from 'naive-ui'
-import { h, ref, inject, watch } from 'vue'
+import { h, ref, inject } from 'vue'
 
-import packageJson from '@/../package.json'
-import { ButtonAnimation } from '@/components'
+import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
 import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
 import { usePersonalization } from '@/composable/usePersonalization'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores/preferences'
+import { useSystemStore } from '@/stores/system'
 import twColors from '@/utils/tailwindColor'
 
 import NoiseModal from './NoiseModal.vue'
 import WatermarkModal from './WatermarkModal.vue'
 
-const mediaQuery = inject(mediaQueryInjectionKey, null)
+const mediaQueryInject = inject(mediaQueryInjectionKey, null)
 
 const preferencesStore = usePreferencesStore()
-
+const systemStore = useSystemStore()
 const { color, setColor } = usePersonalization()
 
 const { modify, reset } = preferencesStore
@@ -95,24 +95,6 @@ const showNoiseModal = () => {
     zIndex: 99999,
   })
 }
-
-watch(
-  () => mediaQuery?.sm.value,
-  (newVal) => {
-    if (newVal) {
-      modify({
-        menu: {
-          collapsed: false,
-        },
-        showTabs: false,
-        showFooter: false,
-      })
-    }
-  },
-  {
-    immediate: true,
-  },
-)
 </script>
 <template>
   <div>
@@ -120,228 +102,232 @@ watch(
       @click="showDrawer = true"
       title="侧边栏"
     >
-      <span class="iconify size-5 rotate-180 ph--sidebar-simple-duotone" />
+      <span class="iconify rotate-180 ph--sidebar-simple-duotone" />
     </ButtonAnimation>
-    <NDrawer
-      v-model:show="showDrawer"
-      :auto-focus="false"
-      :width="320"
-      :theme-overrides="{
-        footerPadding: '14px 16px',
-      }"
-    >
-      <NDrawerContent :native-scrollbar="false">
-        <template #header>
-          <div class="flex items-center gap-x-1">
-            <span>系统设定</span>
-            <ButtonAnimation
-              animation="rotate"
-              @click="reset"
-            >
-              <span class="iconify size-5 ph--arrow-clockwise" />
-            </ButtonAnimation>
-          </div>
-        </template>
-        <div>
-          <NDivider>主题颜色</NDivider>
-          <NColorPicker
-            v-bind="$attrs"
-            :default-value="color"
-            :swatches="colorSwatches"
-            @update-value="(value) => modifyColor(value)"
-          />
-        </div>
-        <div>
-          <NDivider>布局相关</NDivider>
-          <div class="flex flex-col gap-y-1.5">
-            <div class="flex items-center justify-between">
-              <span>展开侧边菜单</span>
-              <NSwitch
-                :value="preferencesStore.preferences.menu.collapsed"
-                :checked-value="false"
-                :unchecked-value="true"
-                :disabled="mediaQuery?.sm.value"
-                @update-value="
-                  (value) =>
-                    modify({
-                      menu: {
-                        collapsed: value,
-                      },
-                    })
-                "
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <span>显示顶部加载条</span>
-              <NSwitch
-                :value="preferencesStore.preferences.showTopLoadingBar"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showTopLoadingBar: value,
-                    })
-                "
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <span>显示Logo</span>
-              <NSwitch
-                :value="preferencesStore.preferences.showLogo"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showLogo: value,
-                    })
-                "
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <span>显示导航按钮</span>
-              <NSwitch
-                :value="preferencesStore.preferences.showNavigation"
-                :disabled="mediaQuery?.sm.value"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showNavigation: value,
-                    })
-                "
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <span>显示面包屑</span>
-              <NSwitch
-                :value="preferencesStore.preferences.showBreadcrumb"
-                :disabled="mediaQuery?.sm.value"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showBreadcrumb: value,
-                    })
-                "
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <span>显示标签页</span>
-              <NSwitch
-                :value="preferencesStore.preferences.showTabs"
-                :disabled="mediaQuery?.sm.value"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showTabs: value,
-                    })
-                "
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <span>常显标签关闭按钮</span>
-              <NSwitch
-                :value="preferencesStore.preferences.showTabClose"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showTabClose: value,
-                    })
-                "
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <span>显示底部</span>
-              <NSwitch
-                :value="preferencesStore.preferences.showFooter"
-                :disabled="mediaQuery?.sm.value"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showFooter: value,
-                    })
-                "
-              />
-            </div>
-          </div>
-        </div>
-        <div>
-          <NDivider>页面相关</NDivider>
-          <div class="flex items-center justify-between">
+    <ButtonAnimationProvider>
+      <NDrawer
+        v-model:show="showDrawer"
+        :auto-focus="false"
+        :width="320"
+        :theme-overrides="{
+          footerPadding: '14px 16px',
+        }"
+      >
+        <NDrawerContent :native-scrollbar="false">
+          <template #header>
             <div class="flex items-center gap-x-1">
-              <span>显示水印</span>
+              <span>系统设定</span>
               <ButtonAnimation
-                size="small"
-                @click="showWatermarkModal"
-                label="修改"
+                animation="rotate"
+                @click="reset"
               >
-                <span class="iconify size-4 ph--pencil-simple-line" />
+                <span class="iconify size-5 ph--arrow-clockwise" />
               </ButtonAnimation>
             </div>
-            <NSwitch
-              :value="preferencesStore.preferences.showWatermark"
-              @update-value="
-                (value) =>
-                  modify({
-                    showWatermark: value,
-                  })
-              "
+          </template>
+          <div>
+            <NDivider>主题颜色</NDivider>
+            <NColorPicker
+              v-bind="$attrs"
+              :default-value="color"
+              :swatches="colorSwatches"
+              @update-value="(value) => modifyColor(value)"
             />
           </div>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-x-1">
-              <span>显示磨砂效果</span>
-              <ButtonAnimation
-                size="small"
-                @click="showNoiseModal"
-                label="修改"
-              >
-                <span class="iconify size-4 ph--pencil-simple-line" />
-              </ButtonAnimation>
+          <div>
+            <NDivider>布局相关</NDivider>
+            <div class="flex flex-col gap-y-1.5">
+              <div class="flex items-center justify-between">
+                <span>展开侧边菜单</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.menu.collapsed"
+                  :checked-value="false"
+                  :unchecked-value="true"
+                  :disabled="mediaQueryInject?.sm.value"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        menu: {
+                          collapsed: value,
+                        },
+                      })
+                  "
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <span>显示顶部加载条</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.showTopLoadingBar"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        showTopLoadingBar: value,
+                      })
+                  "
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <span>显示Logo</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.showLogo"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        showLogo: value,
+                      })
+                  "
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <span>显示导航按钮</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.showNavigation"
+                  :disabled="mediaQueryInject?.sm.value"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        showNavigation: value,
+                      })
+                  "
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <span>显示面包屑</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.showBreadcrumb"
+                  :disabled="mediaQueryInject?.sm.value"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        showBreadcrumb: value,
+                      })
+                  "
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <span>显示标签页</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.showTabs"
+                  :disabled="mediaQueryInject?.sm.value"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        showTabs: value,
+                      })
+                  "
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <span>常显标签关闭按钮</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.showTabClose"
+                  :disabled="mediaQueryInject?.sm.value"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        showTabClose: value,
+                      })
+                  "
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <span>显示底部</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.showFooter"
+                  :disabled="mediaQueryInject?.sm.value"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        showFooter: value,
+                      })
+                  "
+                />
+              </div>
             </div>
-            <NSwitch
-              :value="preferencesStore.preferences.showNoise"
-              @update-value="
-                (value) =>
-                  modify({
-                    showNoise: value,
-                  })
-              "
-            />
           </div>
-          <div class="flex flex-col gap-y-1.5">
+          <div>
+            <NDivider>页面相关</NDivider>
             <div class="flex items-center justify-between">
-              <span>启用导航过渡效果</span>
+              <div class="flex items-center gap-x-1">
+                <span>显示水印</span>
+                <ButtonAnimation
+                  size="small"
+                  @click="showWatermarkModal"
+                  label="修改"
+                >
+                  <span class="iconify size-4 ph--pencil-simple-line" />
+                </ButtonAnimation>
+              </div>
               <NSwitch
-                :value="preferencesStore.preferences.enableNavigationTransition"
+                :value="preferencesStore.preferences.showWatermark"
                 @update-value="
                   (value) =>
                     modify({
-                      enableNavigationTransition: value,
+                      showWatermark: value,
                     })
                 "
               />
             </div>
             <div class="flex items-center justify-between">
-              <span>文字可选中</span>
+              <div class="flex items-center gap-x-1">
+                <span>显示磨砂效果</span>
+                <ButtonAnimation
+                  size="small"
+                  :duration="3000"
+                  @click="showNoiseModal"
+                  label="修改"
+                >
+                  <span class="iconify size-4 ph--pencil-simple-line" />
+                </ButtonAnimation>
+              </div>
               <NSwitch
-                :value="preferencesStore.preferences.enableTextSelect"
+                :value="preferencesStore.preferences.showNoise"
                 @update-value="
                   (value) =>
                     modify({
-                      enableTextSelect: value,
+                      showNoise: value,
                     })
                 "
               />
             </div>
-          </div>
-        </div>
-        <template #footer>
-          <div class="flex w-full items-center justify-between">
-            <div class="flex items-center gap-x-1">
-              <span class="iconify size-5 ph--gear-fine" />
-              <span class="leading-4">当前版本</span>
+            <div class="flex flex-col gap-y-1.5">
+              <div class="flex items-center justify-between">
+                <span>启用导航过渡效果</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.enableNavigationTransition"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        enableNavigationTransition: value,
+                      })
+                  "
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <span>文字可选中</span>
+                <NSwitch
+                  :value="preferencesStore.preferences.enableTextSelect"
+                  @update-value="
+                    (value) =>
+                      modify({
+                        enableTextSelect: value,
+                      })
+                  "
+                />
+              </div>
             </div>
-            <span class="leading-4">{{ packageJson.version }}</span>
           </div>
-        </template>
-      </NDrawerContent>
-    </NDrawer>
+          <template #footer>
+            <div class="flex w-full items-center justify-between">
+              <div class="flex items-center gap-x-1">
+                <span class="iconify size-5 ph--gear-fine" />
+                <span class="leading-4">当前版本</span>
+              </div>
+              <span class="leading-4">{{ systemStore.version }}</span>
+            </div>
+          </template>
+        </NDrawerContent>
+      </NDrawer>
+    </ButtonAnimationProvider>
   </div>
 </template>

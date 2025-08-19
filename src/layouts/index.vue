@@ -2,7 +2,7 @@
 import { useMediaQuery } from '@vueuse/core'
 import { isEmpty } from 'lodash-es'
 import { NScrollbar } from 'naive-ui'
-import { computed, provide } from 'vue'
+import { computed, provide, watch } from 'vue'
 
 import texturePng from '@/assets/texture.png'
 import { EmptyPlaceholder } from '@/components'
@@ -19,8 +19,6 @@ import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
 import MainLayout from './main/index.vue'
 
-import type { CSSProperties } from 'vue'
-
 defineOptions({
   name: 'Layout',
 })
@@ -29,43 +27,60 @@ const tabsStore = useTabsStore()
 const preferencesStore = usePreferencesStore()
 const { scrollbarInMainLayout } = useComponentThemeOverrides()
 
-const mainLayoutStyle = computed<CSSProperties | null>(() => {
-  return preferencesStore.layoutSlideDirection === 'right'
-    ? {
-        transform: `translate(${preferencesStore.preferences.menu.maxWidth || 0}px) scale(0.88)`,
-      }
-    : preferencesStore.layoutSlideDirection === 'left'
-      ? {
-          transform: `translate(-${62}px) scale(0.88)`,
-        }
-      : null
-})
-
-provide(mediaQueryInjectionKey, {
+const mediaQuery = {
   sm: useMediaQuery('(max-width: 640px)'),
   md: useMediaQuery('(max-width: 768px)'),
   lg: useMediaQuery('(max-width: 1024px)'),
   xl: useMediaQuery('(max-width: 1280px)'),
   '2xl': useMediaQuery('(max-width: 1536px)'),
+}
+
+const mobileLayoutTranslateOffset = computed(() => {
+  return preferencesStore.layoutSlideDirection === 'right'
+    ? preferencesStore.preferences.menu.maxWidth || 0
+    : preferencesStore.layoutSlideDirection === 'left'
+      ? -62
+      : 0
 })
+
+watch(
+  () => mediaQuery.sm.value,
+  (isMaxSm) => {
+    if (isMaxSm) {
+      preferencesStore.modify({
+        menu: {
+          collapsed: false,
+        },
+      })
+      preferencesStore.setLayoutSlideDirection(null)
+    }
+  },
+)
+
+provide(mediaQueryInjectionKey, mediaQuery)
 </script>
 <template>
   <div
     class="relative flex h-svh overflow-hidden"
     :style="{ backgroundImage: `url(${texturePng})` }"
   >
-    <MobileLeftAside />
+    <MobileLeftAside v-if="mediaQuery.sm.value" />
     <div
-      class="relative flex h-full w-full flex-col transition-[border-color,rounded,transform] max-sm:rounded-xl sm:transform-none!"
+      class="relative flex h-full w-full flex-col border-naive-border transition-[border-color,rounded,transform] max-sm:rounded-xl sm:transform-none!"
       :class="{
-        'overflow-hidden rounded-xl border border-naive-border': mainLayoutStyle,
-        'border-transparent': !mainLayoutStyle,
+        'overflow-hidden rounded-xl border': mediaQuery.sm.value && mobileLayoutTranslateOffset,
       }"
-      :style="mainLayoutStyle"
+      :style="
+        mediaQuery.sm.value && preferencesStore.layoutSlideDirection
+          ? {
+              transform: `translate(${mobileLayoutTranslateOffset}px) scale(0.88)`,
+            }
+          : null
+      "
     >
       <HeaderLayout />
       <div class="flex flex-1 overflow-hidden">
-        <AsideLayout />
+        <AsideLayout v-if="!mediaQuery.sm.value" />
         <div class="relative flex flex-1 flex-col overflow-x-hidden">
           <Transition
             type="transition"
@@ -77,13 +92,21 @@ provide(mediaQueryInjectionKey, {
             leave-from-class="grid-rows-[1fr]"
           >
             <div
-              v-if="!isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs"
-              class="grid shrink-0 items-baseline overflow-hidden max-sm:hidden"
+              v-if="
+                !mediaQuery.sm.value &&
+                !isEmpty(tabsStore.tabs) &&
+                preferencesStore.preferences.showTabs
+              "
+              class="grid shrink-0 items-baseline overflow-hidden"
             >
               <Tabs />
             </div>
           </Transition>
           <NScrollbar
+            class="transition-[padding]"
+            :class="{
+              'pb-4': mediaQuery.sm.value && preferencesStore.layoutSlideDirection,
+            }"
             container-class="main-container"
             :theme-overrides="scrollbarInMainLayout"
           >
@@ -110,7 +133,7 @@ provide(mediaQueryInjectionKey, {
             leave-from-class="grid-rows-[1fr]"
           >
             <div
-              v-if="preferencesStore.preferences.showFooter"
+              v-if="!mediaQuery.sm.value && preferencesStore.preferences.showFooter"
               class="grid shrink-0 items-baseline overflow-hidden"
             >
               <FooterLayout />
@@ -119,6 +142,6 @@ provide(mediaQueryInjectionKey, {
         </div>
       </div>
     </div>
-    <MobileRightAside />
+    <MobileRightAside v-if="mediaQuery.sm.value" />
   </div>
 </template>

@@ -35,7 +35,7 @@ const colorSwatches = [
     <template #trigger>
       <ButtonAnimation>
         <template #default>
-          <span class="iconify size-5 ph--palette" />
+          <span class="iconify-[nimbus--color-palette] size-5" />
         </template>
       </ButtonAnimation>
     </template>

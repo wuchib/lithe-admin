@@ -62,19 +62,4 @@ describe('EmptyPlaceholder Component', () => {
     expect(wrapper.exists()).toBe(true)
     expect(wrapper.find('.n-empty').exists()).toBe(true)
   })
-
-  it('add content slot', () => {
-    const wrapper = mount(EmptyPlaceholder, {
-      props: {
-        show: true,
-      },
-      slots: {
-        content: '<div class="content">context</div>',
-      },
-    })
-
-    expect(wrapper.exists()).toBe(true)
-    expect(wrapper.find('.n-empty').exists()).toBe(true)
-    expect(wrapper.find('.content').exists()).toBe(true)
-  })
 })

@@ -17,6 +17,7 @@ export default defineConfig((env) => {
     },
     server: {
       port: 5799,
+      host: true,
     },
     build: {
       rollupOptions: {

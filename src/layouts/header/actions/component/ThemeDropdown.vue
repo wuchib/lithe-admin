@@ -41,7 +41,7 @@ const themeDropdownOptions = [
 const themeIconName = computed(
   () =>
     themeDropdownOptions.find((item) => item.key === theme.value)?.iconName ||
-    'iconify ph--desktop',
+    'iconify ph--desktop size-5',
 )
 
 const onThemePopselectUpdated = (key: Theme) => {

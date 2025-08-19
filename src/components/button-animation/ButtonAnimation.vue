@@ -3,25 +3,18 @@ import { mergeWith } from 'lodash-es'
 import { NButton } from 'naive-ui'
 import { ref, inject, computed, useAttrs } from 'vue'
 
-import type { ButtonProps } from 'naive-ui'
+import { buttonAnimationInjectionKey } from './injection'
 
-type Animation = 'beat' | 'rotate' | 'shake'
+import type { ButtonAnimationProps } from './interface'
 
-interface ButtonAnimationProps extends /* @vue-ignore */ ButtonProps {
-  duration?: number
-  animation?: Animation | boolean
-}
-
-const injectButtonAnimation = inject('ButtonAnimationInject', null) as ButtonProps | null
+const buttonAnimationInject = inject(buttonAnimationInjectionKey, null)
 
 const { duration = 600, animation = 'beat' } = defineProps<ButtonAnimationProps>()
 
-const buttonAnimationAttrs = useAttrs() as ButtonProps
-
 const isAnimating = ref(false)
 
-const buttonAnimationProps = computed<ButtonProps>(() => {
-  return mergeWith({}, injectButtonAnimation, buttonAnimationAttrs)
+const buttonAnimationProps = computed<ButtonAnimationProps>(() => {
+  return mergeWith({}, buttonAnimationInject, useAttrs())
 })
 
 const onButtonClicked = () => {

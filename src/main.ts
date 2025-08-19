@@ -4,7 +4,6 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
 import App from './App.vue'
-import { resetSystemData } from './helpers/resetSystemData'
 import router from './router'
 
 async function setupApp() {
@@ -12,9 +11,6 @@ async function setupApp() {
 
   app.use(createPinia())
   app.use(router)
-
-  resetSystemData()
-
   await router.isReady()
 
   if (window.loaderElement) {

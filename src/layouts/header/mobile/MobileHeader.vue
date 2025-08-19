@@ -14,10 +14,13 @@ const toggleLayoutSlideDirection = (direction: LayoutSlideDirection) => {
 }
 </script>
 <template>
-  <div class="flex items-center justify-between px-4 py-3 sm:hidden">
+  <div
+    class="flex items-center justify-between px-4 py-2"
+    @click="toggleLayoutSlideDirection(null)"
+  >
     <div
-      class="size-9"
-      @click="toggleLayoutSlideDirection('right')"
+      class="size-8"
+      @click.stop="toggleLayoutSlideDirection('right')"
     >
       <Logo />
     </div>
@@ -29,7 +32,10 @@ const toggleLayoutSlideDirection = (direction: LayoutSlideDirection) => {
       <span class="text-base">{{ router.currentRoute.value.meta.title }}</span>
     </div>
     <div class="flex items-center gap-x-2">
-      <ButtonAnimation @click="toggleLayoutSlideDirection('left')">
+      <ButtonAnimation
+        size="large"
+        @click="toggleLayoutSlideDirection('left')"
+      >
         <span class="iconify ph--list" />
       </ButtonAnimation>
     </div>

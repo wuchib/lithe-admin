@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { inject } from 'vue'
+
+import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores/preferences'
 
 import Actions from './actions/index.vue'
@@ -12,12 +15,16 @@ defineOptions({
 })
 
 const preferencesStore = usePreferencesStore()
+const mediaQuery = inject(mediaQueryInjectionKey)
 </script>
 <template>
   <header
     class="border-b border-naive-border bg-naive-card transition-[background-color,border-color]"
   >
-    <div class="flex max-sm:hidden">
+    <div
+      v-if="!mediaQuery?.sm.value"
+      class="flex"
+    >
       <LogoArea />
       <div class="flex flex-1 items-center p-4">
         <div class="flex flex-1 items-center">
@@ -57,6 +64,6 @@ const preferencesStore = usePreferencesStore()
         <Actions class="gap-x-3" />
       </div>
     </div>
-    <MobileHeader />
+    <MobileHeader v-else />
   </header>
 </template>

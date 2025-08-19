@@ -1,8 +1,7 @@
 import { useStorage } from '@vueuse/core'
+import { mergeWith } from 'lodash-es'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-
-import { mergeWithArrayReplace } from '@/utils/lodash-helpers'
 
 import type { WatermarkProps } from 'naive-ui'
 
@@ -79,7 +78,11 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
   const layoutSlideDirection = ref<LayoutSlideDirection>(null)
 
   const modify = (options: Partial<PreferencesOptions>) => {
-    preferences.value = mergeWithArrayReplace(preferences.value, options)
+    preferences.value = mergeWith({}, preferences.value, options, (objValue, srcValue) => {
+      if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+        return srcValue
+      }
+    })
   }
 
   const setLayoutSlideDirection = (direction: LayoutSlideDirection) => {

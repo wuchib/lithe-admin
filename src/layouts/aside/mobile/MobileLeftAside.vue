@@ -9,7 +9,7 @@ const preferencesStore = usePreferencesStore()
 </script>
 <template>
   <div
-    class="absolute top-0 left-0 flex h-svh flex-col gap-y-4 py-4 transition-[translate] sm:hidden"
+    class="absolute top-0 left-0 flex h-svh flex-col gap-y-4 pt-6 pb-4 transition-[translate]"
     :class="{
       '-translate-x-full': preferencesStore.layoutSlideDirection !== 'right',
     }"
