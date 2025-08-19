@@ -19,7 +19,7 @@ const toggleLayoutSlideDirection = (direction: LayoutSlideDirection) => {
     @click="toggleLayoutSlideDirection(null)"
   >
     <div
-      class="size-8"
+      class="size-9"
       @click.stop="toggleLayoutSlideDirection('right')"
     >
       <Logo />

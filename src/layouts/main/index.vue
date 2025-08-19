@@ -15,7 +15,7 @@ defineOptions({
   name: 'MainLayout',
 })
 
-const mediaQueryInject = inject(mediaQueryInjectionKey, null)
+const mediaQueryInjection = inject(mediaQueryInjectionKey, null)
 
 const layoutsRouteRedirect = router.getRoutes().find((item) => item.name === 'layouts')?.redirect
 
@@ -79,7 +79,7 @@ watch(
 
     if (!preferencesStore.preferences.enableNavigationTransition) return
 
-    if (!preferencesStore.preferences.showTabs || mediaQueryInject?.sm.value) {
+    if (!preferencesStore.preferences.showTabs || mediaQueryInjection?.sm) {
       navigationTransitionName.value = 'scale'
       return
     }

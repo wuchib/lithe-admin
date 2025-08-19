@@ -233,7 +233,7 @@ function getTabContextMenuActions(): ContextMenuActions | null {
 
   const { id } = tabValue
 
-  const { locked, keepAlive: keepAlived, pinned } = getTab(id) ?? {}
+  const { locked, keepAlive, pinned } = getTab(id) ?? {}
 
   return {
     close: () => {
@@ -255,7 +255,7 @@ function getTabContextMenuActions(): ContextMenuActions | null {
       updateTab(id, { pinned: !pinned })
     },
     keepalive: () => {
-      updateTab(id, { keepAlive: !keepAlived })
+      updateTab(id, { keepAlive: !keepAlive })
     },
     lock: () => {
       updateTab(id, { locked: !locked })

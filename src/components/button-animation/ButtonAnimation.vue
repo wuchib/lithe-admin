@@ -17,7 +17,7 @@ const buttonAnimationProps = computed<ButtonAnimationProps>(() => {
   return mergeWith({}, buttonAnimationInject, useAttrs())
 })
 
-const onButtonClicked = () => {
+const onClick = () => {
   if (isAnimating.value) return
 
   isAnimating.value = true
@@ -33,7 +33,7 @@ const onButtonClicked = () => {
     quaternary
     circle
     v-bind="buttonAnimationProps"
-    @click.stop="onButtonClicked"
+    @click.stop="onClick"
   >
     <template #icon>
       <div

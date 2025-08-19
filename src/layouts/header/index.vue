@@ -15,14 +15,14 @@ defineOptions({
 })
 
 const preferencesStore = usePreferencesStore()
-const mediaQuery = inject(mediaQueryInjectionKey)
+const mediaQueryInjection = inject(mediaQueryInjectionKey)
 </script>
 <template>
   <header
     class="border-b border-naive-border bg-naive-card transition-[background-color,border-color]"
   >
     <div
-      v-if="!mediaQuery?.sm.value"
+      v-if="!mediaQueryInjection?.sm"
       class="flex"
     >
       <LogoArea />

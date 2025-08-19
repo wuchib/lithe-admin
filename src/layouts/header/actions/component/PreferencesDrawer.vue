@@ -22,7 +22,7 @@ import twColors from '@/utils/tailwindColor'
 import NoiseModal from './NoiseModal.vue'
 import WatermarkModal from './WatermarkModal.vue'
 
-const mediaQueryInject = inject(mediaQueryInjectionKey, null)
+const mediaQueryInjection = inject(mediaQueryInjectionKey, null)
 
 const preferencesStore = usePreferencesStore()
 const systemStore = useSystemStore()
@@ -121,7 +121,7 @@ const showNoiseModal = () => {
                 animation="rotate"
                 @click="reset"
               >
-                <span class="iconify size-5 ph--arrow-clockwise" />
+                <span class="iconify ph--arrow-clockwise" />
               </ButtonAnimation>
             </div>
           </template>
@@ -143,7 +143,7 @@ const showNoiseModal = () => {
                   :value="preferencesStore.preferences.menu.collapsed"
                   :checked-value="false"
                   :unchecked-value="true"
-                  :disabled="mediaQueryInject?.sm.value"
+                  :disabled="mediaQueryInjection?.sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -182,7 +182,7 @@ const showNoiseModal = () => {
                 <span>显示导航按钮</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showNavigation"
-                  :disabled="mediaQueryInject?.sm.value"
+                  :disabled="mediaQueryInjection?.sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -195,7 +195,7 @@ const showNoiseModal = () => {
                 <span>显示面包屑</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showBreadcrumb"
-                  :disabled="mediaQueryInject?.sm.value"
+                  :disabled="mediaQueryInjection?.sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -208,7 +208,7 @@ const showNoiseModal = () => {
                 <span>显示标签页</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showTabs"
-                  :disabled="mediaQueryInject?.sm.value"
+                  :disabled="mediaQueryInjection?.sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -221,7 +221,7 @@ const showNoiseModal = () => {
                 <span>常显标签关闭按钮</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showTabClose"
-                  :disabled="mediaQueryInject?.sm.value"
+                  :disabled="mediaQueryInjection?.sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -234,7 +234,7 @@ const showNoiseModal = () => {
                 <span>显示底部</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showFooter"
-                  :disabled="mediaQueryInject?.sm.value"
+                  :disabled="mediaQueryInjection?.sm"
                   @update-value="
                     (value) =>
                       modify({

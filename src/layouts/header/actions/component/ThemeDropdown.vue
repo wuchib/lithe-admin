@@ -38,7 +38,7 @@ const themeDropdownOptions = [
   },
 ]
 
-const themeIconName = computed(
+const themeIconClasses = computed(
   () =>
     themeDropdownOptions.find((item) => item.key === theme.value)?.iconName ||
     'iconify ph--desktop size-5',
@@ -71,7 +71,7 @@ function renderSelectLabel(option: (typeof themeDropdownOptions)[number]) {
     @update-value="onThemePopselectUpdated"
   >
     <ButtonAnimation title="主题">
-      <span :class="themeIconName" />
+      <span :class="themeIconClasses" />
     </ButtonAnimation>
   </NPopselect>
 </template>
