@@ -1,26 +1,20 @@
 <script setup lang="ts">
 import { ButtonAnimation } from '@/components'
 import Logo from '@/components/Logo.vue'
+import { useInjection } from '@/composable/useInjection'
+import { layoutSlideDirectionInjectionKey } from '@/injection'
 import router from '@/router'
-import { usePreferencesStore } from '@/stores'
 
-import type { LayoutSlideDirection } from '@/stores'
-
-const preferencesStore = usePreferencesStore()
-const { setLayoutSlideDirection } = preferencesStore
-
-const toggleLayoutSlideDirection = (direction: LayoutSlideDirection) => {
-  setLayoutSlideDirection(direction === preferencesStore.layoutSlideDirection ? null : direction)
-}
+const { setDirection } = useInjection(layoutSlideDirectionInjectionKey)
 </script>
 <template>
   <div
     class="flex items-center justify-between px-4 py-2"
-    @click="toggleLayoutSlideDirection(null)"
+    @click="setDirection(null)"
   >
     <div
       class="size-9"
-      @click.stop="toggleLayoutSlideDirection('right')"
+      @click.stop="setDirection('right')"
     >
       <Logo />
     </div>
@@ -34,7 +28,7 @@ const toggleLayoutSlideDirection = (direction: LayoutSlideDirection) => {
     <div class="flex items-center gap-x-2">
       <ButtonAnimation
         size="large"
-        @click="toggleLayoutSlideDirection('left')"
+        @click="setDirection('left')"
       >
         <span class="iconify ph--list" />
       </ButtonAnimation>

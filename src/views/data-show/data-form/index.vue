@@ -20,8 +20,9 @@ import {
   NRadio,
   useMessage,
 } from 'naive-ui'
-import { computed, ref, useTemplateRef, watch, inject } from 'vue'
+import { computed, ref, useTemplateRef, watch } from 'vue'
 
+import { useInjection } from '@/composable/useInjection'
 import { useResettableReactive } from '@/composable/useResettable'
 import { mediaQueryInjectionKey } from '@/injection'
 
@@ -45,7 +46,7 @@ defineOptions({
 
 let codeToHtml: any
 
-const mediaQueryInjection = inject(mediaQueryInjectionKey, null)
+const { md, lg, xl } = useInjection(mediaQueryInjectionKey)
 
 const message = useMessage()
 
@@ -229,12 +230,12 @@ watch(
     >
       一个数据表单的例子，做了一些验证的限制，右边是规则和表单的数据，你可以拖动它们之间的分割线
     </NAlert>
-    <NCard :size="mediaQueryInjection?.md ? 'small' : undefined">
+    <NCard :size="md ? 'small' : undefined">
       <NSplit
-        :pane1-class="mediaQueryInjection?.lg ? 'pb-4' : 'pr-8'"
-        :pane2-class="mediaQueryInjection?.lg ? 'pt-4' : 'pl-8'"
+        :pane1-class="lg ? 'pb-4' : 'pr-8'"
+        :pane2-class="lg ? 'pt-4' : 'pl-8'"
         :default-size="0.6"
-        :direction="mediaQueryInjection?.xl ? 'vertical' : 'horizontal'"
+        :direction="xl ? 'vertical' : 'horizontal'"
       >
         <template #1>
           <NScrollbar>

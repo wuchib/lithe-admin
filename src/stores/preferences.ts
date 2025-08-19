@@ -1,11 +1,9 @@
 import { useStorage } from '@vueuse/core'
 import { mergeWith } from 'lodash-es'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 
 import type { WatermarkProps } from 'naive-ui'
-
-export type LayoutSlideDirection = 'left' | 'right' | null
 
 export interface PreferencesOptions {
   menu: Partial<{
@@ -75,18 +73,12 @@ export const DEFAULT_PREFERENCES_OPTIONS: PreferencesOptions = {
 export const usePreferencesStore = defineStore('preferencesStore', () => {
   const preferences = useStorage<PreferencesOptions>('preferences', DEFAULT_PREFERENCES_OPTIONS)
 
-  const layoutSlideDirection = ref<LayoutSlideDirection>(null)
-
   const modify = (options: Partial<PreferencesOptions>) => {
     preferences.value = mergeWith({}, preferences.value, options, (objValue, srcValue) => {
       if (Array.isArray(objValue) && Array.isArray(srcValue)) {
         return srcValue
       }
     })
-  }
-
-  const setLayoutSlideDirection = (direction: LayoutSlideDirection) => {
-    layoutSlideDirection.value = direction
   }
 
   const reset = () => {
@@ -105,8 +97,6 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
 
   return {
     preferences,
-    layoutSlideDirection,
-    setLayoutSlideDirection,
     reset,
     modify,
   }

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
-import { computed, nextTick, onMounted, ref, watch, inject } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 
+import { useInjection } from '@/composable/useInjection'
 import { mediaQueryInjectionKey } from '@/injection'
 import router from '@/router'
 import { usePreferencesStore } from '@/stores'
@@ -15,7 +16,7 @@ defineOptions({
   name: 'MainLayout',
 })
 
-const mediaQueryInjection = inject(mediaQueryInjectionKey, null)
+const { sm } = useInjection(mediaQueryInjectionKey)
 
 const layoutsRouteRedirect = router.getRoutes().find((item) => item.name === 'layouts')?.redirect
 
@@ -79,7 +80,7 @@ watch(
 
     if (!preferencesStore.preferences.enableNavigationTransition) return
 
-    if (!preferencesStore.preferences.showTabs || mediaQueryInjection?.sm) {
+    if (!preferencesStore.preferences.showTabs || sm.value) {
       navigationTransitionName.value = 'scale'
       return
     }

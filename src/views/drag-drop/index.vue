@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { NAlert, NCard, NSplit, NScrollbar, NButton } from 'naive-ui'
-import { ref, watch, inject } from 'vue'
+import { ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
 import { EmptyPlaceholder } from '@/components'
+import { useInjection } from '@/composable/useInjection'
 import { mediaQueryInjectionKey } from '@/injection'
 
 import type { UseDraggableReturn } from 'vue-draggable-plus'
@@ -14,7 +15,7 @@ defineOptions({
 
 let codeToHtml: any
 
-const mediaQuery = inject(mediaQueryInjectionKey, null)
+const { md } = useInjection(mediaQueryInjectionKey)
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -124,14 +125,14 @@ watch(
     </NAlert>
     <NCard
       title="基础使用"
-      :size="mediaQuery?.md.value ? 'small' : undefined"
+      :size="md ? 'small' : undefined"
     >
       <NSplit
-        :direction="mediaQuery?.md.value ? 'vertical' : 'horizontal'"
-        :pane1-class="mediaQuery?.md.value ? 'pb-4' : 'pr-8'"
-        :pane2-class="mediaQuery?.md.value ? 'pt-4' : 'pl-8'"
+        :direction="md ? 'vertical' : 'horizontal'"
+        :pane1-class="md ? 'pb-4' : 'pr-8'"
+        :pane2-class="md ? 'pt-4' : 'pl-8'"
         :style="{
-          height: mediaQuery?.md.value ? '580px' : '280px',
+          height: md ? '580px' : '280px',
         }"
       >
         <template #1>
@@ -169,7 +170,7 @@ watch(
     </NCard>
     <NCard
       title="网格布局"
-      :size="mediaQuery?.md.value ? 'small' : undefined"
+      :size="md ? 'small' : undefined"
     >
       <div class="mb-4">
         你可以把<span class="text-primary">网格布局</span>的元素拖进<span class="text-primary"
@@ -177,11 +178,11 @@ watch(
         >中，它们可以相互拖放
       </div>
       <NSplit
-        :direction="mediaQuery?.md.value ? 'vertical' : 'horizontal'"
-        :pane1-class="mediaQuery?.md.value ? 'pb-4' : 'pr-8'"
-        :pane2-class="mediaQuery?.md.value ? 'pt-4' : 'pl-8'"
+        :direction="md ? 'vertical' : 'horizontal'"
+        :pane1-class="md ? 'pb-4' : 'pr-8'"
+        :pane2-class="md ? 'pt-4' : 'pl-8'"
         :style="{
-          height: mediaQuery?.md.value ? '680px' : '280px',
+          height: md ? '680px' : '280px',
         }"
         :default-size="0.7"
       >
@@ -219,14 +220,14 @@ watch(
     </NCard>
     <NCard
       title="克隆使用"
-      :size="mediaQuery?.md.value ? 'small' : undefined"
+      :size="md ? 'small' : undefined"
     >
       <NSplit
-        :direction="mediaQuery?.md.value ? 'vertical' : 'horizontal'"
-        :pane1-class="mediaQuery?.md.value ? 'pb-4' : 'pr-8'"
-        :pane2-class="mediaQuery?.md.value ? 'pt-4' : 'pl-8'"
+        :direction="md ? 'vertical' : 'horizontal'"
+        :pane1-class="md ? 'pb-4' : 'pr-8'"
+        :pane2-class="md ? 'pt-4' : 'pl-8'"
         :style="{
-          height: mediaQuery?.md.value ? '780px' : '280px',
+          height: md ? '780px' : '280px',
         }"
         :default-size="0.7"
       >
@@ -255,7 +256,7 @@ watch(
             <NScrollbar>
               <EmptyPlaceholder
                 :show="cloneTaskList.length <= 0"
-                :description="`把${mediaQuery?.md.value ? '上' : '左'}边的任务拖拽到这里`"
+                :description="`把${md ? '上' : '左'}边的任务拖拽到这里`"
               />
               <VueDraggable
                 ref="cloneTaskListDragRef"

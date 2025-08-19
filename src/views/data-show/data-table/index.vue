@@ -18,11 +18,12 @@ import {
   NAlert,
 } from 'naive-ui'
 
+import { useInjection } from '@/composable/useInjection'
 import { mediaQueryInjectionKey } from '@/injection'
 
-const mediaQuery = inject(mediaQueryInjectionKey, null)
+const { md, lg } = useInjection(mediaQueryInjectionKey)
 
-import { defineComponent, reactive, ref, useTemplateRef, nextTick, inject } from 'vue'
+import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
 
 import { useComponentModifier } from '@/composable/useComponentModifier'
 import { useDataTable } from '@/composable/useDataTable'
@@ -452,16 +453,16 @@ getDataList()
     >
       一个数据表格的例子，不算复杂，有一个高度的计算，也许对你有帮助
     </NAlert>
-    <NCard :size="mediaQuery?.md.value ? 'small' : undefined">
+    <NCard :size="md ? 'small' : undefined">
       <div class="mb-2 flex justify-end gap-x-4 max-xl:mb-4 max-xl:flex-wrap">
         <NForm
           ref="formRef"
           :model="form"
           :rules="rules"
-          :inline="!mediaQuery?.lg.value"
+          :inline="!lg"
           label-placement="left"
           class="max-lg:w-full max-lg:flex-col"
-          :label-width="mediaQuery?.lg.value ? 70 : undefined"
+          :label-width="lg ? 70 : undefined"
         >
           <NFormItem
             label="姓名"
@@ -540,7 +541,7 @@ getDataList()
           ref="dataTableRef"
           v-model:checked-row-keys="checkedRowKeys"
           :remote="true"
-          :max-height="mediaQuery?.md.value ? undefined : maxHeight"
+          :max-height="md ? undefined : maxHeight"
           :scroll-x="enableScrollX ? 1800 : 0"
           :min-height="166.6"
           :columns="columns"
@@ -581,7 +582,7 @@ getDataList()
               </NButton>
 
               <NButton
-                v-show="!mediaQuery?.md.value"
+                v-show="!md"
                 @click="enableContextmenu = !enableContextmenu"
                 :type="enableContextmenu ? 'primary' : 'default'"
                 secondary
@@ -589,7 +590,7 @@ getDataList()
                 右键菜单
               </NButton>
               <NButton
-                v-show="!mediaQuery?.md.value"
+                v-show="!md"
                 @click="handleDownloadCsvClick"
                 secondary
                 type="info"
@@ -601,10 +602,10 @@ getDataList()
           <NPagination
             v-bind="pagination"
             :prefix="paginationPrefix"
-            :page-slot="mediaQuery?.md.value ? 5 : undefined"
-            :show-quick-jump-dropdown="!mediaQuery?.md.value"
-            :show-quick-jumper="!mediaQuery?.md.value"
-            :show-size-picker="!mediaQuery?.md.value"
+            :page-slot="md ? 5 : undefined"
+            :show-quick-jump-dropdown="!md"
+            :show-quick-jumper="!md"
+            :show-size-picker="!md"
           />
         </div>
       </div>

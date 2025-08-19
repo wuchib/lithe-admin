@@ -9,10 +9,11 @@ import {
   useModal,
   NScrollbar,
 } from 'naive-ui'
-import { h, ref, inject } from 'vue'
+import { h, ref } from 'vue'
 
 import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
 import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
+import { useInjection } from '@/composable/useInjection'
 import { usePersonalization } from '@/composable/usePersonalization'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores'
@@ -22,7 +23,7 @@ import twColors from '@/utils/tailwindColor'
 import NoiseModal from './NoiseModal.vue'
 import WatermarkModal from './WatermarkModal.vue'
 
-const mediaQueryInjection = inject(mediaQueryInjectionKey, null)
+const { sm } = useInjection(mediaQueryInjectionKey)
 
 const preferencesStore = usePreferencesStore()
 const systemStore = useSystemStore()
@@ -143,7 +144,7 @@ const showNoiseModal = () => {
                   :value="preferencesStore.preferences.menu.collapsed"
                   :checked-value="false"
                   :unchecked-value="true"
-                  :disabled="mediaQueryInjection?.sm"
+                  :disabled="sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -182,7 +183,7 @@ const showNoiseModal = () => {
                 <span>显示导航按钮</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showNavigation"
-                  :disabled="mediaQueryInjection?.sm"
+                  :disabled="sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -195,7 +196,7 @@ const showNoiseModal = () => {
                 <span>显示面包屑</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showBreadcrumb"
-                  :disabled="mediaQueryInjection?.sm"
+                  :disabled="sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -208,7 +209,7 @@ const showNoiseModal = () => {
                 <span>显示标签页</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showTabs"
-                  :disabled="mediaQueryInjection?.sm"
+                  :disabled="sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -221,7 +222,7 @@ const showNoiseModal = () => {
                 <span>常显标签关闭按钮</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showTabClose"
-                  :disabled="mediaQueryInjection?.sm"
+                  :disabled="sm"
                   @update-value="
                     (value) =>
                       modify({
@@ -234,7 +235,7 @@ const showNoiseModal = () => {
                 <span>显示底部</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showFooter"
-                  :disabled="mediaQueryInjection?.sm"
+                  :disabled="sm"
                   @update-value="
                     (value) =>
                       modify({

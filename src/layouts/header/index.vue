@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { inject } from 'vue'
-
+import { useInjection } from '@/composable/useInjection'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores'
 
@@ -15,14 +14,14 @@ defineOptions({
 })
 
 const preferencesStore = usePreferencesStore()
-const mediaQueryInjection = inject(mediaQueryInjectionKey)
+const { sm } = useInjection(mediaQueryInjectionKey)
 </script>
 <template>
   <header
     class="border-b border-naive-border bg-naive-card transition-[background-color,border-color]"
   >
     <div
-      v-if="!mediaQueryInjection?.sm"
+      v-if="!sm"
       class="flex"
     >
       <LogoArea />

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { NCard, NAlert, NButton } from 'naive-ui'
-import { inject } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
+import { useInjection } from '@/composable/useInjection'
 import { mediaQueryInjectionKey } from '@/injection'
 
-const mediaQuery = inject(mediaQueryInjectionKey, null)
+const { md } = useInjection(mediaQueryInjectionKey)
 
 defineOptions({
   name: 'DynamicRoute',
@@ -21,7 +21,7 @@ const router = useRouter()
     >
       在路由配置的 meta 中添加 enableMultiTab 属性，访问不同的动态路径时都会创建新的 tab
     </NAlert>
-    <NCard :size="mediaQuery?.md.value ? 'small' : undefined">
+    <NCard :size="md ? 'small' : undefined">
       <div class="grid grid-cols-5 gap-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
         <RouterLink
           v-for="value in 50"

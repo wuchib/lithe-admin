@@ -1,6 +1,10 @@
-import type { MediaQueryInjection } from './interface'
+import type { LayoutSlideDirectionInjection, MediaQueryInjection } from './interface'
 import type { InjectionKey } from 'vue'
 
-export const mediaQueryInjectionKey = Symbol() as InjectionKey<MediaQueryInjection>
+export const mediaQueryInjectionKey: InjectionKey<MediaQueryInjection> =
+  Symbol('mediaQueryInjectionKey')
+export const layoutSlideDirectionInjectionKey: InjectionKey<LayoutSlideDirectionInjection> = Symbol(
+  'layoutSlideDirectionInjectionKey',
+)
 
 export * from './interface'

@@ -9,9 +9,7 @@ import { useUserStore } from '@/stores'
 export const useSystemStore = defineStore('systemStore', () => {
   const version = useStorage('version', '')
 
-  const legacyConfig = localStorage.getItem('configure')
-
-  if (legacyConfig || version.value !== packageJson.version) {
+  if (version.value !== packageJson.version) {
     useTabsStore().clearTabs()
     usePreferencesStore().reset()
     useUserStore().cleanup()

@@ -6,7 +6,7 @@ import { isVNode } from 'vue'
 import type { ButtonProps, PopoverProps } from 'naive-ui'
 import type { AllowedComponentProps, HTMLAttributes, SVGAttributes, VNodeChild } from 'vue'
 
-interface HintHelpProps {
+export interface HintHelpProps {
   buttonProps?: AllowedComponentProps & ButtonProps
   content?: (() => VNodeChild) | string
   iconProps?: SVGAttributes
