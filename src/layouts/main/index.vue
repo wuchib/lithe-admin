@@ -4,10 +4,10 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 
 import router from '@/router'
-import { usePreferencesStore } from '@/stores/preferences'
-import { useTabsStore } from '@/stores/tabs'
+import { usePreferencesStore } from '@/stores'
+import { useTabsStore } from '@/stores'
 
-import type { Tab } from '@/stores/tabs'
+import type { Tab } from '@/stores'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 
 defineOptions({

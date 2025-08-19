@@ -2,7 +2,7 @@
 import { NSlider, NInputNumber } from 'naive-ui'
 import { reactive, ref, watchEffect } from 'vue'
 
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
 import type { SliderProps } from 'naive-ui'
 

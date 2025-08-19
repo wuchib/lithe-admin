@@ -1,7 +1,9 @@
 import './assets/main.css'
 
-import { createPinia } from 'pinia'
 import { createApp } from 'vue'
+
+import { setupRouterGuard } from '@/router/guard'
+import { useSystemStore, piniaInstance } from '@/stores'
 
 import App from './App.vue'
 import router from './router'
@@ -9,8 +11,13 @@ import router from './router'
 async function setupApp() {
   const app = createApp(App)
 
-  app.use(createPinia())
+  app.use(piniaInstance)
+
   app.use(router)
+  setupRouterGuard(router)
+
+  useSystemStore(piniaInstance)
+
   await router.isReady()
 
   if (window.loaderElement) {

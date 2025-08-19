@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { setupRouterGuard } from './guard'
-
 import type { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
@@ -18,7 +16,5 @@ export const router = createRouter({
   routes,
   strict: true,
 })
-
-setupRouterGuard(router)
 
 export default router

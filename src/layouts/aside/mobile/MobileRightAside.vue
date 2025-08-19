@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ButtonAnimationProvider } from '@/components'
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
 import Actions from '../../header/actions/index.vue'
 

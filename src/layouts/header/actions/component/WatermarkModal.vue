@@ -12,9 +12,9 @@ import {
 } from 'naive-ui'
 
 import { HintHelp } from '@/components'
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
-import type { PreferencesOptions } from '@/stores/preferences'
+import type { PreferencesOptions } from '@/stores'
 
 const preferencesStore = usePreferencesStore()
 

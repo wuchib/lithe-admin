@@ -3,7 +3,7 @@ import { useDialog } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
 import { useComponentModifier } from '@/composable/useComponentModifier'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores'
 
 const userStore = useUserStore()
 const dialog = useDialog()

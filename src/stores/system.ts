@@ -1,10 +1,10 @@
 import { useStorage } from '@vueuse/core'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import packageJson from '@/../package.json'
-import { usePreferencesStore } from '@/stores/preferences'
-import { useTabsStore } from '@/stores/tabs'
-import { useUserStore } from '@/stores/user'
+import { usePreferencesStore } from '@/stores'
+import { useTabsStore } from '@/stores'
+import { useUserStore } from '@/stores'
 
 export const useSystemStore = defineStore('systemStore', () => {
   const version = useStorage('version', '')
@@ -22,3 +22,7 @@ export const useSystemStore = defineStore('systemStore', () => {
     version,
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useSystemStore, import.meta.hot))
+}

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import Logo from '@/components/Logo.vue'
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 

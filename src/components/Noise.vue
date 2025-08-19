@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import noisePng from '@/assets/noise.png'
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
 const preferencesStore = usePreferencesStore()
 </script>

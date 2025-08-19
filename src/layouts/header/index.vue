@@ -2,7 +2,7 @@
 import { inject } from 'vue'
 
 import { mediaQueryInjectionKey } from '@/injection'
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
 import Actions from './actions/index.vue'
 import Breadcrumb from './Breadcrumb.vue'

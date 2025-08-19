@@ -13,7 +13,7 @@ import { RouterView } from 'vue-router'
 
 import Noise from '@/components/Noise.vue'
 import { getConfigProviderProps } from '@/composable/useDiscreteApi'
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
 const preferencesStore = usePreferencesStore()
 const configProviderProps = getConfigProviderProps()

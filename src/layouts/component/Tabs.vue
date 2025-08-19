@@ -18,10 +18,10 @@ import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
 import router from '@/router'
-import { usePreferencesStore } from '@/stores/preferences'
-import { useTabsStore } from '@/stores/tabs'
+import { usePreferencesStore } from '@/stores'
+import { useTabsStore } from '@/stores'
 
-import type { Tab, Key } from '@/stores/tabs'
+import type { Tab, Key } from '@/stores'
 import type { DropdownOption } from 'naive-ui'
 import type { PropType } from 'vue'
 

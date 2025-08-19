@@ -2,9 +2,9 @@
 import { ButtonAnimation } from '@/components'
 import Logo from '@/components/Logo.vue'
 import router from '@/router'
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
-import type { LayoutSlideDirection } from '@/stores/preferences'
+import type { LayoutSlideDirection } from '@/stores'
 
 const preferencesStore = usePreferencesStore()
 const { setLayoutSlideDirection } = preferencesStore

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePreferencesStore } from '@/stores/preferences'
+import { usePreferencesStore } from '@/stores'
 
 import LogoArea from '../../header/LogoArea.vue'
 import Menu from '../component/Menu.vue'
