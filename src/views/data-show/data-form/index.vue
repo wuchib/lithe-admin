@@ -45,7 +45,7 @@ defineOptions({
 
 let codeToHtml: any
 
-const mediaQuery = inject(mediaQueryInjectionKey, null)
+const mediaQueryInjection = inject(mediaQueryInjectionKey, null)
 
 const message = useMessage()
 
@@ -229,12 +229,12 @@ watch(
     >
       一个数据表单的例子，做了一些验证的限制，右边是规则和表单的数据，你可以拖动它们之间的分割线
     </NAlert>
-    <NCard :size="mediaQuery?.md.value ? 'small' : undefined">
+    <NCard :size="mediaQueryInjection?.md ? 'small' : undefined">
       <NSplit
-        :pane1-class="mediaQuery?.lg.value ? 'pb-4' : 'pr-8'"
-        :pane2-class="mediaQuery?.lg.value ? 'pt-4' : 'pl-8'"
+        :pane1-class="mediaQueryInjection?.lg ? 'pb-4' : 'pr-8'"
+        :pane2-class="mediaQueryInjection?.lg ? 'pt-4' : 'pl-8'"
         :default-size="0.6"
-        :direction="mediaQuery?.xl.value ? 'vertical' : 'horizontal'"
+        :direction="mediaQueryInjection?.xl ? 'vertical' : 'horizontal'"
       >
         <template #1>
           <NScrollbar>
