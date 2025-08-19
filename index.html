@@ -29,6 +29,7 @@
             window.matchMedia('(prefers-color-scheme: dark)').matches),
       )
       window.loaderElement = document.getElementById('appLoader')
+      window.loaderElement.style = `--clock-color: ${localStorage.getItem('color') || '#8e51ff'}`
     </script>
     <script
       type="module"
