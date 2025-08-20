@@ -20,7 +20,6 @@ watch(
   () => router.currentRoute.value,
   (newRoute) => {
     menuActiveKey.value = newRoute.name as string
-
     menuRef.value?.showOption(menuActiveKey.value)
   },
   {

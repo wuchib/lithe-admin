@@ -11,7 +11,6 @@ export interface PreferencesOptions {
     width: number
     maxWidth: number
   }>
-  shouldRefreshTab: boolean
   showFooter: boolean
   showLogo: boolean
   showTabs: boolean
@@ -33,7 +32,6 @@ export const DEFAULT_PREFERENCES_OPTIONS: PreferencesOptions = {
     width: 64,
     maxWidth: 272,
   },
-  shouldRefreshTab: false,
   showFooter: true,
   showTabs: true,
   showTabClose: true,

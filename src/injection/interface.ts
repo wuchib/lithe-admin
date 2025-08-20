@@ -1,6 +1,6 @@
 import type { ComputedRef, Ref } from 'vue'
 
-export interface MediaQueryInjection {
+export interface MediaQueryProvider {
   sm: ComputedRef<boolean>
   md: ComputedRef<boolean>
   lg: ComputedRef<boolean>
@@ -10,7 +10,8 @@ export interface MediaQueryInjection {
 
 export type LayoutSlideDirection = 'left' | 'right' | null
 
-export interface LayoutSlideDirectionInjection {
-  direction: Ref<LayoutSlideDirection>
-  setDirection: (direction: LayoutSlideDirection) => void
+export interface LayoutProvider {
+  shouldRefreshRoute: Ref<boolean>
+  layoutSlideDirection: Ref<LayoutSlideDirection>
+  setLayoutSlideDirection: (direction: LayoutSlideDirection) => void
 }

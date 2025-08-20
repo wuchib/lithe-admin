@@ -7,7 +7,7 @@ import { computed, provide, watch, ref } from 'vue'
 import texturePng from '@/assets/texture.png'
 import { EmptyPlaceholder } from '@/components'
 import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
-import { mediaQueryInjectionKey, layoutSlideDirectionInjectionKey } from '@/injection'
+import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores'
 import { useTabsStore } from '@/stores'
 
@@ -22,7 +22,7 @@ import MainLayout from './main/index.vue'
 import type { LayoutSlideDirection } from '@/injection'
 
 defineOptions({
-  name: 'Layout',
+  name: 'Layouts',
 })
 
 const tabsStore = useTabsStore()
@@ -39,6 +39,8 @@ const mediaQuery = {
 
 const layoutSlideDirection = ref<LayoutSlideDirection>(null)
 
+const shouldRefreshRoute = ref(false)
+
 const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
     ? preferencesStore.preferences.menu.maxWidth || 0
@@ -52,24 +54,25 @@ function setLayoutSlideDirection(direction: LayoutSlideDirection) {
 }
 
 watch(
-  () => mediaQuery.sm,
-  (isMaxSm) => {
-    if (isMaxSm) {
+  () => mediaQuery.sm.value,
+  (isSm) => {
+    if (isSm) {
       preferencesStore.modify({
         menu: {
           collapsed: false,
         },
       })
-      preferencesStore.setLayoutSlideDirection(null)
+      setLayoutSlideDirection(null)
     }
   },
 )
 
 provide(mediaQueryInjectionKey, mediaQuery)
 
-provide(layoutSlideDirectionInjectionKey, {
-  direction: layoutSlideDirection,
-  setDirection: setLayoutSlideDirection,
+provide(layoutInjectionKey, {
+  shouldRefreshRoute,
+  layoutSlideDirection,
+  setLayoutSlideDirection,
 })
 </script>
 <template>

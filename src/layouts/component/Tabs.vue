@@ -17,6 +17,8 @@ import {
 import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
+import { useInjection } from '@/composable/useInjection'
+import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
 import { usePreferencesStore } from '@/stores'
 import { useTabsStore } from '@/stores'
@@ -35,6 +37,8 @@ type ContextMenuActions = {
   keepalive: () => void
   lock: () => void
 }
+
+const { shouldRefreshRoute } = useInjection(layoutInjectionKey)
 
 const scrollbarRef = useTemplateRef<InstanceType<typeof NScrollbar>>('scrollbarRef')
 
@@ -272,11 +276,7 @@ function scrollToActiveTab(behavior: ScrollBehavior = 'auto') {
 }
 
 function handleTabRefresh() {
-  if (!preferencesStore.preferences.shouldRefreshTab) {
-    preferencesStore.modify({
-      shouldRefreshTab: true,
-    })
-  }
+  shouldRefreshRoute.value = true
 }
 
 const routerAfterEach = router.afterEach(() => {

@@ -4,7 +4,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 
 import { useInjection } from '@/composable/useInjection'
-import { mediaQueryInjectionKey } from '@/injection'
+import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import router from '@/router'
 import { usePreferencesStore } from '@/stores'
 import { useTabsStore } from '@/stores'
@@ -17,6 +17,7 @@ defineOptions({
 })
 
 const { sm } = useInjection(mediaQueryInjectionKey)
+const { shouldRefreshRoute } = useInjection(layoutInjectionKey)
 
 const layoutsRouteRedirect = router.getRoutes().find((item) => item.name === 'layouts')?.redirect
 
@@ -103,14 +104,12 @@ watch(
 )
 
 watch(
-  () => preferencesStore.preferences.shouldRefreshTab,
+  () => shouldRefreshRoute.value,
   (shouldRefresh) => {
     if (shouldRefresh) {
       navigationTransitionName.value = 'shake'
       nextTick(() => {
-        preferencesStore.modify({
-          shouldRefreshTab: false,
-        })
+        shouldRefreshRoute.value = false
       })
     }
   },
@@ -150,13 +149,13 @@ onMounted(() => {
     v-slot="{ Component, route }"
   >
     <Transition
-      type="transition"
+      :type="navigationTransitionName === 'shake' ? 'animation' : 'transition'"
       :name="navigationTransitionName"
     >
       <KeepAlive :include="keepAliveTabs">
         <component
           :is="Component"
-          v-if="isMounted && !preferencesStore.preferences.shouldRefreshTab"
+          v-if="isMounted && !shouldRefreshRoute"
           :key="route.path + JSON.stringify(route.query)"
         />
       </KeepAlive>

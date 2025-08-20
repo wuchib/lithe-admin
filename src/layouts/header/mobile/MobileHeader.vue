@@ -2,19 +2,19 @@
 import { ButtonAnimation } from '@/components'
 import Logo from '@/components/Logo.vue'
 import { useInjection } from '@/composable/useInjection'
-import { layoutSlideDirectionInjectionKey } from '@/injection'
+import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
 
-const { setDirection } = useInjection(layoutSlideDirectionInjectionKey)
+const { setLayoutSlideDirection } = useInjection(layoutInjectionKey)
 </script>
 <template>
   <div
     class="flex items-center justify-between px-4 py-2"
-    @click="setDirection(null)"
+    @click="setLayoutSlideDirection(null)"
   >
     <div
       class="size-9"
-      @click.stop="setDirection('right')"
+      @click.stop="setLayoutSlideDirection('right')"
     >
       <Logo />
     </div>
@@ -28,7 +28,7 @@ const { setDirection } = useInjection(layoutSlideDirectionInjectionKey)
     <div class="flex items-center gap-x-2">
       <ButtonAnimation
         size="large"
-        @click="setDirection('left')"
+        @click="setLayoutSlideDirection('left')"
       >
         <span class="iconify ph--list" />
       </ButtonAnimation>
