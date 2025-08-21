@@ -5,12 +5,14 @@ import { useInjection } from '@/composable/useInjection'
 import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
 
-const { setLayoutSlideDirection } = useInjection(layoutInjectionKey)
+const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
 </script>
 <template>
-  <div
-    class="flex items-center justify-between px-4 py-2"
-    @click="setLayoutSlideDirection(null)"
+  <header
+    class="flex items-center justify-between border-b border-naive-border bg-naive-card px-4 py-2 transition-[background-color,border-color]"
+    :class="{
+      'rounded-t-xl': layoutSlideDirection,
+    }"
   >
     <div
       class="size-9"
@@ -33,5 +35,5 @@ const { setLayoutSlideDirection } = useInjection(layoutInjectionKey)
         <span class="iconify ph--list" />
       </ButtonAnimation>
     </div>
-  </div>
+  </header>
 </template>

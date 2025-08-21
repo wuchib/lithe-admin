@@ -17,7 +17,8 @@ defineOptions({
 })
 
 const { sm } = useInjection(mediaQueryInjectionKey)
-const { shouldRefreshRoute } = useInjection(layoutInjectionKey)
+const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
+  useInjection(layoutInjectionKey)
 
 const layoutsRouteRedirect = router.getRoutes().find((item) => item.name === 'layouts')?.redirect
 
@@ -118,6 +119,10 @@ watch(
 watch(
   () => router.currentRoute.value,
   (newRoute, oldRoute) => {
+    if (layoutSlideDirection.value) {
+      setLayoutSlideDirection(null)
+    }
+
     if (newRoute.fullPath !== oldRoute?.fullPath) {
       const { showTab, enableMultiTab } = newRoute.meta
       const targetPath = enableMultiTab ? newRoute.fullPath : newRoute.path

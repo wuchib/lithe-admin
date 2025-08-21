@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { useInjection } from '@/composable/useInjection'
-import { mediaQueryInjectionKey } from '@/injection'
+import CollapseTransition from '@/components/CollapseTransition.vue'
 import { usePreferencesStore } from '@/stores'
 
 import Actions from './actions/index.vue'
 import Breadcrumb from './Breadcrumb.vue'
 import LogoArea from './LogoArea.vue'
-import MobileHeader from './mobile/MobileHeader.vue'
 import Navigation from './Navigation.vue'
 
 defineOptions({
@@ -14,55 +12,25 @@ defineOptions({
 })
 
 const preferencesStore = usePreferencesStore()
-const { sm } = useInjection(mediaQueryInjectionKey)
 </script>
 <template>
   <header
-    class="border-b border-naive-border bg-naive-card transition-[background-color,border-color]"
+    class="flex border-b border-naive-border bg-naive-card transition-[background-color,border-color]"
   >
-    <div
-      v-if="!sm"
-      class="flex"
-    >
-      <LogoArea />
-      <div class="flex flex-1 items-center p-4">
-        <div class="flex flex-1 items-center">
-          <Transition
-            type="transition"
-            enter-active-class="transition-[grid-template-columns]"
-            leave-active-class="transition-[grid-template-columns]"
-            enter-from-class="grid-cols-[0fr]"
-            leave-to-class="grid-cols-[0fr]"
-            enter-to-class="grid-cols-[1fr]"
-            leave-from-class="grid-cols-[1fr]"
-          >
-            <div
-              v-if="preferencesStore.preferences.showNavigation"
-              class="grid overflow-hidden"
-            >
-              <Navigation />
-            </div>
-          </Transition>
-          <Transition
-            type="transition"
-            enter-active-class="transition-[grid-template-columns]"
-            leave-active-class="transition-[grid-template-columns]"
-            enter-from-class="grid-cols-[0fr]"
-            leave-to-class="grid-cols-[0fr]"
-            enter-to-class="grid-cols-[1fr]"
-            leave-from-class="grid-cols-[1fr]"
-          >
-            <div
-              v-if="preferencesStore.preferences.showBreadcrumb"
-              class="grid overflow-hidden"
-            >
-              <Breadcrumb />
-            </div>
-          </Transition>
-        </div>
-        <Actions class="gap-x-3" />
+    <LogoArea />
+    <div class="flex flex-1 items-center p-4">
+      <div class="flex flex-1 items-center">
+        <CollapseTransition :display="preferencesStore.preferences.showNavigation">
+          <Navigation />
+        </CollapseTransition>
+        <CollapseTransition
+          :display="preferencesStore.preferences.showBreadcrumb"
+          contentTag="nav"
+        >
+          <Breadcrumb />
+        </CollapseTransition>
       </div>
+      <Actions class="gap-x-3" />
     </div>
-    <MobileHeader v-else />
   </header>
 </template>

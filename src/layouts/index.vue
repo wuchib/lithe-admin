@@ -6,6 +6,7 @@ import { computed, provide, watch, ref } from 'vue'
 
 import texturePng from '@/assets/texture.png'
 import { EmptyPlaceholder } from '@/components'
+import CollapseTransition from '@/components/CollapseTransition.vue'
 import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores'
@@ -17,6 +18,7 @@ import MobileRightAside from './aside/mobile/MobileRightAside.vue'
 import Tabs from './component/Tabs.vue'
 import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
+import MobileHeader from './header/mobile/MobileHeader.vue'
 import MainLayout from './main/index.vue'
 
 import type { LayoutSlideDirection } from '@/injection'
@@ -45,7 +47,7 @@ const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
     ? preferencesStore.preferences.menu.maxWidth || 0
     : layoutSlideDirection.value === 'left'
-      ? -62
+      ? -64
       : 0
 })
 
@@ -81,43 +83,36 @@ provide(layoutInjectionKey, {
     :style="{ backgroundImage: `url(${texturePng})` }"
   >
     <MobileLeftAside v-if="mediaQuery.sm.value" />
+
     <div
-      class="relative flex h-full w-full flex-col border-naive-border transition-[border-color,rounded,transform] max-sm:rounded-xl sm:transform-none!"
+      class="relative flex h-full w-full flex-col border-naive-border bg-naive-card/50 transition-[background-color,border-color,rounded,transform]"
       :class="{
-        'overflow-hidden rounded-xl border': mediaQuery.sm.value && layoutTranslateOffset,
+        'rounded-xl border': mediaQuery.sm.value && layoutTranslateOffset,
       }"
       :style="
-        mediaQuery.sm.value && layoutSlideDirection
-          ? {
-              transform: `translate(${layoutTranslateOffset}px) scale(0.88)`,
-            }
-          : null
+        mediaQuery.sm.value &&
+        layoutSlideDirection && {
+          transform: `translate(${layoutTranslateOffset}px) scale(0.88)`,
+        }
       "
     >
-      <HeaderLayout />
+      <HeaderLayout v-if="!mediaQuery.sm.value" />
+      <MobileHeader v-else />
       <div class="flex flex-1 overflow-hidden">
         <AsideLayout v-if="!mediaQuery.sm.value" />
         <div class="relative flex flex-1 flex-col overflow-x-hidden">
-          <Transition
-            type="transition"
-            enter-active-class="transition-[grid-template-rows]"
-            leave-active-class="transition-[grid-template-rows]"
-            enter-from-class="grid-rows-[0fr]"
-            leave-to-class="grid-rows-[0fr]"
-            enter-to-class="grid-rows-[1fr]"
-            leave-from-class="grid-rows-[1fr]"
+          <CollapseTransition
+            :display="
+              !mediaQuery.sm.value &&
+              !isEmpty(tabsStore.tabs) &&
+              preferencesStore.preferences.showTabs
+            "
+            direction="horizontal"
+            :render-content="false"
+            container-class="shrink-0 items-baseline"
           >
-            <div
-              v-if="
-                !mediaQuery.sm.value &&
-                !isEmpty(tabsStore.tabs) &&
-                preferencesStore.preferences.showTabs
-              "
-              class="grid shrink-0 items-baseline overflow-hidden"
-            >
-              <Tabs />
-            </div>
-          </Transition>
+            <Tabs />
+          </CollapseTransition>
           <NScrollbar
             class="transition-[padding]"
             :class="{
@@ -139,24 +134,21 @@ provide(layoutInjectionKey, {
               </div>
             </template>
           </EmptyPlaceholder>
-          <Transition
-            type="transition"
-            enter-active-class="transition-[grid-template-rows]"
-            leave-active-class="transition-[grid-template-rows]"
-            enter-from-class="grid-rows-[0fr]"
-            leave-to-class="grid-rows-[0fr]"
-            enter-to-class="grid-rows-[1fr]"
-            leave-from-class="grid-rows-[1fr]"
+          <CollapseTransition
+            :display="!mediaQuery.sm.value && preferencesStore.preferences.showFooter"
+            direction="horizontal"
+            :render-content="false"
+            container-class="shrink-0 items-baseline"
           >
-            <div
-              v-if="!mediaQuery.sm.value && preferencesStore.preferences.showFooter"
-              class="grid shrink-0 items-baseline overflow-hidden"
-            >
-              <FooterLayout />
-            </div>
-          </Transition>
+            <FooterLayout />
+          </CollapseTransition>
         </div>
       </div>
+      <div
+        v-if="mediaQuery.sm.value && layoutSlideDirection"
+        class="absolute inset-0"
+        @click="setLayoutSlideDirection(null)"
+      />
     </div>
     <MobileRightAside v-if="mediaQuery.sm.value" />
   </div>

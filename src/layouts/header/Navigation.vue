@@ -26,24 +26,22 @@ const stopWatch = watch(
 )
 </script>
 <template>
-  <div class="min-w-0">
-    <div class="flex gap-x-0.5 pr-2">
-      <ButtonAnimation
-        size="medium"
-        @click="router.back()"
-        title="上一页"
-        :disabled="!navigationState.canGoBack"
-      >
-        <span class="iconify size-4.5 ph--arrow-left" />
-      </ButtonAnimation>
-      <ButtonAnimation
-        size="medium"
-        @click="router.forward()"
-        title="下一页"
-        :disabled="!navigationState.canGoForward"
-      >
-        <span class="iconify size-4.5 ph--arrow-right" />
-      </ButtonAnimation>
-    </div>
+  <div class="flex gap-x-0.5 pr-2">
+    <ButtonAnimation
+      size="medium"
+      @click="router.back()"
+      title="上一页"
+      :disabled="!navigationState.canGoBack"
+    >
+      <span class="iconify size-4.5 ph--arrow-left" />
+    </ButtonAnimation>
+    <ButtonAnimation
+      size="medium"
+      @click="router.forward()"
+      title="下一页"
+      :disabled="!navigationState.canGoForward"
+    >
+      <span class="iconify size-4.5 ph--arrow-right" />
+    </ButtonAnimation>
   </div>
 </template>
