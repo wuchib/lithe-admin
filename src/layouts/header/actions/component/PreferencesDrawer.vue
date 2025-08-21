@@ -23,7 +23,7 @@ import twColors from '@/utils/tailwindColor'
 import NoiseModal from './NoiseModal.vue'
 import WatermarkModal from './WatermarkModal.vue'
 
-const { sm } = useInjection(mediaQueryInjectionKey)
+const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 
 const preferencesStore = usePreferencesStore()
 const systemStore = useSystemStore()
@@ -144,7 +144,7 @@ const showNoiseModal = () => {
                   :value="preferencesStore.preferences.menu.collapsed"
                   :checked-value="false"
                   :unchecked-value="true"
-                  :disabled="sm"
+                  :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
                       modify({
@@ -183,7 +183,7 @@ const showNoiseModal = () => {
                 <span>显示导航按钮</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showNavigation"
-                  :disabled="sm"
+                  :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
                       modify({
@@ -196,7 +196,7 @@ const showNoiseModal = () => {
                 <span>显示面包屑</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showBreadcrumb"
-                  :disabled="sm"
+                  :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
                       modify({
@@ -209,7 +209,7 @@ const showNoiseModal = () => {
                 <span>显示标签页</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showTabs"
-                  :disabled="sm"
+                  :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
                       modify({
@@ -222,7 +222,7 @@ const showNoiseModal = () => {
                 <span>常显标签关闭按钮</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showTabClose"
-                  :disabled="sm"
+                  :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
                       modify({
@@ -235,7 +235,7 @@ const showNoiseModal = () => {
                 <span>显示底部</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showFooter"
-                  :disabled="sm"
+                  :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
                       modify({
@@ -296,6 +296,7 @@ const showNoiseModal = () => {
                 <span>启用导航过渡效果</span>
                 <NSwitch
                   :value="preferencesStore.preferences.enableNavigationTransition"
+                  :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
                       modify({

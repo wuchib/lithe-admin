@@ -21,7 +21,7 @@ import {
 import { useInjection } from '@/composable/useInjection'
 import { mediaQueryInjectionKey } from '@/injection'
 
-const { md, lg } = useInjection(mediaQueryInjectionKey)
+const { isMediumScreen, isLargeScreen } = useInjection(mediaQueryInjectionKey)
 
 import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
 
@@ -453,16 +453,16 @@ getDataList()
     >
       一个数据表格的例子，不算复杂，有一个高度的计算，也许对你有帮助
     </NAlert>
-    <NCard :size="md ? 'small' : undefined">
+    <NCard :size="isMediumScreen ? 'small' : undefined">
       <div class="mb-2 flex justify-end gap-x-4 max-xl:mb-4 max-xl:flex-wrap">
         <NForm
           ref="formRef"
           :model="form"
           :rules="rules"
-          :inline="!lg"
+          :inline="!isLargeScreen"
           label-placement="left"
           class="max-lg:w-full max-lg:flex-col"
-          :label-width="lg ? 70 : undefined"
+          :label-width="isLargeScreen ? 70 : undefined"
         >
           <NFormItem
             label="姓名"
@@ -541,7 +541,7 @@ getDataList()
           ref="dataTableRef"
           v-model:checked-row-keys="checkedRowKeys"
           :remote="true"
-          :max-height="md ? undefined : maxHeight"
+          :max-height="isMediumScreen ? undefined : maxHeight"
           :scroll-x="enableScrollX ? 1800 : 0"
           :min-height="166.6"
           :columns="columns"
@@ -582,7 +582,7 @@ getDataList()
               </NButton>
 
               <NButton
-                v-show="!md"
+                v-show="!isMediumScreen"
                 @click="enableContextmenu = !enableContextmenu"
                 :type="enableContextmenu ? 'primary' : 'default'"
                 secondary
@@ -590,7 +590,7 @@ getDataList()
                 右键菜单
               </NButton>
               <NButton
-                v-show="!md"
+                v-show="!isMediumScreen"
                 @click="handleDownloadCsvClick"
                 secondary
                 type="info"
@@ -602,10 +602,10 @@ getDataList()
           <NPagination
             v-bind="pagination"
             :prefix="paginationPrefix"
-            :page-slot="md ? 5 : undefined"
-            :show-quick-jump-dropdown="!md"
-            :show-quick-jumper="!md"
-            :show-size-picker="!md"
+            :page-slot="isMediumScreen ? 5 : undefined"
+            :show-quick-jump-dropdown="!isMediumScreen"
+            :show-quick-jumper="!isMediumScreen"
+            :show-size-picker="!isMediumScreen"
           />
         </div>
       </div>

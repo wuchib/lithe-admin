@@ -16,7 +16,7 @@ defineOptions({
   name: 'MainLayout',
 })
 
-const { sm } = useInjection(mediaQueryInjectionKey)
+const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
   useInjection(layoutInjectionKey)
 
@@ -82,7 +82,12 @@ watch(
 
     if (!preferencesStore.preferences.enableNavigationTransition) return
 
-    if (!preferencesStore.preferences.showTabs || sm.value) {
+    if (isSmallScreen.value) {
+      navigationTransitionName.value = ''
+      return
+    }
+
+    if (!preferencesStore.preferences.showTabs) {
       navigationTransitionName.value = 'scale'
       return
     }
