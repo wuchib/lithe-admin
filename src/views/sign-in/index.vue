@@ -11,9 +11,9 @@ import {
 } from 'vue'
 
 import topographySvg from '@/assets/topography.svg'
-import { usePersonalization, useInjection } from '@/composable'
+import { usePersonalization, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import ThemeDropdown from '@/layouts/header/actions/component/ThemeDropdown.vue'
+import ThemeDropdown from '@/layout/header/actions/component/ThemeDropdown.vue'
 import router from '@/router'
 import { useUserStore } from '@/stores'
 import twc from '@/utils/tailwindColor'

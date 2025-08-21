@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash-es'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 
-import { useInjection } from '@/composable'
+import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import router from '@/router'
 import { usePreferencesStore, useTabsStore } from '@/stores'

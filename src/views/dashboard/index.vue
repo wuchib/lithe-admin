@@ -4,7 +4,7 @@ import * as echarts from 'echarts'
 import { NNumberAnimation } from 'naive-ui'
 import { onMounted, watch, ref, computed, onUnmounted, nextTick } from 'vue'
 
-import { usePersonalization } from '@/composable'
+import { usePersonalization } from '@/composables'
 import { usePreferencesStore } from '@/stores'
 import twc from '@/utils/tailwindColor'
 

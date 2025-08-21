@@ -22,7 +22,7 @@ import {
 } from 'naive-ui'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 
-import { useInjection, useResettableReactive } from '@/composable'
+import { useInjection, useResettableReactive } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
 import type { FormRules } from 'naive-ui'

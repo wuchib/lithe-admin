@@ -17,7 +17,7 @@ import {
 import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
-import { useInjection } from '@/composable'
+import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
 import { usePreferencesStore, useTabsStore } from '@/stores'

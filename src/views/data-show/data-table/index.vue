@@ -24,7 +24,7 @@ import {
   useComponentModifier,
   useDataTable,
   useResettableReactive,
-} from '@/composable'
+} from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
 import ModalData from './ModalData.vue'

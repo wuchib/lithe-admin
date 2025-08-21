@@ -1,4 +1,4 @@
-import { useComponentModifier, useDiscreteApi } from '@/composable'
+import { useComponentModifier, useDiscreteApi } from '@/composables'
 
 import type { MessageType, ModalOptions, NotificationType } from 'naive-ui'
 

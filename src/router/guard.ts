@@ -1,9 +1,9 @@
-import { useDiscreteApi } from '@/composable'
+import { useDiscreteApi } from '@/composables'
 import { usePreferencesStore, pinia, useUserStore } from '@/stores'
 
 import type { Router } from 'vue-router'
 
-const Layouts = () => import('@/layouts/index.vue')
+const Layouts = () => import('@/layout/index.vue')
 
 const { loadingBar } = useDiscreteApi()
 

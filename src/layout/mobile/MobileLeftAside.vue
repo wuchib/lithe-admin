@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useInjection } from '@/composable'
+import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 
-import LogoArea from '../../header/LogoArea.vue'
-import Menu from '../component/Menu.vue'
-import UserCard from '../component/UserCard.vue'
+import Menu from '../aside/component/Menu.vue'
+import UserCard from '../aside/component/UserCard.vue'
+import LogoArea from '../header/LogoArea.vue'
 
 const { layoutSlideDirection } = useInjection(layoutInjectionKey)
 </script>

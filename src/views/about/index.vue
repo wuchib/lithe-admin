@@ -3,7 +3,7 @@ import { NCard, NSplit, NButton, NScrollbar, NTag } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
 import packageJson from '@/../package.json'
-import { useInjection } from '@/composable'
+import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
 defineOptions({

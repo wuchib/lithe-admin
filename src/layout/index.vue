@@ -1,25 +1,22 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
 import { NScrollbar } from 'naive-ui'
-import { computed, watch } from 'vue'
+import { computed, defineAsyncComponent, watch } from 'vue'
 
 import texturePng from '@/assets/texture.png'
 import { CollapseTransition, EmptyPlaceholder } from '@/components'
-import { useComponentThemeOverrides, useInjection } from '@/composable'
+import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import { usePreferencesStore, useTabsStore } from '@/stores'
 
 import AsideLayout from './aside/index.vue'
-import MobileLeftAside from './aside/mobile/MobileLeftAside.vue'
-import MobileRightAside from './aside/mobile/MobileRightAside.vue'
 import Tabs from './component/Tabs.vue'
 import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
-import MobileHeader from './header/mobile/MobileHeader.vue'
 import MainLayout from './main/index.vue'
 
 defineOptions({
-  name: 'Layouts',
+  name: 'Layout',
 })
 
 const tabsStore = useTabsStore()
@@ -27,6 +24,10 @@ const preferencesStore = usePreferencesStore()
 const { scrollbarInMainLayout } = useComponentThemeOverrides()
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
+
+const MobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
+const MobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
+const MobileRightAside = defineAsyncComponent(() => import('./mobile/MobileRightAside.vue'))
 
 const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
@@ -58,7 +59,7 @@ watch(
     <MobileLeftAside v-if="isSmallScreen" />
 
     <div
-      class="relative flex h-full w-full flex-col border-naive-border bg-naive-card/50 transition-[background-color,border-color,rounded,transform]"
+      class="relative flex h-full w-full flex-col border-naive-border transition-[background-color,border-color,rounded,transform] max-sm:bg-naive-card/50"
       :class="{
         'rounded-xl border': isSmallScreen && layoutTranslateOffset,
       }"

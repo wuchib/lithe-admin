@@ -14,10 +14,12 @@ import { provide, ref } from 'vue'
 import { RouterView } from 'vue-router'
 
 import Noise from '@/components/Noise.vue'
-import { getConfigProviderProps } from '@/composable'
+import { getConfigProviderProps } from '@/composables'
 import { usePreferencesStore } from '@/stores'
 
-import { layoutInjectionKey, mediaQueryInjectionKey, type LayoutSlideDirection } from './injection'
+import { layoutInjectionKey, mediaQueryInjectionKey } from './injection'
+
+import type { LayoutSlideDirection } from './injection'
 
 const preferencesStore = usePreferencesStore()
 const configProviderProps = getConfigProviderProps()

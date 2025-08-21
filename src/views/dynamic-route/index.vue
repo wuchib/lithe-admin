@@ -2,7 +2,7 @@
 import { NCard, NAlert, NButton } from 'naive-ui'
 import { RouterLink, useRouter } from 'vue-router'
 
-import { useInjection } from '@/composable'
+import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
 const { isMediumScreen } = useInjection(mediaQueryInjectionKey)

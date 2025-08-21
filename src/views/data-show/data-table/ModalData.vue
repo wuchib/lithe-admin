@@ -2,7 +2,7 @@
 import { NForm, NFormItem, NInput, NSelect, NButton, NInputNumber, NDatePicker } from 'naive-ui'
 import { onMounted, useTemplateRef } from 'vue'
 
-import { useComponentThemeOverrides, useResettableReactive } from '@/composable'
+import { useComponentThemeOverrides, useResettableReactive } from '@/composables'
 
 import type { UserInfo } from './index.vue'
 import type { FormRules } from 'naive-ui'

@@ -12,7 +12,7 @@ import {
 import { h, ref } from 'vue'
 
 import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
-import { useComponentThemeOverrides, useInjection, usePersonalization } from '@/composable'
+import { useComponentThemeOverrides, useInjection, usePersonalization } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore, useSystemStore } from '@/stores'
 import twColors from '@/utils/tailwindColor'
