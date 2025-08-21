@@ -80,12 +80,12 @@ watch(
       }
     }
 
-    if (!preferencesStore.preferences.enableNavigationTransition) return
-
     if (isSmallScreen.value) {
       navigationTransitionName.value = ''
       return
     }
+
+    if (!preferencesStore.preferences.enableNavigationTransition) return
 
     if (!preferencesStore.preferences.showTabs) {
       navigationTransitionName.value = 'scale'
