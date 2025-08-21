@@ -1,5 +1,5 @@
 import { useDiscreteApi } from '@/composable/useDiscreteApi'
-import { usePreferencesStore, piniaInstance } from '@/stores'
+import { usePreferencesStore, pinia } from '@/stores'
 import { useUserStore } from '@/stores'
 
 import type { Router } from 'vue-router'
@@ -8,7 +8,7 @@ const Layouts = () => import('@/layouts/index.vue')
 
 const { loadingBar } = useDiscreteApi()
 
-const preferencesStore = usePreferencesStore(piniaInstance)
+const preferencesStore = usePreferencesStore(pinia)
 
 export function setupRouterGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
