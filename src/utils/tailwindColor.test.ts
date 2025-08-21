@@ -117,7 +117,7 @@ describe('tailwindColor', () => {
     expect(extractShades(twc).blue['150']).not.toBeUndefined()
   })
 
-  it('should have 220 shade', () => {
+  it('should have not 200 shade', () => {
     expect(extractShades(twc).blue['200']).toBeUndefined()
   })
 })
