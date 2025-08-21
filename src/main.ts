@@ -3,7 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 
 import { setupRouterGuard } from '@/router/guard'
-import { useSystemStore, piniaInstance } from '@/stores'
+import { useSystemStore, pinia } from '@/stores'
 
 import App from './App.vue'
 import router from './router'
@@ -11,12 +11,12 @@ import router from './router'
 async function setupApp() {
   const app = createApp(App)
 
-  app.use(piniaInstance)
+  app.use(pinia)
 
   app.use(router)
   setupRouterGuard(router)
 
-  useSystemStore(piniaInstance)
+  useSystemStore(pinia)
 
   await router.isReady()
 

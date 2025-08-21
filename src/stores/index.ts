@@ -1,8 +1,8 @@
 import { createPinia } from 'pinia'
 
-const piniaInstance = createPinia()
+const pinia = createPinia()
 
-export { piniaInstance }
+export { pinia }
 
 export * from './preferences'
 export * from './system'
