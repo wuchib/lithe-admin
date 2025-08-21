@@ -228,13 +228,13 @@ const onScrollbarWheeled = (e: WheelEvent) => {
 }
 
 function getTabContextMenuActions(): ContextMenuActions | null {
-  const tabValue = tabContextMenu.value
+  const targetTab = tabContextMenu.value
 
-  if (!tabValue) {
+  if (!targetTab) {
     return null
   }
 
-  const { id } = tabValue
+  const { id } = targetTab
 
   const { locked, keepAlive, pinned } = getTab(id) ?? {}
 
