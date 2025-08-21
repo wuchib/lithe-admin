@@ -3,8 +3,7 @@ import { NMenu, NScrollbar } from 'naive-ui'
 import { ref, useTemplateRef, watch } from 'vue'
 
 import router from '@/router'
-import { usePreferencesStore } from '@/stores'
-import { useUserStore } from '@/stores'
+import { usePreferencesStore, useUserStore } from '@/stores'
 
 import type { MenuInst } from 'naive-ui'
 

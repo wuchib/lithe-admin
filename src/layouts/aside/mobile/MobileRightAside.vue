@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ButtonAnimationProvider } from '@/components'
-import { useInjection } from '@/composable/useInjection'
+import { useInjection } from '@/composable'
 import { layoutInjectionKey } from '@/injection'
 
 import Actions from '../../header/actions/index.vue'

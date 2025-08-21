@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { useMediaQuery } from '@vueuse/core'
 import { isEmpty } from 'lodash-es'
 import { NScrollbar } from 'naive-ui'
-import { computed, provide, watch, ref } from 'vue'
+import { computed, watch } from 'vue'
 
 import texturePng from '@/assets/texture.png'
-import { EmptyPlaceholder } from '@/components'
-import CollapseTransition from '@/components/CollapseTransition.vue'
-import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
+import { CollapseTransition, EmptyPlaceholder } from '@/components'
+import { useComponentThemeOverrides, useInjection } from '@/composable'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
-import { usePreferencesStore } from '@/stores'
-import { useTabsStore } from '@/stores'
+import { usePreferencesStore, useTabsStore } from '@/stores'
 
 import AsideLayout from './aside/index.vue'
 import MobileLeftAside from './aside/mobile/MobileLeftAside.vue'
@@ -21,8 +18,6 @@ import HeaderLayout from './header/index.vue'
 import MobileHeader from './header/mobile/MobileHeader.vue'
 import MainLayout from './main/index.vue'
 
-import type { LayoutSlideDirection } from '@/injection'
-
 defineOptions({
   name: 'Layouts',
 })
@@ -30,18 +25,8 @@ defineOptions({
 const tabsStore = useTabsStore()
 const preferencesStore = usePreferencesStore()
 const { scrollbarInMainLayout } = useComponentThemeOverrides()
-
-const mediaQuery = {
-  isSmallScreen: useMediaQuery('(max-width: 640px)'),
-  isMediumScreen: useMediaQuery('(max-width: 768px)'),
-  isLargeScreen: useMediaQuery('(max-width: 1024px)'),
-  isExtraLargeScreen: useMediaQuery('(max-width: 1280px)'),
-  isExtraExtraLargeScreen: useMediaQuery('(max-width: 1536px)'),
-}
-
-const layoutSlideDirection = ref<LayoutSlideDirection>(null)
-
-const shouldRefreshRoute = ref(false)
+const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
+const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
 
 const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
@@ -51,14 +36,10 @@ const layoutTranslateOffset = computed(() => {
       : 0
 })
 
-function setLayoutSlideDirection(direction: LayoutSlideDirection) {
-  layoutSlideDirection.value = direction === layoutSlideDirection.value ? null : direction
-}
-
 watch(
-  () => mediaQuery.isSmallScreen.value,
-  (isSm) => {
-    if (isSm) {
+  () => isSmallScreen.value,
+  (isSmallScreen) => {
+    if (isSmallScreen) {
       preferencesStore.modify({
         menu: {
           collapsed: false,
@@ -68,44 +49,34 @@ watch(
     }
   },
 )
-
-provide(mediaQueryInjectionKey, mediaQuery)
-
-provide(layoutInjectionKey, {
-  shouldRefreshRoute,
-  layoutSlideDirection,
-  setLayoutSlideDirection,
-})
 </script>
 <template>
   <div
     class="relative flex h-svh overflow-hidden"
     :style="{ backgroundImage: `url(${texturePng})` }"
   >
-    <MobileLeftAside v-if="mediaQuery.isSmallScreen.value" />
+    <MobileLeftAside v-if="isSmallScreen" />
 
     <div
       class="relative flex h-full w-full flex-col border-naive-border bg-naive-card/50 transition-[background-color,border-color,rounded,transform]"
       :class="{
-        'rounded-xl border': mediaQuery.isSmallScreen.value && layoutTranslateOffset,
+        'rounded-xl border': isSmallScreen && layoutTranslateOffset,
       }"
       :style="
-        mediaQuery.isSmallScreen.value &&
+        isSmallScreen &&
         layoutSlideDirection && {
           transform: `translate(${layoutTranslateOffset}px) scale(0.88)`,
         }
       "
     >
-      <HeaderLayout v-if="!mediaQuery.isSmallScreen.value" />
+      <HeaderLayout v-if="!isSmallScreen" />
       <MobileHeader v-else />
       <div class="flex flex-1 overflow-hidden">
-        <AsideLayout v-if="!mediaQuery.isSmallScreen.value" />
+        <AsideLayout v-if="!isSmallScreen" />
         <div class="relative flex flex-1 flex-col overflow-x-hidden">
           <CollapseTransition
             :display="
-              !mediaQuery.isSmallScreen.value &&
-              !isEmpty(tabsStore.tabs) &&
-              preferencesStore.preferences.showTabs
+              !isSmallScreen && !isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs
             "
             direction="horizontal"
             :render-content="false"
@@ -116,7 +87,7 @@ provide(layoutInjectionKey, {
           <NScrollbar
             class="transition-[padding]"
             :class="{
-              'pb-4': mediaQuery.isSmallScreen.value && layoutSlideDirection,
+              'pb-4': isSmallScreen && layoutSlideDirection,
             }"
             container-class="main-container"
             :theme-overrides="scrollbarInMainLayout"
@@ -135,7 +106,7 @@ provide(layoutInjectionKey, {
             </template>
           </EmptyPlaceholder>
           <CollapseTransition
-            :display="!mediaQuery.isSmallScreen.value && preferencesStore.preferences.showFooter"
+            :display="!isSmallScreen && preferencesStore.preferences.showFooter"
             direction="horizontal"
             :render-content="false"
             container-class="shrink-0 items-baseline"
@@ -145,11 +116,11 @@ provide(layoutInjectionKey, {
         </div>
       </div>
       <div
-        v-if="mediaQuery.isSmallScreen.value && layoutSlideDirection"
+        v-if="isSmallScreen && layoutSlideDirection"
         class="absolute inset-0"
         @click="setLayoutSlideDirection(null)"
       />
     </div>
-    <MobileRightAside v-if="mediaQuery.isSmallScreen.value" />
+    <MobileRightAside v-if="isSmallScreen" />
   </div>
 </template>

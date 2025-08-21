@@ -2,9 +2,7 @@ import { useStorage } from '@vueuse/core'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import packageJson from '@/../package.json'
-import { usePreferencesStore } from '@/stores'
-import { useTabsStore } from '@/stores'
-import { useUserStore } from '@/stores'
+import { usePreferencesStore, useTabsStore, useUserStore } from '@/stores'
 
 export const useSystemStore = defineStore('systemStore', () => {
   const version = useStorage('version', '')

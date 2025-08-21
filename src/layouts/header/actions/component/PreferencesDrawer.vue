@@ -12,12 +12,9 @@ import {
 import { h, ref } from 'vue'
 
 import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
-import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
-import { useInjection } from '@/composable/useInjection'
-import { usePersonalization } from '@/composable/usePersonalization'
+import { useComponentThemeOverrides, useInjection, usePersonalization } from '@/composable'
 import { mediaQueryInjectionKey } from '@/injection'
-import { usePreferencesStore } from '@/stores'
-import { useSystemStore } from '@/stores'
+import { usePreferencesStore, useSystemStore } from '@/stores'
 import twColors from '@/utils/tailwindColor'
 
 import NoiseModal from './NoiseModal.vue'

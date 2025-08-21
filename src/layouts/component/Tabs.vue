@@ -17,11 +17,10 @@ import {
 import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
-import { useInjection } from '@/composable/useInjection'
+import { useInjection } from '@/composable'
 import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
-import { usePreferencesStore } from '@/stores'
-import { useTabsStore } from '@/stores'
+import { usePreferencesStore, useTabsStore } from '@/stores'
 
 import type { Tab, Key } from '@/stores'
 import type { DropdownOption } from 'naive-ui'

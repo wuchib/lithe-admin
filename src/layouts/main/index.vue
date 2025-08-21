@@ -3,11 +3,10 @@ import { isEmpty } from 'lodash-es'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 
-import { useInjection } from '@/composable/useInjection'
+import { useInjection } from '@/composable'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import router from '@/router'
-import { usePreferencesStore } from '@/stores'
-import { useTabsStore } from '@/stores'
+import { usePreferencesStore, useTabsStore } from '@/stores'
 
 import type { Tab } from '@/stores'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'

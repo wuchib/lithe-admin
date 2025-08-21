@@ -3,9 +3,9 @@ import { NPopselect } from 'naive-ui'
 import { computed, h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
-import { usePersonalization } from '@/composable/usePersonalization'
+import { usePersonalization } from '@/composable'
 
-import type { Theme } from '@/composable/usePersonalization'
+import type { Theme } from '@/composable'
 import type { PopoverProps } from 'naive-ui'
 
 interface ThemeDropdownProps extends /* @vue-ignore */ PopoverProps {}

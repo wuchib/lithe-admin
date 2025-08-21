@@ -2,7 +2,7 @@
 import { NPopover } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
-import { usePersonalization } from '@/composable/usePersonalization'
+import { usePersonalization } from '@/composable'
 import twColors from '@/utils/tailwindColor'
 
 const { color: currentColor, setColor } = usePersonalization()

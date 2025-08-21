@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useInjection } from '@/composable/useInjection'
+import { useInjection } from '@/composable'
 import { layoutInjectionKey } from '@/injection'
 
 import LogoArea from '../../header/LogoArea.vue'

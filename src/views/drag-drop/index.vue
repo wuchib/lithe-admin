@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
 import { EmptyPlaceholder } from '@/components'
-import { useInjection } from '@/composable/useInjection'
+import { useInjection } from '@/composable'
 import { mediaQueryInjectionKey } from '@/injection'
 
 import type { UseDraggableReturn } from 'vue-draggable-plus'

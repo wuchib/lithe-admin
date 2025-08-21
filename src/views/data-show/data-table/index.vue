@@ -17,17 +17,10 @@ import {
   NNumberAnimation,
   NAlert,
 } from 'naive-ui'
-
-import { useInjection } from '@/composable/useInjection'
-import { mediaQueryInjectionKey } from '@/injection'
-
-const { isMediumScreen, isLargeScreen } = useInjection(mediaQueryInjectionKey)
-
 import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
 
-import { useComponentModifier } from '@/composable/useComponentModifier'
-import { useDataTable } from '@/composable/useDataTable'
-import { useResettableReactive } from '@/composable/useResettable'
+import { useInjection, useComponentModifier, useDataTable, useResettableReactive } from '@/composable'
+import { mediaQueryInjectionKey } from '@/injection'
 
 import ModalData from './ModalData.vue'
 
@@ -53,6 +46,8 @@ interface UserForm extends Partial<UserInfo> {}
 defineOptions({
   name: 'DataTable',
 })
+
+const { isMediumScreen, isLargeScreen } = useInjection(mediaQueryInjectionKey)
 
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
 

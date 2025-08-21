@@ -3,10 +3,10 @@ import { NForm, NFormItem, NInput, NButton, NCheckbox, NCarousel } from 'naive-u
 import { computed, onMounted, onUnmounted, reactive, ref, useTemplateRef } from 'vue'
 
 import topographySvg from '@/assets/topography.svg'
-import { usePersonalization } from '@/composable/usePersonalization'
+import { usePersonalization } from '@/composable'
 import ThemeDropdown from '@/layouts/header/actions/component/ThemeDropdown.vue'
 import router from '@/router'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores'
 import twc from '@/utils/tailwindColor'
 
 import Illustration1 from './component/Illustration1.vue'

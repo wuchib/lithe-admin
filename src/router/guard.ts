@@ -1,6 +1,5 @@
-import { useDiscreteApi } from '@/composable/useDiscreteApi'
-import { usePreferencesStore, pinia } from '@/stores'
-import { useUserStore } from '@/stores'
+import { useDiscreteApi } from '@/composable'
+import { usePreferencesStore, pinia, useUserStore } from '@/stores'
 
 import type { Router } from 'vue-router'
 

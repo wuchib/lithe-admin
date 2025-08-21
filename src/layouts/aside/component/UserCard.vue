@@ -4,8 +4,7 @@ import { h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
 import DefaultAvatar from '@/components/Avatar.vue'
-import { usePreferencesStore } from '@/stores'
-import { useUserStore } from '@/stores'
+import { usePreferencesStore, useUserStore } from '@/stores'
 
 const preferencesStore = usePreferencesStore()
 const userStore = useUserStore()

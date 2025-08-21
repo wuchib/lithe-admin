@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ButtonAnimation } from '@/components'
 import Logo from '@/components/Logo.vue'
-import { useInjection } from '@/composable/useInjection'
+import { useInjection } from '@/composable'
 import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
 
