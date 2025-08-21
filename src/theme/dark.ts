@@ -10,7 +10,7 @@ const dark = {
   textColor1: twc.neutral[350],
   textColor2: twc.neutral[350],
   textColor3: twc.neutral[450],
-  borderColor: cdh(twc.neutral[750], 0.22),
+  borderColor: twc.neutral[800],
 }
 
 const closeIcon = (primaryColor: string) => {

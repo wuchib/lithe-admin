@@ -9,7 +9,7 @@ const light = {
   textColor1: twc.neutral[750],
   textColor2: twc.neutral[700],
   textColor3: twc.neutral[500],
-  borderColor: twc.neutral[200],
+  borderColor: twc.neutral[150],
 }
 
 const closeIcon = (primaryColor: string) => {
