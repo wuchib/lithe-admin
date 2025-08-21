@@ -15,6 +15,10 @@ export interface HintHelpProps {
   popoverProps?: PopoverProps
 }
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const { label, popoverProps, buttonProps, iconProps, content } = defineProps<HintHelpProps>()
 </script>
 <template>
