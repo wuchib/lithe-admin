@@ -60,7 +60,7 @@ const DIRECTION_CLASSES_MAP = {
       :class="containerClass"
       :style="[
         typeof duration === 'number' &&
-        duration > 0 && {
+          duration > 0 && {
             '--default-transition-duration': `${duration}ms`,
           },
         containerStyle,

@@ -19,7 +19,12 @@ import {
 } from 'naive-ui'
 import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
 
-import { useInjection, useComponentModifier, useDataTable, useResettableReactive } from '@/composable'
+import {
+  useInjection,
+  useComponentModifier,
+  useDataTable,
+  useResettableReactive,
+} from '@/composable'
 import { mediaQueryInjectionKey } from '@/injection'
 
 import ModalData from './ModalData.vue'
