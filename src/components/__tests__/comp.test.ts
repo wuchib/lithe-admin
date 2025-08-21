@@ -1,7 +1,8 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect} from 'vitest'
+import { nextTick } from 'vue'
 
-import { ButtonAnimation, EmptyPlaceholder } from '../index'
+import { ButtonAnimation, CollapseTransition, EmptyPlaceholder } from '../index'
 
 describe('ButtonAnimation Component', () => {
   it('render component', () => {
@@ -61,5 +62,24 @@ describe('EmptyPlaceholder Component', () => {
 
     expect(wrapper.exists()).toBe(true)
     expect(wrapper.find('.n-empty').exists()).toBe(true)
+  })
+})
+
+describe('CollapseTransition Component', () => {
+  it('toggle by v-if when display=false', async () => {
+    const wrapper = mount(CollapseTransition, {
+      props: {
+        display: true,
+        direction: 'vertical',
+      },
+      slots: { default: '<div class="context">context</div>' },
+    })
+
+    expect(wrapper.find('.context').exists()).toBe(true)
+
+    await wrapper.setProps({ display: false })
+    await nextTick()
+
+    expect(wrapper.find('.context').exists()).toBe(false)
   })
 })

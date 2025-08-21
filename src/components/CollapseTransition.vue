@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import type { CSSProperties, TransitionProps } from 'vue'
 
-interface CollapseTransitionProps extends TransitionProps {
+export interface CollapseTransitionProps extends TransitionProps {
   displayDirective?: 'if' | 'show'
   display?: boolean
   direction?: 'vertical' | 'horizontal'
-  transitionDuration?: number
   containerClass?: string
   containerStyle?: CSSProperties
   renderContent?: boolean
@@ -19,7 +18,7 @@ const {
   type = 'transition',
   displayDirective = 'if',
   display,
-  transitionDuration,
+  duration,
   contentTag = 'div',
   renderContent = true,
   contentClass,
@@ -28,7 +27,7 @@ const {
   containerStyle,
 } = defineProps<CollapseTransitionProps>()
 
-const BASE_CLASSES = {
+const DIRECTION_CLASSES_MAP = {
   vertical: {
     activeClass: 'transition-[grid-template-columns]',
     fromClass: 'grid-cols-[0fr]',
@@ -46,12 +45,12 @@ const BASE_CLASSES = {
 <template>
   <Transition
     :type="type"
-    :enter-active-class="BASE_CLASSES[direction].activeClass"
-    :leave-active-class="BASE_CLASSES[direction].activeClass"
-    :enter-from-class="BASE_CLASSES[direction].fromClass"
-    :leave-to-class="BASE_CLASSES[direction].fromClass"
-    :enter-to-class="BASE_CLASSES[direction].toClass"
-    :leave-from-class="BASE_CLASSES[direction].toClass"
+    :enter-active-class="DIRECTION_CLASSES_MAP[direction].activeClass"
+    :leave-active-class="DIRECTION_CLASSES_MAP[direction].activeClass"
+    :enter-from-class="DIRECTION_CLASSES_MAP[direction].fromClass"
+    :leave-to-class="DIRECTION_CLASSES_MAP[direction].fromClass"
+    :enter-to-class="DIRECTION_CLASSES_MAP[direction].toClass"
+    :leave-from-class="DIRECTION_CLASSES_MAP[direction].toClass"
     v-bind="$attrs"
   >
     <div
@@ -60,9 +59,9 @@ const BASE_CLASSES = {
       class="grid overflow-hidden"
       :class="containerClass"
       :style="[
-        typeof transitionDuration === 'number' &&
-          transitionDuration > 0 && {
-            '--default-transition-duration': `${transitionDuration}ms`,
+        typeof duration === 'number' &&
+        duration > 0 && {
+            '--default-transition-duration': `${duration}ms`,
           },
         containerStyle,
       ]"
@@ -70,7 +69,7 @@ const BASE_CLASSES = {
       <component
         v-if="renderContent"
         :is="contentTag"
-        :class="[BASE_CLASSES[direction].contentClass, contentClass]"
+        :class="[DIRECTION_CLASSES_MAP[direction].contentClass, contentClass]"
         :style="contentStyle"
       >
         <slot />
