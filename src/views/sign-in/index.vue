@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { NForm, NFormItem, NInput, NButton, NCheckbox, NCarousel } from 'naive-ui'
-import { computed, onMounted, onUnmounted, reactive, ref, useTemplateRef } from 'vue'
+import {
+  computed,
+  defineAsyncComponent,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  useTemplateRef,
+} from 'vue'
 
 import topographySvg from '@/assets/topography.svg'
-import { usePersonalization } from '@/composable'
+import { usePersonalization, useInjection } from '@/composable'
+import { mediaQueryInjectionKey } from '@/injection'
 import ThemeDropdown from '@/layouts/header/actions/component/ThemeDropdown.vue'
 import router from '@/router'
 import { useUserStore } from '@/stores'
 import twc from '@/utils/tailwindColor'
 
-import Illustration1 from './component/Illustration1.vue'
-import Illustration2 from './component/Illustration2.vue'
-import Illustration3 from './component/Illustration3.vue'
 import ThemeColorPopover from './component/ThemeColorPopover.vue'
 
 import type { FormItemRule } from 'naive-ui'
@@ -21,8 +27,15 @@ defineOptions({
 })
 
 const { isDark } = usePersonalization()
+const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 
 const userStore = useUserStore()
+
+const illustrations = [
+  defineAsyncComponent(() => import('./component/Illustration1.vue')),
+  defineAsyncComponent(() => import('./component/Illustration2.vue')),
+  defineAsyncComponent(() => import('./component/Illustration3.vue')),
+]
 
 const loading = ref(false)
 
@@ -91,9 +104,7 @@ function onMouseMove(e: MouseEvent) {
 }
 
 function onTouchMove(e: TouchEvent) {
-  if (e.touches.length > 0) {
-    updateTexturePosition(e.touches[0].clientX, e.touches[0].clientY)
-  }
+  updateTexturePosition(e.touches[0].clientX, e.touches[0].clientY)
 }
 
 onMounted(() => {
@@ -132,7 +143,8 @@ onUnmounted(() => {
     />
     <div class="relative z-50 flex h-[480px] w-[800px] justify-center rounded shadow-lg">
       <div
-        class="flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] max-sm:hidden dark:bg-neutral-850"
+        v-if="!isSmallScreen"
+        class="flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] dark:bg-neutral-850"
       >
         <NCarousel
           draggable
@@ -141,14 +153,12 @@ onUnmounted(() => {
           loop
           autoplay
         >
-          <div class="flex h-full items-center p-5">
-            <Illustration1 />
-          </div>
-          <div class="flex h-full items-center p-5">
-            <Illustration2 />
-          </div>
-          <div class="flex h-full items-center p-5">
-            <Illustration3 />
+          <div
+            v-for="(illustration, index) in illustrations"
+            :key="index"
+            class="flex h-full items-center p-5"
+          >
+            <component :is="illustration" />
           </div>
         </NCarousel>
       </div>
