@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { throttle } from 'lodash-es'
 import {
   NColorPicker,
   NDivider,
@@ -52,10 +51,6 @@ const colorSwatches = [
   twColors.fuchsia[500],
   twColors.pink[500],
 ]
-
-const modifyColor = throttle((value: string) => {
-  setColor(value)
-}, 1000)
 
 const showWatermarkModal = () => {
   modal.create({
@@ -129,7 +124,7 @@ const showNoiseModal = () => {
               v-bind="$attrs"
               :default-value="color"
               :swatches="colorSwatches"
-              @update-value="(value) => modifyColor(value)"
+              @update-value="setColor"
             />
           </div>
           <div>
