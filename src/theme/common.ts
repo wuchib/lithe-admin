@@ -1,11 +1,34 @@
 import chroma from 'chroma-js'
 
+import { usePersonalization } from '@/composables'
 import twc from '@/utils/tailwindColor'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
-export function cc(primaryColor: string, color1: string, color2: string) {
-  return chroma.contrast(primaryColor, '#fff') > 4.4 ? color1 : color2
+const { isDark } = usePersonalization()
+
+export function ccAPCA(
+  backgroundColor: string,
+  color1: string = '#ffffff',
+  color2: string = '#000000',
+  bodyColor?: string,
+): string {
+  bodyColor = isDark.value ? twc.neutral[950] : twc.neutral[25]
+
+  const cBackgroundColor = chroma(backgroundColor)
+  const cBodyColor = chroma(bodyColor)
+
+  const actualDisplayColor = chroma.mix(
+    cBackgroundColor.alpha(1),
+    cBodyColor,
+    1 - cBackgroundColor.alpha(),
+    'rgb',
+  )
+
+  const contrastWithLight = Math.abs(chroma.contrastAPCA(color1, actualDisplayColor))
+  const contrastWithDark = Math.abs(chroma.contrastAPCA(color2, actualDisplayColor))
+
+  return contrastWithLight > contrastWithDark ? color1 : color2
 }
 
 export function cah(color: string, value: number) {
@@ -39,14 +62,14 @@ export function commonThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
       scrollbarBorderRadius: '0',
     },
     Button: {
-      textColorPrimary: cc(primaryColor, twc.neutral[150], twc.neutral[950]),
-      textColorHoverPrimary: cdh(cc(primaryColor, twc.neutral[150], twc.neutral[950]), 0.1),
-      textColorPressedPrimary: cdh(cc(primaryColor, twc.neutral[150], twc.neutral[950]), 0.2),
-      textColorSupplPrimary: cc(primaryColor, twc.neutral[150], twc.neutral[950]),
-      textColorFocusPrimary: cc(primaryColor, twc.neutral[150], twc.neutral[950]),
+      textColorPrimary: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]),
+      textColorHoverPrimary: cdh(ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]), 0.1),
+      textColorPressedPrimary: cdh(ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]), 0.2),
+      textColorSupplPrimary: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]),
+      textColorFocusPrimary: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]),
     },
     Checkbox: {
-      checkMarkColor: cc(primaryColor, twc.neutral[150], twc.neutral[800]),
+      checkMarkColor: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[800]),
     },
     Dialog: {
       iconSize: '24px',
