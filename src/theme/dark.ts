@@ -3,7 +3,7 @@ import twc from '@/utils/tailwindColor'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
-const dark = {
+const DARK = {
   baseColor: twc.neutral[250],
   textColorBase: twc.neutral[250],
   textColor1: twc.neutral[350],
@@ -12,7 +12,7 @@ const dark = {
   borderColor: twc.neutral[800],
 }
 
-const closeIcon = (primaryColor: string) => {
+const closeIconColor = (primaryColor: string) => {
   return {
     closeIconColorSuccess: twc.lime[600],
     closeIconColorInfo: twc.sky[600],
@@ -50,19 +50,19 @@ const closeIcon = (primaryColor: string) => {
 export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
   return {
     common: {
-      baseColor: dark.baseColor,
+      baseColor: DARK.baseColor,
 
-      textColorBase: dark.textColorBase,
+      textColorBase: DARK.textColorBase,
 
-      textColor1: dark.textColor1,
+      textColor1: DARK.textColor1,
 
-      textColor2: dark.textColor2,
+      textColor2: DARK.textColor2,
 
-      textColor3: dark.textColor3,
+      textColor3: DARK.textColor3,
 
       bodyColor: twc.neutral[950],
 
-      borderColor: dark.borderColor,
+      borderColor: DARK.borderColor,
 
       cardColor: twc.neutral[900],
 
@@ -101,7 +101,7 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       errorColorSuppl: twc.pink[650],
     },
     Alert: {
-      ...closeIcon(primaryColor),
+      ...closeIconColor(primaryColor),
     },
     Button: {
       textColorSuccess: twc.lime[50],
@@ -113,10 +113,10 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       textColorError: twc.pink[50],
     },
     Card: {
-      borderColor: dark.borderColor,
+      borderColor: DARK.borderColor,
     },
     DataTable: {
-      borderColor: dark.borderColor,
+      borderColor: DARK.borderColor,
       tdColor: twc.neutral[900],
       tdColorHover: cbh(twc.neutral[850], 0.06),
       thColor: twc.neutral[850],
@@ -150,7 +150,7 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       colorError: cmh(twc.neutral[750], twc.pink[950], 0.06),
       colorLoading: cmh(twc.neutral[750], primaryColor, 0.01),
 
-      ...closeIcon(primaryColor),
+      ...closeIconColor(primaryColor),
     },
     Modal: {
       peers: {

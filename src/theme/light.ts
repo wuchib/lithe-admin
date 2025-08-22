@@ -3,7 +3,7 @@ import twc from '@/utils/tailwindColor'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
-const light = {
+const LIGHT = {
   textColorBase: twc.neutral[800],
   textColor1: twc.neutral[750],
   textColor2: twc.neutral[700],
@@ -11,7 +11,7 @@ const light = {
   borderColor: twc.neutral[150],
 }
 
-const closeIcon = (primaryColor: string) => {
+const closeIconColor = (primaryColor: string) => {
   return {
     closeIconColorSuccess: twc.lime[500],
     closeIconColorInfo: twc.sky[500],
@@ -49,17 +49,17 @@ const closeIcon = (primaryColor: string) => {
 export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
   return {
     common: {
-      textColorBase: light.textColorBase,
+      textColorBase: LIGHT.textColorBase,
 
-      textColor1: light.textColor1,
+      textColor1: LIGHT.textColor1,
 
-      textColor2: light.textColor2,
+      textColor2: LIGHT.textColor2,
 
-      textColor3: light.textColor3,
+      textColor3: LIGHT.textColor3,
 
       bodyColor: twc.neutral[25],
 
-      borderColor: light.borderColor,
+      borderColor: LIGHT.borderColor,
 
       cardColor: twc.neutral[25],
 
@@ -98,7 +98,7 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       errorColorSuppl: twc.pink[500],
     },
     Alert: {
-      ...closeIcon(primaryColor),
+      ...closeIconColor(primaryColor),
     },
     Button: {
       textColorSuccess: twc.lime[25],
@@ -110,20 +110,20 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       textColorError: twc.pink[25],
     },
     Card: {
-      borderColor: light.borderColor,
+      borderColor: LIGHT.borderColor,
     },
     Checkbox: {
       colorDisabled: twc.neutral[100],
     },
     DataTable: {
-      borderColor: light.borderColor,
+      borderColor: LIGHT.borderColor,
       tdColor: twc.neutral[25],
       tdColorHover: cdh(twc.neutral[100], 0.06),
       thColor: twc.neutral[100],
     },
     Drawer: {
-      footerBorderTop: `1px solid ${light.borderColor}`,
-      headerBorderBottom: `1px solid ${light.borderColor}`,
+      footerBorderTop: `1px solid ${LIGHT.borderColor}`,
+      headerBorderBottom: `1px solid ${LIGHT.borderColor}`,
       peers: {
         Scrollbar: {
           color: twc.neutral[300],
@@ -147,7 +147,7 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       colorError: cbh(twc.pink[25], 0.3),
       colorLoading: cmh(twc.neutral[25], primaryColor, 0.01),
 
-      ...closeIcon(primaryColor),
+      ...closeIconColor(primaryColor),
     },
     Modal: {
       peers: {
@@ -167,11 +167,11 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
     },
     Popover: {
       color: twc.neutral[25],
-      textColor: light.textColor2,
+      textColor: LIGHT.textColor2,
     },
     Slider: {
       indicatorColor: twc.neutral[25],
-      indicatorTextColor: light.textColor2,
+      indicatorTextColor: LIGHT.textColor2,
     },
     Select: {
       peers: {
