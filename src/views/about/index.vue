@@ -23,7 +23,7 @@ const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
-const dir = `📂 lithe-admin
+const dir = ` 📂 lithe-admin
 ├── 📄 LICENSE
 ├── 📄 README.md
 ├── 📄 eslint.config.ts
@@ -43,25 +43,44 @@ const dir = `📂 lithe-admin
 │    ├── 📄 texture.png
 │    ├── 📄 topography.svg
 │  └── 📂 components/
-│    ├── 📄 Avatar.vue
-│    ├── 📄 ButtonAnimation.vue
-│    ├── 📄 EmptyPlaceholder.vue
-│    ├── 📄 HintHelp.vue
+│    ├── 📄 Logo.vue
 │    ├── 📄 Noise.vue
-│    └── 📂 __tests__/
-│      ├── 📄 comp.test.ts
+│    └── 📂 button-animation/
+│      ├── 📄 ButtonAnimation.test.ts
+│      ├── 📄 ButtonAnimation.vue
+│      ├── 📄 ButtonAnimationProvider.vue
+│      ├── 📄 index.ts
+│      ├── 📄 injection.ts
+│      ├── 📄 interface.ts
+│    └── 📂 collapse-transition/
+│      ├── 📄 CollapseTransition.test.ts
+│      ├── 📄 CollapseTransition.vue
+│    └── 📂 content-wrapper/
+│      ├── 📄 ContentWrapper.test.ts
+│      ├── 📄 ContentWrapper.vue
+│    └── 📂 empty-placeholder/
+│      ├── 📄 EmptyPlaceholder.test.ts
+│      ├── 📄 EmptyPlaceholder.vue
+│    └── 📂 hint-help/
+│      ├── 📄 HintHelp.test.ts
+│      ├── 📄 HintHelp.vue
 │    ├── 📄 index.ts
-│  └── 📂 composable/
+│  └── 📂 composables/
+│    ├── 📄 index.ts
 │    ├── 📄 useComponentModifier.ts
 │    ├── 📄 useComponentThemeOverrides.ts
-│    ├── 📄 useDataTable.ts
 │    ├── 📄 useDiscreteApi.ts
+│    ├── 📄 useInjection.ts
 │    ├── 📄 usePersonalization.ts
 │    ├── 📄 useResettable.ts
 │    ├── 📄 useTheme.ts
-│  └── 📂 layouts/
+│  └── 📂 injection/
+│    ├── 📄 index.ts
+│    ├── 📄 interface.ts
+│  └── 📂 layout/
 │    └── 📂 aside/
 │      └── 📂 component/
+│        ├── 📄 Avatar.vue
 │        ├── 📄 Menu.vue
 │        ├── 📄 UserCard.vue
 │      ├── 📄 index.vue
@@ -70,7 +89,10 @@ const dir = `📂 lithe-admin
 │    └── 📂 footer/
 │      ├── 📄 index.vue
 │    └── 📂 header/
-│      └── 📂 Actions/
+│      ├── 📄 Breadcrumb.vue
+│      ├── 📄 LogoArea.vue
+│      ├── 📄 Navigation.vue
+│      └── 📂 actions/
 │        └── 📂 component/
 │          ├── 📄 FullScreen.vue
 │          ├── 📄 NoiseModal.vue
@@ -79,13 +101,14 @@ const dir = `📂 lithe-admin
 │          ├── 📄 ThemeDropdown.vue
 │          ├── 📄 WatermarkModal.vue
 │        ├── 📄 index.vue
-│      ├── 📄 Breadcrumb.vue
-│      ├── 📄 Logo.vue
-│      ├── 📄 Navigation.vue
 │      ├── 📄 index.vue
 │    ├── 📄 index.vue
 │    └── 📂 main/
 │      ├── 📄 index.vue
+│    └── 📂 mobile/
+│      ├── 📄 MobileHeader.vue
+│      ├── 📄 MobileLeftAside.vue
+│      ├── 📄 MobileRightAside.vue
 │  ├── 📄 main.ts
 │  └── 📂 router/
 │    ├── 📄 guard.ts
@@ -93,6 +116,7 @@ const dir = `📂 lithe-admin
 │    ├── 📄 index.ts
 │    ├── 📄 record.ts
 │  └── 📂 stores/
+│    ├── 📄 index.ts
 │    ├── 📄 preferences.ts
 │    ├── 📄 system.ts
 │    ├── 📄 tabs.ts
@@ -101,11 +125,12 @@ const dir = `📂 lithe-admin
 │    ├── 📄 common.ts
 │    ├── 📄 dark.ts
 │    ├── 📄 light.ts
-│  └── 📂 typings/
+│  └── 📂 types/
 │    ├── 📄 env.d.ts
 │    ├── 📄 vue-router.d.ts
 │    ├── 📄 window.d.ts
 │  └── 📂 utils/
+│    ├── 📄 chromaHelper.ts
 │    ├── 📄 tailwindColor.test.ts
 │    ├── 📄 tailwindColor.ts
 │  └── 📂 views/
@@ -136,7 +161,6 @@ const dir = `📂 lithe-admin
 │        ├── 📄 Illustration1.vue
 │        ├── 📄 Illustration2.vue
 │        ├── 📄 Illustration3.vue
-│        ├── 📄 Illustration4.vue
 │        ├── 📄 ThemeColorPopover.vue
 │      ├── 📄 index.vue
 ├── 📄 tailwind.config.ts
