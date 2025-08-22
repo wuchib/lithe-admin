@@ -2,6 +2,7 @@
 import { NCard, NAlert, NButton } from 'naive-ui'
 import { RouterLink, useRouter } from 'vue-router'
 
+import { ContentWrapper } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
@@ -14,7 +15,7 @@ defineOptions({
 const router = useRouter()
 </script>
 <template>
-  <div class="flex flex-col gap-y-2 p-4">
+  <ContentWrapper content-class="flex flex-col gap-y-2">
     <NAlert
       type="info"
       closable
@@ -46,5 +47,5 @@ const router = useRouter()
         </RouterLink>
       </div>
     </NCard>
-  </div>
+  </ContentWrapper>
 </template>

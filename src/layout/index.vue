@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
-import { NScrollbar } from 'naive-ui'
 import { computed, defineAsyncComponent, watch } from 'vue'
 
 import texturePng from '@/assets/texture.png'
 import { CollapseTransition, EmptyPlaceholder } from '@/components'
-import { useComponentThemeOverrides, useInjection } from '@/composables'
+import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import { usePreferencesStore, useTabsStore } from '@/stores'
 
@@ -21,7 +20,6 @@ defineOptions({
 
 const tabsStore = useTabsStore()
 const preferencesStore = usePreferencesStore()
-const { scrollbarInMainLayout } = useComponentThemeOverrides()
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
 
@@ -74,7 +72,7 @@ watch(
       <MobileHeader v-else />
       <div class="flex flex-1 overflow-hidden">
         <AsideLayout v-if="!isSmallScreen" />
-        <div class="relative flex flex-1 flex-col overflow-x-hidden">
+        <div class="flex flex-1 flex-col overflow-hidden">
           <CollapseTransition
             :display="
               !isSmallScreen && !isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs
@@ -85,16 +83,9 @@ watch(
           >
             <Tabs />
           </CollapseTransition>
-          <NScrollbar
-            class="transition-[padding]"
-            :class="{
-              'pb-4': isSmallScreen && layoutSlideDirection,
-            }"
-            container-class="main-container"
-            :theme-overrides="scrollbarInMainLayout"
-          >
+          <div class="relative flex-1 overflow-hidden">
             <MainLayout />
-          </NScrollbar>
+          </div>
           <EmptyPlaceholder
             :show="isEmpty(tabsStore.tabs)"
             description="空标签页"

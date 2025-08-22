@@ -19,12 +19,8 @@ import {
 } from 'naive-ui'
 import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
 
-import {
-  useInjection,
-  useComponentModifier,
-  useDataTable,
-  useResettableReactive,
-} from '@/composables'
+import { ContentWrapper } from '@/components'
+import { useInjection, useComponentModifier, useResettableReactive } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
 import ModalData from './ModalData.vue'
@@ -57,8 +53,6 @@ const { isMediumScreen, isLargeScreen } = useInjection(mediaQueryInjectionKey)
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
 
 const dataTableRef = useTemplateRef<InstanceType<typeof NDataTable>>('dataTableRef')
-
-const { maxHeight, updateMaxHeight } = useDataTable(dataTableRef)
 
 const message = useMessage()
 
@@ -445,15 +439,21 @@ async function getDataList() {
 getDataList()
 </script>
 <template>
-  <div class="main-wrap flex flex-col gap-y-2 p-4">
+  <ContentWrapper
+    content-class="flex flex-col gap-y-2"
+    :scrollable="false"
+  >
     <NAlert
       type="info"
       closable
-      @after-leave="updateMaxHeight"
     >
-      一个数据表格的例子，不算复杂，有一个高度的计算，也许对你有帮助
+      一个数据表格的例子，不算复杂，也许对你有帮助
     </NAlert>
-    <NCard :size="isMediumScreen ? 'small' : undefined">
+    <NCard
+      :size="isMediumScreen ? 'small' : undefined"
+      class="flex-1"
+      content-class="flex flex-col"
+    >
       <div class="mb-2 flex justify-end gap-x-4 max-xl:mb-4 max-xl:flex-wrap">
         <NForm
           ref="formRef"
@@ -536,14 +536,14 @@ getDataList()
           </NButton>
         </div>
       </div>
-      <div>
+      <div class="flex flex-1 flex-col">
         <NDataTable
+          class="flex-1"
           ref="dataTableRef"
           v-model:checked-row-keys="checkedRowKeys"
           :remote="true"
-          :max-height="isMediumScreen ? undefined : maxHeight"
+          flex-height
           :scroll-x="enableScrollX ? 1800 : 0"
-          :min-height="166.6"
           :columns="columns"
           :data="dataList"
           :row-key="(row) => row.id"
@@ -616,5 +616,5 @@ getDataList()
       v-bind="dropdownOptions"
       :show="enableContextmenu && showDropdown"
     />
-  </div>
+  </ContentWrapper>
 </template>

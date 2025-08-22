@@ -3,7 +3,7 @@ import { NAlert, NCard, NSplit, NScrollbar, NButton } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
-import { EmptyPlaceholder } from '@/components'
+import { ContentWrapper, EmptyPlaceholder } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
@@ -115,7 +115,7 @@ watch(
 )
 </script>
 <template>
-  <div class="flex flex-col gap-y-2 p-4">
+  <ContentWrapper content-class="flex flex-col gap-y-2">
     <NAlert
       type="info"
       closable
@@ -301,5 +301,5 @@ watch(
         </template>
       </NSplit>
     </NCard>
-  </div>
+  </ContentWrapper>
 </template>

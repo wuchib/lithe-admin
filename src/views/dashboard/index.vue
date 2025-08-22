@@ -4,6 +4,7 @@ import * as echarts from 'echarts'
 import { NNumberAnimation } from 'naive-ui'
 import { onMounted, watch, ref, computed, onUnmounted, nextTick } from 'vue'
 
+import { ContentWrapper } from '@/components'
 import { usePersonalization } from '@/composables'
 import { usePreferencesStore } from '@/stores'
 import twc from '@/utils/tailwindColor'
@@ -1118,7 +1119,7 @@ watch([isDark, color], () => {
 })
 </script>
 <template>
-  <div class="space-y-4 p-4">
+  <ContentWrapper content-class="flex flex-col gap-y-4">
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
       <div
         v-for="item in cardList"
@@ -1217,5 +1218,5 @@ watch([isDark, color], () => {
         </div>
       </div>
     </div>
-  </div>
+  </ContentWrapper>
 </template>

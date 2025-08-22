@@ -1,6 +1,5 @@
 export * from './useComponentModifier'
 export * from './useComponentThemeOverrides'
-export * from './useDataTable'
 export * from './useDiscreteApi'
 export * from './useInjection'
 export * from './usePersonalization'

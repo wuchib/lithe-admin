@@ -3,6 +3,7 @@ import { NCard, NSplit, NButton, NScrollbar, NTag } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
 import packageJson from '@/../package.json'
+import { ContentWrapper } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
@@ -186,7 +187,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="flex flex-col gap-y-4 p-4">
+  <ContentWrapper content-class="flex flex-col gap-y-4">
     <NCard
       :title="`关于 ${APP_NAME}`"
       :size="isMediumScreen ? 'small' : undefined"
@@ -311,5 +312,5 @@ onMounted(async () => {
         </NSplit>
       </NCard>
     </div>
-  </div>
+  </ContentWrapper>
 </template>

@@ -2,6 +2,7 @@
 import { NButton, NAlert } from 'naive-ui'
 import { reactive } from 'vue'
 
+import { ContentWrapper } from '@/components'
 import router from '@/router'
 
 import ErrorPage from './index.vue'
@@ -22,7 +23,7 @@ const changeStateCode200 = () => {
 }
 </script>
 <template>
-  <div class="h-full p-4">
+  <ContentWrapper>
     <NAlert
       type="info"
       closable
@@ -63,5 +64,5 @@ const changeStateCode200 = () => {
         >
       </ErrorPage>
     </div>
-  </div>
+  </ContentWrapper>
 </template>
