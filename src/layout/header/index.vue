@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CollapseTransition from '@/components/CollapseTransition.vue'
+import CollapseTransition from '@/components/collapse-transition/CollapseTransition.vue'
 import { usePreferencesStore } from '@/stores'
 
 import Actions from './actions/index.vue'

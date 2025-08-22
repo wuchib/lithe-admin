@@ -3,8 +3,9 @@ import { useMessage, NDropdown, NAvatar } from 'naive-ui'
 import { h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
-import DefaultAvatar from '@/components/Avatar.vue'
 import { usePreferencesStore, useUserStore } from '@/stores'
+
+import DefaultAvatar from './Avatar.vue'
 
 const preferencesStore = usePreferencesStore()
 const userStore = useUserStore()
