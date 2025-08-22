@@ -17,11 +17,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const {
-  scrollable = true,
-  contentClass,
-  contentStyle,
-} = defineProps<ContentWrapperProps>()
+const { scrollable = true, contentClass, contentStyle } = defineProps<ContentWrapperProps>()
 
 const { scrollbarInMainLayout } = useComponentThemeOverrides()
 
