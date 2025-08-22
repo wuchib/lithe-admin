@@ -441,7 +441,7 @@ getDataList()
 <template>
   <ContentWrapper
     content-class="flex flex-col gap-y-2"
-    :scrollable="false"
+    :scrollable="isLargeScreen"
   >
     <NAlert
       type="info"
@@ -542,7 +542,7 @@ getDataList()
           ref="dataTableRef"
           v-model:checked-row-keys="checkedRowKeys"
           :remote="true"
-          flex-height
+          :flex-height="!isLargeScreen"
           :scroll-x="enableScrollX ? 1800 : 0"
           :columns="columns"
           :data="dataList"

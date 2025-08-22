@@ -57,9 +57,11 @@ watch(
     <MobileLeftAside v-if="isSmallScreen" />
 
     <div
-      class="relative flex h-full w-full flex-col border-naive-border transition-[background-color,border-color,rounded,transform] max-sm:bg-naive-card/50"
+      class="relative flex h-full w-full flex-col max-sm:bg-naive-card/50"
       :class="{
-        'rounded-xl border': isSmallScreen && layoutTranslateOffset,
+        'border-naive-border transition-[background-color,border-color,rounded,transform]':
+          isSmallScreen,
+        'rounded-xl border pb-2': isSmallScreen && layoutTranslateOffset,
       }"
       :style="
         isSmallScreen &&
@@ -74,9 +76,8 @@ watch(
         <AsideLayout v-if="!isSmallScreen" />
         <div class="flex flex-1 flex-col overflow-hidden">
           <CollapseTransition
-            :display="
-              !isSmallScreen && !isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs
-            "
+            v-if="!isSmallScreen"
+            :display="!isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs"
             direction="horizontal"
             :render-content="false"
             container-class="shrink-0 items-baseline"
@@ -98,7 +99,8 @@ watch(
             </template>
           </EmptyPlaceholder>
           <CollapseTransition
-            :display="!isSmallScreen && preferencesStore.preferences.showFooter"
+            v-if="!isSmallScreen"
+            :display="preferencesStore.preferences.showFooter"
             direction="horizontal"
             :render-content="false"
             container-class="shrink-0 items-baseline"

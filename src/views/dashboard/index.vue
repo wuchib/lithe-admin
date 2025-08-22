@@ -1119,8 +1119,8 @@ watch([isDark, color], () => {
 })
 </script>
 <template>
-  <ContentWrapper content-class="flex flex-col gap-y-4">
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+  <ContentWrapper content-class="flex flex-col gap-y-4 max-sm:gap-y-2">
+    <div class="grid grid-cols-1 gap-4 max-sm:gap-2 md:grid-cols-2 lg:grid-cols-4">
       <div
         v-for="item in cardList"
         :key="item.title"
@@ -1166,7 +1166,7 @@ watch([isDark, color], () => {
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-4 overflow-hidden lg:grid-cols-12">
+    <div class="grid grid-cols-1 gap-4 overflow-hidden max-sm:gap-2 lg:grid-cols-12">
       <div class="col-span-1 lg:col-span-8">
         <div
           class="rounded bg-naive-card px-5 pt-5 pb-4.5 shadow-xs transition-[background-color]"
@@ -1194,7 +1194,7 @@ watch([isDark, color], () => {
         </div>
       </div>
     </div>
-    <div class="grid grid-cols-1 gap-4 overflow-hidden lg:grid-cols-12">
+    <div class="grid grid-cols-1 gap-4 overflow-hidden max-sm:gap-2 lg:grid-cols-12">
       <div class="col-span-1 lg:col-span-5">
         <div
           class="rounded bg-naive-card px-5 pt-5 pb-3 shadow-xs transition-[background-color]"

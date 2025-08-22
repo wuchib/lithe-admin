@@ -187,7 +187,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <ContentWrapper content-class="flex flex-col gap-y-4">
+  <ContentWrapper content-class="flex flex-col gap-y-2">
     <NCard
       :title="`关于 ${APP_NAME}`"
       :size="isMediumScreen ? 'small' : undefined"
