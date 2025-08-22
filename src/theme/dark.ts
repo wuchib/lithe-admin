@@ -1,6 +1,5 @@
+import { cbh, cdh, cah, cmh } from '@/utils/chromaHelper'
 import twc from '@/utils/tailwindColor'
-
-import { cbh, cdh, cah, cmh } from './common'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 

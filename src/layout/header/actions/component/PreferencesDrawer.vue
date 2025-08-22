@@ -14,7 +14,9 @@ import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
 import { useComponentThemeOverrides, useInjection, usePersonalization } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore, useSystemStore } from '@/stores'
+import { ccAPCA } from '@/utils/chromaHelper'
 import twColors from '@/utils/tailwindColor'
+import twc from '@/utils/tailwindColor'
 
 import NoiseModal from './NoiseModal.vue'
 import WatermarkModal from './WatermarkModal.vue'
@@ -125,7 +127,14 @@ const showNoiseModal = () => {
               :default-value="color"
               :swatches="colorSwatches"
               @update-value="setColor"
-            />
+            >
+              <template #label="color">
+                <span
+                  :style="color && { color: ccAPCA(color, twc.neutral[150], twc.neutral[950]) }"
+                  >{{ color }}</span
+                >
+              </template>
+            </NColorPicker>
           </div>
           <div>
             <NDivider>布局相关</NDivider>
