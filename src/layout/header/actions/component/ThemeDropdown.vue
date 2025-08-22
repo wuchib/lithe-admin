@@ -8,9 +8,7 @@ import { usePersonalization } from '@/composables'
 import type { Theme } from '@/composables'
 import type { PopoverProps } from 'naive-ui'
 
-interface ThemeDropdownProps extends /* @vue-ignore */ PopoverProps {}
-
-const props = defineProps<ThemeDropdownProps>()
+const props = defineProps</* @vue-ignore */ PopoverProps>()
 
 const { setTheme, theme } = usePersonalization()
 

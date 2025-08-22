@@ -128,10 +128,14 @@ const showNoiseModal = () => {
               :swatches="colorSwatches"
               @update-value="setColor"
             >
-              <template #label="color">
+              <template #label="currentColor">
                 <span
-                  :style="color && { color: ccAPCA(color, twc.neutral[150], twc.neutral[950]) }"
-                  >{{ color }}</span
+                  :style="
+                    currentColor && {
+                      color: ccAPCA(currentColor, twc.neutral[150], twc.neutral[950]),
+                    }
+                  "
+                  >{{ currentColor }}</span
                 >
               </template>
             </NColorPicker>

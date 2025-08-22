@@ -375,7 +375,7 @@ function initRevenueChart() {
   chart.setOption(option)
 
   chart.on('legendselectchanged', (params: any) => {
-    if (params && params.selected) {
+    if (params?.selected) {
       revenueChartSelected.value = params.selected
     }
   })

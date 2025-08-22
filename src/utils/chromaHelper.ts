@@ -7,8 +7,8 @@ const { isDark } = usePersonalization()
 
 export function ccAPCA(
   backgroundColor: string,
-  color1: string = '#ffffff',
-  color2: string = '#000000',
+  color1 = '#ffffff',
+  color2 = '#000000',
   bodyColor?: string,
 ): string {
   if (!bodyColor) {
