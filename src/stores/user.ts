@@ -62,8 +62,8 @@ export const useUserStore = defineStore('userStore', () => {
 
     token.value = null
 
-    if (router.hasRoute('layouts')) {
-      router.removeRoute('layouts')
+    if (router.hasRoute('layout')) {
+      router.removeRoute('layout')
     }
 
     menuList.value = []

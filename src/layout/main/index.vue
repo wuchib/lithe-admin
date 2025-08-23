@@ -19,7 +19,7 @@ const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
   useInjection(layoutInjectionKey)
 
-const layoutsRouteRedirect = router.getRoutes().find((item) => item.name === 'layouts')?.redirect
+const layoutRouteRedirect = router.getRoutes().find((item) => item.name === 'layout')?.redirect
 
 const tabsStore = useTabsStore()
 
@@ -69,8 +69,8 @@ watch(
       newTabActivePath !== router.currentRoute.value.fullPath
     ) {
       if (
-        layoutsRouteRedirect &&
-        layoutsRouteRedirect === router.currentRoute.value.path &&
+        layoutRouteRedirect &&
+        layoutRouteRedirect === router.currentRoute.value.path &&
         newTabActivePath === '/'
       ) {
         router.go(0)
