@@ -7,17 +7,17 @@ import { buttonAnimationInjectionKey } from './injection'
 
 import type { ButtonAnimationProps } from './interface'
 
-const buttonAnimationInject = inject(buttonAnimationInjectionKey, null)
+const buttonAnimationInjection = inject(buttonAnimationInjectionKey, null)
 
 const { duration = 600, animation = 'beat' } = defineProps<ButtonAnimationProps>()
 
 const isAnimating = ref(false)
 
 const buttonAnimationProps = computed<ButtonAnimationProps>(() => {
-  return mergeWith({}, buttonAnimationInject, useAttrs())
+  return mergeWith({}, buttonAnimationInjection, useAttrs())
 })
 
-const onClick = () => {
+const handleButtonClick = () => {
   if (isAnimating.value) return
 
   isAnimating.value = true
@@ -33,7 +33,7 @@ const onClick = () => {
     quaternary
     circle
     v-bind="buttonAnimationProps"
-    @click.stop="onClick"
+    @click.stop="handleButtonClick"
   >
     <template #icon>
       <div

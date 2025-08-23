@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { throttle } from 'lodash-es'
 import {
   NForm,
   NFormItem,
@@ -18,13 +17,13 @@ import type { PreferencesOptions } from '@/stores'
 
 const preferencesStore = usePreferencesStore()
 
-const modifyWatermarkColor = throttle((color: string) => {
+const modifyWatermarkColor = (color: string) => {
   preferencesStore.modify({
     watermarkOptions: {
       fontColor: color,
     },
   })
-}, 100)
+}
 
 const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOptions']>(
   key: K,

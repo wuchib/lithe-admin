@@ -11,7 +11,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const props = defineProps<EmptyPlaceholderProps>()
+const { show } = defineProps<EmptyPlaceholderProps>()
 </script>
 <template>
   <Transition
@@ -20,7 +20,7 @@ const props = defineProps<EmptyPlaceholderProps>()
     enter-from-class="scale-50 opacity-0"
   >
     <div
-      v-show="props.show"
+      v-show="show"
       class="absolute inset-0 grid size-full place-items-center"
     >
       <NEmpty v-bind="$attrs">

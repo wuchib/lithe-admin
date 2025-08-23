@@ -3,7 +3,7 @@ import { usePreferencesStore, pinia, useUserStore } from '@/stores'
 
 import type { Router } from 'vue-router'
 
-const Layouts = () => import('@/layout/index.vue')
+const Layout = () => import('@/layout/index.vue')
 
 const { loadingBar } = useDiscreteApi()
 
@@ -33,14 +33,14 @@ export function setupRouterGuard(router: Router) {
       return false
     }
 
-    if (userStore.token && !router.hasRoute('layouts')) {
+    if (userStore.token && !router.hasRoute('layout')) {
       try {
         await userStore.resolveMenuList()
 
         router.addRoute({
           path: '/',
-          name: 'layouts',
-          component: Layouts,
+          name: 'layout',
+          component: Layout,
           // if you need to have a redirect when accessing / routing
           redirect: '/dashboard',
           children: userStore.routeList,

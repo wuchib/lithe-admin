@@ -274,7 +274,7 @@ function scrollToActiveTab(behavior: ScrollBehavior = 'auto') {
   })
 }
 
-function handleTabRefresh() {
+function handleTabRefreshClick() {
   shouldRefreshRoute.value = true
 }
 
@@ -284,7 +284,7 @@ const routerAfterEach = router.afterEach(() => {
   })
 })
 
-const CompTabs = defineComponent({
+const InternalTabs = defineComponent({
   props: {
     modelValue: {
       type: Array as PropType<Tab[]>,
@@ -446,18 +446,18 @@ onBeforeUnmount(() => {
   <div
     class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] select-none"
   >
-    <CompTabs v-model="tabPinnedList" />
+    <InternalTabs v-model="tabPinnedList" />
     <NScrollbar
       ref="scrollbarRef"
       x-scrollable
       @wheel.passive="onScrollbarWheeled"
     >
-      <CompTabs v-model="tabUnPinnedList" />
+      <InternalTabs v-model="tabUnPinnedList" />
     </NScrollbar>
     <div class="flex items-center px-3">
       <ButtonAnimation
         title="刷新"
-        @click="handleTabRefresh"
+        @click="handleTabRefreshClick"
         animation="rotate"
       >
         <span class="iconify size-5 ph--arrows-clockwise"></span>

@@ -12,6 +12,10 @@ const routerBreadcrumb = computed(() => {
   return router.currentRoute.value.matched.filter((item) => item.name !== 'layouts')
 })
 
+const onDropdownSelected: DropdownProps['onSelect'] = (key) => {
+  router.push({ name: key })
+}
+
 function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options'] {
   return route.map((item) => {
     return {
@@ -23,10 +27,6 @@ function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options
         : undefined,
     }
   })
-}
-
-const onDropdownSelected: DropdownProps['onSelect'] = (key) => {
-  router.push({ name: key })
 }
 
 function isCurrentRoute(name: RouteRecordNameGeneric) {

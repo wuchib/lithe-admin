@@ -18,14 +18,14 @@ defineOptions({
   name: 'Layout',
 })
 
+const MobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
+const MobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
+const MobileRightAside = defineAsyncComponent(() => import('./mobile/MobileRightAside.vue'))
+
 const tabsStore = useTabsStore()
 const preferencesStore = usePreferencesStore()
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
-
-const MobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
-const MobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
-const MobileRightAside = defineAsyncComponent(() => import('./mobile/MobileRightAside.vue'))
 
 const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
