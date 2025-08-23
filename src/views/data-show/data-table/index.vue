@@ -398,7 +398,7 @@ function createOrEditData(data?: UserInfo) {
     draggable: true,
     style: {
       width: '500px',
-      marginInline: isMediumScreen ? '16px' : undefined,
+      ...(isMediumScreen.value ? { marginInline: '16px' } : {}),
     },
     content: () => (
       <ActionModal
