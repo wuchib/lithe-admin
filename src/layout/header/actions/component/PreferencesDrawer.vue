@@ -132,7 +132,7 @@ const showNoiseModal = () => {
                 <span
                   :style="
                     currentColor && {
-                      color: ccAPCA(currentColor, twc.neutral[150], twc.neutral[950]),
+                      color: ccAPCA(currentColor, twc.neutral[150], twc.neutral[950], '#fff'),
                     }
                   "
                   >{{ currentColor }}</span
