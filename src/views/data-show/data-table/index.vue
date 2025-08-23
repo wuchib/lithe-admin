@@ -23,7 +23,7 @@ import { ContentWrapper } from '@/components'
 import { useInjection, useComponentModifier, useResettableReactive } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
-import ModalData from './ModalData.vue'
+import ActionModal from './ActionModal.vue'
 
 import type { DataTableColumns, PaginationProps, FormRules, DropdownProps } from 'naive-ui'
 import type { PropType } from 'vue'
@@ -42,8 +42,6 @@ export interface UserInfo {
   children: UserInfo[]
 }
 
-interface UserForm extends Partial<UserInfo> {}
-
 defineOptions({
   name: 'DataTable',
 })
@@ -60,7 +58,7 @@ const modal = useModal()
 
 const { getPopconfirmModifier } = useComponentModifier()
 
-const [form, , resetForm] = useResettableReactive<UserForm>({
+const [form, , resetForm] = useResettableReactive<Partial<UserInfo>>({
   fullName: '',
   sex: null,
   phone: '',
@@ -400,9 +398,10 @@ function createOrEditData(data?: UserInfo) {
     draggable: true,
     style: {
       width: '500px',
+      marginInline: isMediumScreen ? '16px' : undefined,
     },
     content: () => (
-      <ModalData
+      <ActionModal
         data={data || {}}
         onSubmit={handleSubmitClick}
         onUpdate={handleUpdateClick}

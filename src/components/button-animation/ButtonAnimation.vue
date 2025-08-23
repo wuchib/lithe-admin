@@ -7,9 +7,9 @@ import { buttonAnimationInjectionKey } from './injection'
 
 import type { ButtonAnimationProps } from './interface'
 
-const buttonAnimationInjection = inject(buttonAnimationInjectionKey, null)
-
 const { duration = 600, animation = 'beat' } = defineProps<ButtonAnimationProps>()
+
+const buttonAnimationInjection = inject(buttonAnimationInjectionKey, null)
 
 const isAnimating = ref(false)
 
