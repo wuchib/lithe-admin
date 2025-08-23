@@ -23,7 +23,7 @@ const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
-const dir = ` 📂 lithe-admin
+const dir = `📂 lithe-admin
 ├── 📄 LICENSE
 ├── 📄 README.md
 ├── 📄 eslint.config.ts
@@ -142,7 +142,7 @@ const dir = ` 📂 lithe-admin
 │      └── 📂 data-form/
 │        ├── 📄 index.vue
 │      └── 📂 data-table/
-│        ├── 📄 ModalData.vue
+│        ├── 📄 ActionModal.vue
 │        ├── 📄 index.vue
 │    └── 📂 drag-drop/
 │      ├── 📄 index.vue
