@@ -10,7 +10,7 @@
 
 [预览地址(国内)](https://lithe-admin.havenovelgod.com) | [预览地址](https://lithe-admin.vercel.app)
 
-[English](https://github.com/tenianon/lithe-admin/blob/main/README.en_US) | 简体中文
+[English](https://github.com/tenianon/lithe-admin/blob/main/README.en_US.md) | 简体中文
 
 </div>
 
