@@ -5,8 +5,11 @@ import { watch } from 'vue'
 
 import type { WatermarkProps } from 'naive-ui'
 
+type NavigationMode = 'sidebar' | 'horizontal'
+
 export interface PreferencesOptions {
-  menu: Partial<{
+  navigationMode: NavigationMode
+  sidebarMenu: Partial<{
     collapsed: boolean
     width: number
     maxWidth: number
@@ -26,11 +29,12 @@ export interface PreferencesOptions {
   noiseOpacity: number
 }
 
-export const DEFAULT_PREFERENCES_OPTIONS: PreferencesOptions = {
-  menu: {
+export const DEFAULT_PREFERENCES_OPTIONS = {
+  navigationMode: 'sidebar',
+  sidebarMenu: {
     collapsed: false,
     width: 64,
-    maxWidth: 272,
+    maxWidth: 256,
   },
   showFooter: true,
   showTabs: true,
@@ -66,7 +70,7 @@ export const DEFAULT_PREFERENCES_OPTIONS: PreferencesOptions = {
     imageOpacity: 0.5,
   },
   noiseOpacity: 0.02,
-}
+} as const
 
 export const usePreferencesStore = defineStore('preferencesStore', () => {
   const preferences = useStorage<PreferencesOptions>('preferences', DEFAULT_PREFERENCES_OPTIONS)

@@ -18,6 +18,7 @@ import { ccAPCA } from '@/utils/chromaHelper'
 import twColors from '@/utils/tailwindColor'
 import twc from '@/utils/tailwindColor'
 
+import LayoutThumbnail from './LayoutThumbnail.vue'
 import NoiseModal from './NoiseModal.vue'
 import WatermarkModal from './WatermarkModal.vue'
 
@@ -141,19 +142,25 @@ const showNoiseModal = () => {
             </NColorPicker>
           </div>
           <div>
+            <NDivider>导航模式</NDivider>
+            <LayoutThumbnail />
+          </div>
+          <div>
             <NDivider>布局相关</NDivider>
             <div class="flex flex-col gap-y-1.5">
               <div class="flex items-center justify-between">
                 <span>展开侧边菜单</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.menu.collapsed"
+                  :value="preferencesStore.preferences.sidebarMenu.collapsed"
                   :checked-value="false"
                   :unchecked-value="true"
-                  :disabled="isSmallScreen"
+                  :disabled="
+                    isSmallScreen || preferencesStore.preferences.navigationMode !== 'sidebar'
+                  "
                   @update-value="
                     (value) =>
                       modify({
-                        menu: {
+                        sidebarMenu: {
                           collapsed: value,
                         },
                       })
@@ -188,7 +195,9 @@ const showNoiseModal = () => {
                 <span>显示导航按钮</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showNavigation"
-                  :disabled="isSmallScreen"
+                  :disabled="
+                    isSmallScreen || preferencesStore.preferences.navigationMode !== 'sidebar'
+                  "
                   @update-value="
                     (value) =>
                       modify({
@@ -201,7 +210,9 @@ const showNoiseModal = () => {
                 <span>显示面包屑</span>
                 <NSwitch
                   :value="preferencesStore.preferences.showBreadcrumb"
-                  :disabled="isSmallScreen"
+                  :disabled="
+                    isSmallScreen || preferencesStore.preferences.navigationMode !== 'sidebar'
+                  "
                   @update-value="
                     (value) =>
                       modify({
