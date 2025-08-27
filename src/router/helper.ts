@@ -1,8 +1,13 @@
-import { isArray, isEmpty, isString, pickBy, omit } from 'lodash-es'
+import { isEmpty, isString, pickBy, omit } from 'lodash-es'
 import { h } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import type { MenuProps, MenuDividerOption, MenuOption, MenuGroupOption } from 'naive-ui'
+import type {
+  MenuProps,
+  MenuDividerOption as MenuDividerOptionRaw,
+  MenuOption as MenuOptionRaw,
+  MenuGroupOption as MenuGroupOptionRaw,
+} from 'naive-ui'
 import type { RouteRecordRaw } from 'vue-router'
 
 type NoIndex<T> = {
@@ -26,43 +31,43 @@ type RouteOption = Omit<CustomRouteRecordRaw, 'children'> & {
   type?: never
 }
 
-type MergeMenuOption = ReplaceKeys<
-  MenuOption,
+type MenuOption = ReplaceKeys<
+  MenuOptionRaw,
   {
     icon: string
-    children?: MergeMenuMixedOptions[]
+    children?: MenuMixedOptions[]
   }
 > &
   RouteOption
 
-type MergeMenuGroup = NoIndex<
+type MenuGroup = NoIndex<
   ReplaceKeys<
-    MenuGroupOption,
+    MenuGroupOptionRaw,
     {
-      children?: Array<MergeMenuOption | MergeMenuDivider>
+      children?: Array<MenuOption | MenuDivider>
     }
   >
 >
 
-type MergeMenuDivider = NoIndex<MenuDividerOption>
+type MenuDivider = NoIndex<MenuDividerOptionRaw>
 
-export type MergeMenuMixedOptions = MergeMenuOption | MergeMenuGroup | MergeMenuDivider
+export type MenuMixedOptions = MenuOption | MenuGroup | MenuDivider
 
-export function resolveMenu(options: MergeMenuMixedOptions[], parentDisabled = false) {
-  const menuOption: MenuProps['options'] = []
+export function resolveMenu(options: MenuMixedOptions[], parentDisabled = false) {
+  const menuOptions: MenuProps['options'] = []
 
   options.forEach((item) => {
     if (!item.type || item.type === 'group') {
       const { children, name, path, label, icon, key, disabled, extra, props, show, type } =
-        item as MergeMenuOption & { label: string }
+        item as MenuOption & { label: string }
 
       const mergedDisabled = parentDisabled || disabled
 
-      const renderIcon = icon ? () => h('span', { class: `${icon} size-6` }) : null
+      const renderIcon = icon ? () => h('span', { class: `${icon}` }) : null
 
       const menu = pickBy(
         {
-          key: key || (name as string) || (path as string),
+          key: key || name || path,
           icon: renderIcon,
           label,
           disabled,
@@ -70,11 +75,12 @@ export function resolveMenu(options: MergeMenuMixedOptions[], parentDisabled = f
           props,
           show,
           type,
+          name,
         },
         (v) => v !== undefined,
       ) as NonNullable<MenuProps['options']>[number]
 
-      if (isArray(children) && !isEmpty(children)) {
+      if (Array.isArray(children) && !isEmpty(children)) {
         menu.children = resolveMenu(children, mergedDisabled)
       } else {
         menu.label = mergedDisabled
@@ -82,27 +88,27 @@ export function resolveMenu(options: MergeMenuMixedOptions[], parentDisabled = f
           : () => h(RouterLink, { to: { name } }, { default: () => label })
       }
 
-      menuOption.push(menu)
+      menuOptions.push(menu)
     } else {
-      menuOption.push(item)
+      menuOptions.push(item)
     }
   })
 
-  return menuOption
+  return menuOptions
 }
 
-export function resolveRoute(options: MergeMenuMixedOptions[]) {
+export function resolveRoute(options: MenuMixedOptions[]) {
   const modules = import.meta.glob('@/views/**/*.vue')
 
   const routeOptions: RouteRecordRaw[] = []
 
-  function flattenOptions(options: MergeMenuMixedOptions[]): MergeMenuMixedOptions[] {
+  function flattenOptions(options: MenuMixedOptions[]): MenuMixedOptions[] {
     return options.flatMap((item) => {
       if (item.type === 'divider') {
         return []
       }
 
-      if (item.type === 'group' && isArray(item.children) && !isEmpty(item.children)) {
+      if (item.type === 'group' && Array.isArray(item.children) && !isEmpty(item.children)) {
         return flattenOptions(item.children)
       }
 
@@ -111,10 +117,9 @@ export function resolveRoute(options: MergeMenuMixedOptions[]) {
   }
 
   flattenOptions(options).forEach((item) => {
-    const { label, icon, meta, component, children, disabled, ...rest } =
-      item as MergeMenuOption & {
-        label: string
-      }
+    const { label, icon, meta, component, children, disabled, ...rest } = item as MenuOption & {
+      label: string
+    }
 
     if (!disabled) {
       let compModule: (() => Promise<unknown>) | null = null
@@ -140,7 +145,7 @@ export function resolveRoute(options: MergeMenuMixedOptions[]) {
         ['type', 'label', 'icon', 'disabled', 'extra', 'props', 'show', 'key'],
       ) as RouteRecordRaw
 
-      if (isArray(children) && !isEmpty(children)) {
+      if (Array.isArray(children) && !isEmpty(children)) {
         route.children = resolveRoute(children)
       }
 

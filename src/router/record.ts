@@ -1,6 +1,6 @@
-import type { MergeMenuMixedOptions } from './helper'
+import type { MenuMixedOptions } from './helper'
 
-export const routeRecordRaw: MergeMenuMixedOptions[] = [
+export const routeRecordRaw: MenuMixedOptions[] = [
   {
     path: 'dashboard',
     name: 'dashboard',
@@ -185,6 +185,7 @@ export const routeRecordRaw: MergeMenuMixedOptions[] = [
     name: 'feedback',
     icon: 'iconify-[ph--messenger-logo]',
     label: '反馈组件',
+    disabled: true,
     meta: {
       componentName: 'Feedback',
       showTab: true,

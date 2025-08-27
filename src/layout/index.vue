@@ -29,7 +29,7 @@ const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInj
 
 const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
-    ? preferencesStore.preferences.menu.maxWidth || 0
+    ? preferencesStore.preferences.sidebarMenu.maxWidth || 0
     : layoutSlideDirection.value === 'left'
       ? -64
       : 0
@@ -40,7 +40,7 @@ watch(
   (isSmallScreen) => {
     if (isSmallScreen) {
       preferencesStore.modify({
-        menu: {
+        sidebarMenu: {
           collapsed: false,
         },
       })
@@ -73,14 +73,20 @@ watch(
       <HeaderLayout v-if="!isSmallScreen" />
       <MobileHeader v-else />
       <div class="flex flex-1 overflow-hidden">
-        <AsideLayout v-if="!isSmallScreen" />
+        <CollapseTransition
+          v-if="!isSmallScreen"
+          :display="preferencesStore.preferences.navigationMode === 'sidebar'"
+          content-class="min-h-0"
+        >
+          <AsideLayout />
+        </CollapseTransition>
+
         <div class="flex flex-1 flex-col overflow-hidden">
           <CollapseTransition
             v-if="!isSmallScreen"
             :display="!isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs"
             direction="horizontal"
             :render-content="false"
-            container-class="shrink-0 items-baseline"
           >
             <Tabs />
           </CollapseTransition>
@@ -103,7 +109,6 @@ watch(
             :display="preferencesStore.preferences.showFooter"
             direction="horizontal"
             :render-content="false"
-            container-class="shrink-0 items-baseline"
           >
             <FooterLayout />
           </CollapseTransition>

@@ -16,10 +16,9 @@ defineOptions({
 })
 
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
+
 const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
   useInjection(layoutInjectionKey)
-
-const layoutRouteRedirect = router.getRoutes().find((item) => item.name === 'layout')?.redirect
 
 const tabsStore = useTabsStore()
 
@@ -27,9 +26,11 @@ const preferencesStore = usePreferencesStore()
 
 const { createTab, setTabActivePath } = tabsStore
 
+const isMounted = ref(false)
+
 const navigationTransitionName = ref('scale')
 
-const isMounted = ref(false)
+const layoutRouteRedirect = router.getRoutes().find((item) => item.name === 'layout')?.redirect
 
 const keepAliveTabs = computed(() => {
   return tabsStore.tabs.filter((tab) => tab.keepAlive).map((tab) => tab.componentName ?? '')

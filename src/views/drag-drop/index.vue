@@ -147,11 +147,11 @@ watch(
               class="flex flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none"
             >
               <div
-                v-for="item in baseList"
-                :key="item.id"
+                v-for="{ id, name } in baseList"
+                :key="id"
                 class="flex h-14 cursor-move items-center justify-center rounded bg-neutral-500/8 p-3"
               >
-                {{ item.name }}
+                {{ name }}
               </div>
             </VueDraggable>
           </NScrollbar>
@@ -197,11 +197,11 @@ watch(
               class="m-auto grid grid-cols-8 gap-2 rounded bg-neutral-500/5 p-4 select-none max-lg:grid-cols-4"
             >
               <div
-                v-for="item in gridList"
-                :key="item.id"
+                v-for="{ id, name } in gridList"
+                :key="id"
                 class="flex h-14 cursor-move items-center justify-center rounded bg-neutral-500/8 p-3"
               >
-                {{ item.name }}
+                {{ name }}
               </div>
             </VueDraggable>
           </NScrollbar>
@@ -245,11 +245,11 @@ watch(
                 :clone="cloneTask"
               >
                 <div
-                  v-for="item in taskList"
-                  :key="item.id"
+                  v-for="{ id, name } in taskList"
+                  :key="id"
                   class="flex h-14 cursor-move items-center justify-center rounded bg-neutral-500/8 p-3"
                 >
-                  {{ item.name }}
+                  {{ name }}
                 </div>
               </VueDraggable>
             </NScrollbar>

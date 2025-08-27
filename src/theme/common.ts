@@ -34,11 +34,20 @@ export function commonThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
     Drawer: {
       borderRadius: 0,
     },
+    Dropdown: {
+      padding: '6px 2px',
+    },
     Message: {
       iconMargin: '0 6px 0 0',
       padding: '10px 18px',
     },
-
+    Menu: {
+      peers: {
+        Dropdown: {
+          padding: '6px 2px',
+        },
+      },
+    },
     Popconfirm: {
       iconSize: '20px',
     },

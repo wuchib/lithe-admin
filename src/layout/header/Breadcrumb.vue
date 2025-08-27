@@ -47,38 +47,38 @@ function isCurrentRoute(name: RouteRecordNameGeneric) {
     leave-from-class="grid-cols-[1fr]"
   >
     <li
-      v-for="item in routerBreadcrumb"
-      :key="item.path"
+      v-for="{ children, meta, name, path } in routerBreadcrumb"
+      :key="path"
       class="grid shrink-0 justify-start overflow-hidden"
     >
       <div
         class="flex min-w-0 items-center"
         :class="{
-          'not-hover:text-[var(--text-color-3)]': !isCurrentRoute(item.name),
+          'not-hover:text-[var(--text-color-3)]': !isCurrentRoute(name),
         }"
       >
         <NDropdown
-          :options="resolveDropdownOptions(item.children)"
+          :options="resolveDropdownOptions(children)"
           placement="bottom-start"
           @select="onDropdownSelected"
         >
           <div
             class="flex shrink-0 items-center gap-x-1.5 rounded px-1.5 py-1 transition-[background-color,color]"
             :class="{
-              'cursor-pointer hover:bg-[var(--button-color-2-hover)]': !isCurrentRoute(item.name),
+              'cursor-pointer hover:bg-[var(--button-color-2-hover)]': !isCurrentRoute(name),
             }"
           >
             <span
-              v-if="item.meta?.icon"
+              v-if="meta?.icon"
               class="size-5"
-              :class="item.meta?.icon"
+              :class="meta?.icon"
             />
-            {{ item.meta?.title }}
+            {{ meta?.title }}
           </div>
         </NDropdown>
         <span
           class="iconify-[fluent--slash-forward-20-regular] w-3.5 text-[var(--text-color-3)]"
-          v-if="!isCurrentRoute(item.name)"
+          v-if="!isCurrentRoute(name)"
         />
       </div>
     </li>

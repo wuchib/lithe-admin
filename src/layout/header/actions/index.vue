@@ -4,7 +4,7 @@ import { ButtonAnimation } from '@/components'
 import FullScreen from './component/FullScreen.vue'
 import PreferencesDrawer from './component/PreferencesDrawer.vue'
 import SignOut from './component/SignOut.vue'
-import ThemeDropdown from './component/ThemeDropdown.vue'
+import ThemePopselect from './component/ThemePopselect.vue'
 
 defineOptions({
   name: 'Actions',
@@ -21,7 +21,7 @@ defineOptions({
       <span class="iconify-[mdi--github]" />
     </ButtonAnimation>
     <FullScreen />
-    <ThemeDropdown />
+    <ThemePopselect />
     <PreferencesDrawer />
     <SignOut />
   </div>

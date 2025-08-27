@@ -8,7 +8,13 @@ import { usePersonalization } from '@/composables'
 import type { Theme } from '@/composables'
 import type { PopoverProps } from 'naive-ui'
 
-const props = defineProps</* @vue-ignore */ PopoverProps>()
+interface ThemePopselectProps extends /* @vue-ignore */ PopoverProps {}
+
+defineProps<ThemePopselectProps>()
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const { setTheme, theme } = usePersonalization()
 
@@ -60,8 +66,9 @@ function renderSelectLabel(option: (typeof themeDropdownOptions)[number]) {
 </script>
 <template>
   <NPopselect
-    v-bind="props"
+    class="p-0.5"
     trigger="click"
+    v-bind="$attrs"
     v-model:value="theme"
     :options="themeDropdownOptions"
     :render-label="renderSelectLabel"

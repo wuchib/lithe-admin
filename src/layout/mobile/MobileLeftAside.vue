@@ -2,8 +2,8 @@
 import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 
-import Menu from '../aside/component/Menu.vue'
-import UserCard from '../aside/component/UserCard.vue'
+import SidebarMenu from '../aside/component/SidebarMenu.vue'
+import SidebarUserPanel from '../aside/component/SidebarUserPanel.vue'
 import LogoArea from '../header/LogoArea.vue'
 
 const { layoutSlideDirection } = useInjection(layoutInjectionKey)
@@ -16,7 +16,7 @@ const { layoutSlideDirection } = useInjection(layoutInjectionKey)
     }"
   >
     <LogoArea />
-    <Menu />
-    <UserCard />
+    <SidebarMenu />
+    <SidebarUserPanel />
   </div>
 </template>

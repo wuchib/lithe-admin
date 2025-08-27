@@ -1,11 +1,12 @@
-<script setup lang="ts">
+<script setup lang="tsx">
+import { isFunction } from 'lodash-es'
 import { NMenu, NScrollbar } from 'naive-ui'
-import { ref, useTemplateRef, watch } from 'vue'
+import { h, ref, useTemplateRef, watch } from 'vue'
 
 import router from '@/router'
 import { usePreferencesStore, useUserStore } from '@/stores'
 
-import type { MenuInst } from 'naive-ui'
+import type { MenuInst, MenuProps } from 'naive-ui'
 
 const preferencesStore = usePreferencesStore()
 
@@ -14,6 +15,14 @@ const userStore = useUserStore()
 const menuRef = useTemplateRef<MenuInst>('menuRef')
 
 const menuActiveKey = ref('')
+
+const renderIcon: MenuProps['renderIcon'] = (option) => {
+  return isFunction(option.icon)
+    ? h(option.icon, {
+        class: 'size-5',
+      })
+    : null
+}
 
 watch(
   () => router.currentRoute.value,
@@ -30,11 +39,15 @@ watch(
   <NScrollbar>
     <NMenu
       ref="menuRef"
-      :collapsed-width="preferencesStore.preferences.menu.width"
-      :collapsed="preferencesStore.preferences.menu.collapsed"
+      :collapsed-width="preferencesStore.preferences.sidebarMenu.width"
+      :collapsed="preferencesStore.preferences.sidebarMenu.collapsed"
       :collapsed-icon-size="20"
       :value="menuActiveKey"
       :options="userStore.menuList"
+      :render-icon="renderIcon"
+      :dropdown-props="{
+        size: 'medium',
+      }"
     />
   </NScrollbar>
 </template>

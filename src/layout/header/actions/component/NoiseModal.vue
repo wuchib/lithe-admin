@@ -16,7 +16,7 @@ const sliderRange = reactive({
   max: 0.1,
 })
 
-const onSliderUpdata: SliderProps['onUpdateValue'] = (opacity) => {
+const onSliderUpdate: SliderProps['onUpdateValue'] = (opacity) => {
   preferencesStore.modify({
     noiseOpacity: opacity,
   })
@@ -31,7 +31,7 @@ watchEffect(() => {
     <NSlider
       v-model:value="opacity"
       v-bind="sliderRange"
-      @update-value="onSliderUpdata"
+      @update-value="onSliderUpdate"
     />
     <NInputNumber
       v-model:value="opacity"

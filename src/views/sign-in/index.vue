@@ -13,7 +13,7 @@ import {
 import topographySvg from '@/assets/topography.svg'
 import { usePersonalization, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import ThemeDropdown from '@/layout/header/actions/component/ThemeDropdown.vue'
+import ThemePopselect from '@/layout/header/actions/component/ThemePopselect.vue'
 import router from '@/router'
 import { useUserStore } from '@/stores'
 import twc from '@/utils/tailwindColor'
@@ -167,7 +167,7 @@ onUnmounted(() => {
       >
         <div class="absolute top-0 left-0 z-50 flex w-full items-center justify-end gap-x-4 p-4">
           <ThemeColorPopover />
-          <ThemeDropdown />
+          <ThemePopselect />
         </div>
         <div>
           <div>

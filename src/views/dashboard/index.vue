@@ -1051,7 +1051,7 @@ function resizeAllCharts() {
 }
 
 watch(
-  () => preferencesStore.preferences.menu.collapsed,
+  () => preferencesStore.preferences.sidebarMenu.collapsed,
   () => {
     if (collapseResizeTimeout !== null) {
       clearTimeout(collapseResizeTimeout)
@@ -1122,44 +1122,52 @@ watch([isDark, color], () => {
   <ContentWrapper content-class="flex flex-col gap-y-4 max-sm:gap-y-2">
     <div class="grid grid-cols-1 gap-4 max-sm:gap-2 md:grid-cols-2 lg:grid-cols-4">
       <div
-        v-for="item in cardList"
-        :key="item.title"
+        v-for="{
+          title,
+          value,
+          precision,
+          percentage,
+          description,
+          iconBgClass,
+          iconClass,
+        } in cardList"
+        :key="title"
         class="flex items-center justify-between gap-x-4 overflow-hidden rounded bg-naive-card p-6 shadow-xs transition-[background-color]"
       >
         <div class="flex-1">
-          <span class="text-sm font-medium text-neutral-450">{{ item.title }}</span>
+          <span class="text-sm font-medium text-neutral-450">{{ title }}</span>
           <div class="mt-1 mb-1.5 flex gap-x-4 text-2xl text-neutral-700 dark:text-neutral-400">
             <NNumberAnimation
-              :to="item.value"
+              :to="value"
               show-separator
-              :precision="item.precision"
+              :precision="precision"
             />
           </div>
           <div class="flex items-center">
             <div
               class="flex items-center gap-x-0.5 rounded-xs px-1.5 py-0.5 text-xs transition-[background-color,color]"
               :class="
-                item.percentage > 0
+                percentage > 0
                   ? 'bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400'
                   : 'bg-rose-100 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400'
               "
             >
               <span
-                :class="item.percentage > 0 ? 'iconify ph--arrow-up' : 'iconify ph--arrow-down'"
+                :class="percentage > 0 ? 'iconify ph--arrow-up' : 'iconify ph--arrow-down'"
               ></span>
-              <span class="font-medium">{{ Math.abs(item.percentage) }}%</span>
+              <span class="font-medium">{{ Math.abs(percentage) }}%</span>
             </div>
-            <span class="ml-2 text-neutral-500 dark:text-neutral-400">{{ item.description }}</span>
+            <span class="ml-2 text-neutral-500 dark:text-neutral-400">{{ description }}</span>
           </div>
         </div>
         <div>
           <div
             class="grid place-items-center rounded-full p-3"
-            :class="item.iconBgClass"
+            :class="iconBgClass"
           >
             <span
               class="size-7"
-              :class="item.iconClass"
+              :class="iconClass"
             />
           </div>
         </div>

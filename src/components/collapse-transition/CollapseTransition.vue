@@ -29,13 +29,13 @@ const {
 
 const DIRECTION_CLASSES_MAP = {
   vertical: {
-    activeClass: 'transition-[grid-template-columns]',
+    activeClass: 'transition-[grid-template-columns] overflow-hidden',
     fromClass: 'grid-cols-[0fr]',
     toClass: 'grid-cols-[1fr]',
     contentClass: 'min-w-0',
   },
   horizontal: {
-    activeClass: 'transition-[grid-template-rows]',
+    activeClass: 'transition-[grid-template-rows] overflow-hidden',
     fromClass: 'grid-rows-[0fr]',
     toClass: 'grid-rows-[1fr]',
     contentClass: 'min-h-0',
@@ -56,7 +56,7 @@ const DIRECTION_CLASSES_MAP = {
     <div
       v-if="displayDirective === 'if' ? display : true"
       v-show="displayDirective === 'show' ? display : true"
-      class="grid overflow-hidden"
+      class="grid"
       :class="containerClass"
       :style="[
         typeof duration === 'number' &&
