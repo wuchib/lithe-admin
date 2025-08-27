@@ -76,7 +76,7 @@ const preferencesStore = usePreferencesStore()
               :key="i"
               class="size-1 rounded-full border border-neutral-350 dark:border-neutral-650"
             />
-            <div class="size-1 rounded-full border border-primary" />
+            <div class="size-1 rounded-full bg-primary" />
           </div>
         </div>
       </div>

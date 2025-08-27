@@ -16,7 +16,6 @@ import { mediaQueryInjectionKey } from '@/injection'
 import ThemePopselect from '@/layout/header/actions/component/ThemePopselect.vue'
 import router from '@/router'
 import { useUserStore } from '@/stores'
-import twc from '@/utils/tailwindColor'
 
 import ThemeColorPopover from './component/ThemeColorPopover.vue'
 
@@ -217,13 +216,7 @@ onUnmounted(() => {
                 </NInput>
               </NFormItem>
               <div class="flex justify-between">
-                <NCheckbox
-                  :theme-overrides="{
-                    border: `1px solid ${twc.neutral[isDark ? 650 : 300]}`,
-                  }"
-                  v-model:checked="isRememberMed"
-                  >记住我</NCheckbox
-                >
+                <NCheckbox v-model:checked="isRememberMed">记住我</NCheckbox>
                 <NButton
                   text
                   size="small"

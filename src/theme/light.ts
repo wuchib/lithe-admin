@@ -113,6 +113,9 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       borderColor: LIGHT.borderColor,
     },
     Checkbox: {
+      common: {
+        borderColor: twc.neutral[250],
+      },
       colorDisabled: twc.neutral[100],
     },
     DataTable: {
@@ -168,6 +171,11 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
     Popover: {
       color: twc.neutral[25],
       textColor: LIGHT.textColor2,
+    },
+    Radio: {
+      common: {
+        borderColor: twc.neutral[250],
+      },
     },
     Slider: {
       indicatorColor: twc.neutral[25],

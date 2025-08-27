@@ -115,6 +115,11 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
     Card: {
       borderColor: DARK.borderColor,
     },
+    Checkbox: {
+      common: {
+        borderColor: twc.neutral[700],
+      },
+    },
     DataTable: {
       borderColor: DARK.borderColor,
       tdColor: twc.neutral[900],
@@ -166,6 +171,11 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
           color: twc.neutral[750],
           colorHover: twc.neutral[700],
         },
+      },
+    },
+    Radio: {
+      common: {
+        borderColor: twc.neutral[700],
       },
     },
     Select: {
