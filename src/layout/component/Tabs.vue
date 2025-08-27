@@ -407,7 +407,7 @@ const InternalTabs = defineComponent({
 })
 
 watch(
-  (): [Tab[], string] => [tabsStore.tabs, tabsStore.tabActivePath],
+  [() => tabsStore.tabs, () => tabsStore.tabActivePath],
   ([newTabs, newTabActivePath], [oldTabs, oldTabActivePath]) => {
     if (!newTabActivePath) {
       tabBackgroundTransitionClasses.leaveToClass = 'scale-0 opacity-0'

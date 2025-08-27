@@ -62,7 +62,7 @@ function createTabFromRoute(route: RouteLocationNormalizedLoaded) {
 }
 
 watch(
-  (): [Tab[], string] => [tabsStore.tabs, tabsStore.tabActivePath],
+  [() => tabsStore.tabs, () => tabsStore.tabActivePath],
   ([newTabs, newTabActivePath], [, oldTabActivePath]) => {
     if (
       newTabActivePath &&

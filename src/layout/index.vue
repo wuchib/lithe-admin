@@ -35,19 +35,16 @@ const layoutTranslateOffset = computed(() => {
       : 0
 })
 
-watch(
-  () => isSmallScreen.value,
-  (isSmallScreen) => {
-    if (isSmallScreen) {
-      preferencesStore.modify({
-        sidebarMenu: {
-          collapsed: false,
-        },
-      })
-      setLayoutSlideDirection(null)
-    }
-  },
-)
+watch(isSmallScreen, (isSmallScreen) => {
+  if (isSmallScreen) {
+    preferencesStore.modify({
+      sidebarMenu: {
+        collapsed: false,
+      },
+    })
+    setLayoutSlideDirection(null)
+  }
+})
 </script>
 <template>
   <div

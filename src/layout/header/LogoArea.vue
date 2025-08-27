@@ -13,9 +13,9 @@ const logoAreaWrapRef = ref<HTMLElement | null>(null)
 const collapseWidth = ref(0)
 
 watch(
-  () => [
-    preferencesStore.preferences.navigationMode,
-    preferencesStore.preferences.sidebarMenu.collapsed,
+  [
+    () => preferencesStore.preferences.navigationMode,
+    () => preferencesStore.preferences.sidebarMenu.collapsed,
   ],
   ([navigationMode, isCollapsed]) => {
     if (navigationMode === 'horizontal') {

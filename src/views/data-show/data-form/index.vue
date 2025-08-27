@@ -187,17 +187,15 @@ function removePhoneField(index: number) {
 }
 
 watch(
-  [form],
-  async (newVal) => {
-    const [form] = newVal
-
+  form,
+  async (newForm) => {
     if (!codeToHtml) {
       // @ts-ignore
       const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm')
       codeToHtml = shiki.codeToHtml
     }
 
-    codeToHtml(JSON.stringify(form, null, 2), {
+    codeToHtml(JSON.stringify(newForm, null, 2), {
       lang: 'json',
       themes: {
         dark: 'dark-plus',
@@ -205,7 +203,7 @@ watch(
       },
     })
       .then((result: string) => (formCodeHighlight.value = result))
-      .catch(() => (formCodeHighlight.value = JSON.stringify(form, null, 2)))
+      .catch(() => (formCodeHighlight.value = JSON.stringify(newForm, null, 2)))
 
     codeToHtml(JSON.stringify(rules, null, 2), {
       lang: 'json',
