@@ -185,7 +185,6 @@ export const routeRecordRaw: MenuMixedOptions[] = [
     name: 'feedback',
     icon: 'iconify-[ph--messenger-logo]',
     label: '反馈组件',
-    disabled: true,
     meta: {
       componentName: 'Feedback',
       showTab: true,
