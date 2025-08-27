@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { isFunction, isEmpty } from 'lodash-es'
 import { NDropdown } from 'naive-ui'
-import { h, ref, watch } from 'vue'
+import { h, onMounted, ref, watch, nextTick } from 'vue'
 
 import router from '@/router'
 import { useUserStore } from '@/stores'
 
 import type { DropdownProps } from 'naive-ui'
+import { useElementSize } from '@vueuse/core'
 
 const userStore = useUserStore()
 
@@ -41,16 +42,49 @@ watch(
     immediate: true,
   },
 )
+
+const fatherRef = ref()
+const totalMenuItemsWidth = ref<any>(0)
+const widths = ref<any[]>([]) //这里按顺序存储每一个menuItem的宽度
+const testInit = ref(true)
+const curWidths = ref<any[]>([])
+onMounted(()=>{
+  const children = Array.from(fatherRef.value.children) 
+  totalMenuItemsWidth.value = children.reduce((pre:any, cur:any)=>{
+    widths.value.push(cur.clientWidth)
+    curWidths.value.push(cur.clientWidth)
+    return cur.clientWidth + pre
+  },0)
+  console.log(totalMenuItemsWidth.value);
+  console.log(widths.value);
+  console.log(curWidths.value);
+})
+
+
+const { width, height } = useElementSize(fatherRef)
+watch(()=>width.value,w=>{
+  if(w < totalMenuItemsWidth.value){
+    // 1.隐藏最后一个menuItem
+    curWidths.value.pop()
+    // 2.totalMenuItemsWidth = totalMenuItemsWidth - 隐藏的 menuItem 宽度
+    totalMenuItemsWidth.value = curWidths.value.reduce((pre,cur)=>cur + pre,0)
+    testInit.value = false
+  }else{
+    // 菜单项回显
+  }
+})
+
 </script>
 <template>
-  <div class="relative flex w-full items-center gap-x-1 truncate">
+  <div class="relative flex w-full items-center gap-x-1 truncate" ref="fatherRef">
     <template
-      v-for="{ disabled, key, type, label, icon, children } in userStore.menuList"
+      v-for="({ disabled, key, type, label, icon, children }, i) in userStore.menuList"
       :key="key"
     >
       <div
         v-if="!type && isEmpty(children)"
         :data-key="key"
+        :is-hidden="i > curWidths.length - 1 && !testInit"
         class="relative flex items-center rounded-naive px-2.5 py-2 transition-[background-color,color]"
         :class="[
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
@@ -79,6 +113,7 @@ watch(
       >
         <div
           :data-key="key"
+          :is-hidden="i > curWidths.length - 1 && !testInit"
           class="flex items-center rounded-naive py-2 pr-2 pl-2.5 transition-[background-color,color]"
           :class="[
             disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
@@ -99,3 +134,9 @@ watch(
     </template>
   </div>
 </template>
+
+<style>
+[is-hidden="true"] {
+  display: none !important;
+}
+</style>
