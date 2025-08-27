@@ -19,7 +19,7 @@ const handleUserCardClick = () => {
     class="flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
     :class="
       preferencesStore.preferences.sidebarMenu.collapsed
-        ? 'mx-2 rounded'
+        ? 'mx-2 rounded-naive'
         : 'mx-4 rounded-xl bg-neutral-150 py-3.5 pr-2.5 pl-3.5 dark:bg-neutral-800'
     "
     @click="handleUserCardClick"

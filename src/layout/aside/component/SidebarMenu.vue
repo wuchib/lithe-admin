@@ -47,6 +47,7 @@ watch(
       :render-icon="renderIcon"
       :dropdown-props="{
         size: 'medium',
+        trigger: 'click',
       }"
     />
   </NScrollbar>

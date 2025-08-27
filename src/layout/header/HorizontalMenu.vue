@@ -51,7 +51,7 @@ watch(
       <div
         v-if="!type && isEmpty(children)"
         :data-key="key"
-        class="relative flex items-center rounded-[var(--border-radius)] px-2.5 py-2 transition-[background-color,color]"
+        class="relative flex items-center rounded-naive px-2.5 py-2 transition-[background-color,color]"
         :class="[
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
           menuActiveKey === key
@@ -79,7 +79,7 @@ watch(
       >
         <div
           :data-key="key"
-          class="flex items-center rounded-[var(--border-radius)] py-2 pr-2 pl-2.5 transition-[background-color,color]"
+          class="flex items-center rounded-naive py-2 pr-2 pl-2.5 transition-[background-color,color]"
           :class="[
             disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
             hasActiveChild(children)
