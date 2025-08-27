@@ -1051,7 +1051,10 @@ function resizeAllCharts() {
 }
 
 watch(
-  () => preferencesStore.preferences.sidebarMenu.collapsed,
+  () => [
+    preferencesStore.preferences.sidebarMenu.collapsed,
+    preferencesStore.preferences.navigationMode,
+  ],
   () => {
     if (collapseResizeTimeout !== null) {
       clearTimeout(collapseResizeTimeout)

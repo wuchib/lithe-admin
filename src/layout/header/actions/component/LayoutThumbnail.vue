@@ -13,7 +13,7 @@ const preferencesStore = usePreferencesStore()
     }"
   >
     <div
-      class="flex h-16 w-20 cursor-pointer flex-col rounded border border-neutral-350 outline-offset-4 transition-[outline] dark:border-neutral-650"
+      class="flex h-16 w-20 cursor-pointer flex-col rounded border border-neutral-350 outline-offset-4 transition-[outline] max-sm:pointer-events-none max-sm:opacity-50 dark:border-neutral-650"
       :class="
         preferencesStore.preferences.navigationMode === 'sidebar'
           ? 'outline-2 outline-primary/50'
@@ -52,7 +52,7 @@ const preferencesStore = usePreferencesStore()
       </div>
     </div>
     <div
-      class="flex h-16 w-20 cursor-pointer flex-col rounded border border-neutral-350 outline-offset-4 transition-[outline] duration-300 dark:border-neutral-650"
+      class="flex h-16 w-20 cursor-pointer flex-col rounded border border-neutral-350 outline-offset-4 transition-[outline] duration-300 max-sm:pointer-events-none max-sm:opacity-50 dark:border-neutral-650"
       :class="
         preferencesStore.preferences.navigationMode === 'horizontal'
           ? 'outline-2 outline-primary/50'
@@ -65,9 +65,9 @@ const preferencesStore = usePreferencesStore()
         <div class="flex w-full items-center justify-between p-0.5">
           <div class="flex items-center gap-x-[1px]">
             <div
-              v-for="i in 6"
+              v-for="i in 5"
               :key="i"
-              class="size-1 rounded-full border border-primary"
+              class="h-1 w-1.5 border border-primary"
             />
           </div>
           <div class="flex items-center gap-x-[1px]">
