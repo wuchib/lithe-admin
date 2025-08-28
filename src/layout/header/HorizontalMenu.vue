@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useElementSize } from '@vueuse/core'
+import { useElementSize, watchThrottled } from '@vueuse/core'
 import { isFunction, isEmpty } from 'lodash-es'
 import { NDropdown } from 'naive-ui'
 import { h, computed, ref, watch, nextTick, onBeforeUnmount } from 'vue'
@@ -19,6 +19,9 @@ const MENU_SIZE = {
   ITEM_COLUMN_GAP: 4,
   BOUNDARY_OFFSET: 1,
 }
+
+let rafId: number | null = null
+let initialized = false
 
 const userStore = useUserStore()
 
@@ -56,8 +59,9 @@ function forwardRef(key: Key, ref: Element | ComponentPublicInstance | null) {
     const rect = (ref as HTMLElement).getBoundingClientRect()
     menuRightBoundMap.set(
       key,
-      rect.right - navigationWrapperRef.value!.getBoundingClientRect().left,
+      rect.right - (navigationWrapperRef.value?.getBoundingClientRect().left ?? 0),
     )
+    scheduleUpdateMenuVisibility()
   })
 }
 
@@ -73,6 +77,15 @@ function updateMenuVisibility(containerWidth: number) {
       partiallyVisibleMenuKeys.value.delete(key)
     }
   }
+}
+
+function scheduleUpdateMenuVisibility() {
+  if (rafId != null) return
+  rafId = requestAnimationFrame(() => {
+    rafId = null
+    updateMenuVisibility(containerWidth.value)
+    if (!initialized) initialized = true
+  })
 }
 
 function hasActiveChild(children: any[]): boolean {
@@ -97,9 +110,16 @@ watch(
   },
 )
 
-watch(containerWidth, (width) => {
-  updateMenuVisibility(width)
-})
+watchThrottled(
+  containerWidth,
+  (width) => {
+    if (!initialized) return
+    updateMenuVisibility(width)
+  },
+  {
+    throttle: 100,
+  },
+)
 
 onBeforeUnmount(() => {
   stopObserveContainerWidth()
