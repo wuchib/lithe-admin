@@ -48,6 +48,7 @@ export default defineConfigWithVueTs(
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'type'],
         },
       ],
+      'perfectionist/sort-objects': 'off',
     },
   },
 )

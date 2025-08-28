@@ -18,20 +18,23 @@ defineOptions({
   name: 'Layout',
 })
 
-const MobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
-const MobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
-const MobileRightAside = defineAsyncComponent(() => import('./mobile/MobileRightAside.vue'))
+const AsyncMobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
+const AsyncMobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
+const AsyncMobileRightAside = defineAsyncComponent(() => import('./mobile/MobileRightAside.vue'))
 
 const tabsStore = useTabsStore()
+
 const preferencesStore = usePreferencesStore()
+
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
+
 const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
 
 const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
     ? preferencesStore.preferences.sidebarMenu.maxWidth || 0
     : layoutSlideDirection.value === 'left'
-      ? -64
+      ? -(preferencesStore.preferences.sidebarMenu.width || 0)
       : 0
 })
 
@@ -51,7 +54,7 @@ watch(isSmallScreen, (isSmallScreen) => {
     class="relative flex h-svh overflow-hidden"
     :style="{ backgroundImage: `url(${texturePng})` }"
   >
-    <MobileLeftAside v-if="isSmallScreen" />
+    <AsyncMobileLeftAside v-if="isSmallScreen" />
 
     <div
       class="relative flex h-full w-full flex-col max-sm:bg-naive-card/50"
@@ -68,7 +71,7 @@ watch(isSmallScreen, (isSmallScreen) => {
       "
     >
       <HeaderLayout v-if="!isSmallScreen" />
-      <MobileHeader v-else />
+      <AsyncMobileHeader v-else />
       <div class="flex flex-1 overflow-hidden">
         <CollapseTransition
           v-if="!isSmallScreen"
@@ -114,9 +117,10 @@ watch(isSmallScreen, (isSmallScreen) => {
       <div
         v-if="isSmallScreen && layoutSlideDirection"
         class="absolute inset-0"
+        style="z-index: 9997"
         @click="setLayoutSlideDirection(null)"
       />
     </div>
-    <MobileRightAside v-if="isSmallScreen" />
+    <AsyncMobileRightAside v-if="isSmallScreen" />
   </div>
 </template>

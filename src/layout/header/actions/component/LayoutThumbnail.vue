@@ -3,6 +3,7 @@ import { usePersonalization } from '@/composables'
 import { usePreferencesStore } from '@/stores'
 
 const { color } = usePersonalization()
+
 const preferencesStore = usePreferencesStore()
 </script>
 <template>

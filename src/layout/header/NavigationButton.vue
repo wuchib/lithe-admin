@@ -16,7 +16,6 @@ const stopWatch = watch(
       stopWatch()
       return
     }
-
     navigationState.canGoBack = window.navigation.canGoBack
     navigationState.canGoForward = window.navigation.canGoForward
   },

@@ -59,10 +59,9 @@ const DIRECTION_CLASSES_MAP = {
       class="grid"
       :class="containerClass"
       :style="[
-        typeof duration === 'number' &&
-          duration > 0 && {
-            '--default-transition-duration': `${duration}ms`,
-          },
+        typeof duration === 'number' && {
+          '--default-transition-duration': `${duration}ms`,
+        },
         containerStyle,
       ]"
     >

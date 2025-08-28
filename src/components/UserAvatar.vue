@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { NAvatar } from 'naive-ui'
 
-import type { AvatarProps as AvatarPropsRaw } from 'naive-ui'
+import type { AvatarProps } from 'naive-ui'
 
-interface AvatarProps extends /** @vue-ignore */ AvatarPropsRaw {}
+interface UserAvatarProps extends /** @vue-ignore */ AvatarProps {}
 
-defineProps<AvatarProps>()
+defineProps<UserAvatarProps>()
 </script>
 <template>
   <NAvatar

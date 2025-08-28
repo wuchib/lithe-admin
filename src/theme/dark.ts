@@ -126,6 +126,9 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       tdColorHover: cbh(twc.neutral[850], 0.06),
       thColor: twc.neutral[850],
     },
+    Divider: {
+      color: cdh(twc.neutral[750], 0.24),
+    },
     Drawer: {
       footerBorderTop: `1px solid ${twc.neutral[750]}`,
       headerBorderBottom: `1px solid ${twc.neutral[750]}`,
@@ -135,9 +138,6 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
           colorHover: twc.neutral[700],
         },
       },
-    },
-    Divider: {
-      color: cdh(twc.neutral[750], 0.24),
     },
     Menu: {
       itemColorHover: twc.neutral[800],

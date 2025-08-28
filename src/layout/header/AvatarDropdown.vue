@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ButtonAnimation } from '@/components'
-import Avatar from '@/components/Avatar.vue'
+import Avatar from '@/components/UserAvatar.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
 </script>
 <template>

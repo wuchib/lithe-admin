@@ -124,6 +124,9 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       tdColorHover: cdh(twc.neutral[100], 0.06),
       thColor: twc.neutral[100],
     },
+    Divider: {
+      color: twc.neutral[150],
+    },
     Drawer: {
       footerBorderTop: `1px solid ${LIGHT.borderColor}`,
       headerBorderBottom: `1px solid ${LIGHT.borderColor}`,
@@ -133,9 +136,6 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
           colorHover: twc.neutral[350],
         },
       },
-    },
-    Divider: {
-      color: twc.neutral[150],
     },
     Message: {
       textColorSuccess: twc.lime[500],
@@ -177,10 +177,6 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
         borderColor: twc.neutral[250],
       },
     },
-    Slider: {
-      indicatorColor: twc.neutral[25],
-      indicatorTextColor: LIGHT.textColor2,
-    },
     Select: {
       peers: {
         InternalSelectMenu: {
@@ -193,6 +189,10 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
           },
         },
       },
+    },
+    Slider: {
+      indicatorColor: twc.neutral[25],
+      indicatorTextColor: LIGHT.textColor2,
     },
     Upload: {
       draggerColor: twc.neutral[100],

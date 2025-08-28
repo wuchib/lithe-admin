@@ -25,7 +25,9 @@ import WatermarkModal from './WatermarkModal.vue'
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 
 const preferencesStore = usePreferencesStore()
+
 const systemStore = useSystemStore()
+
 const { color, setColor } = usePersonalization()
 
 const { modify, reset } = preferencesStore

@@ -1,37 +1,66 @@
-<script setup lang="ts">
-import { isEmpty } from 'lodash-es'
+<script setup lang="tsx">
+import { isEmpty, isFunction } from 'lodash-es'
 import { NDropdown } from 'naive-ui'
-import { computed, h } from 'vue'
+import { computed, defineComponent, h } from 'vue'
 
 import router from '@/router'
 
 import type { DropdownProps } from 'naive-ui'
+import type { PropType } from 'vue'
 import type { RouteRecordNameGeneric, RouteRecordRaw } from 'vue-router'
 
-const routerBreadcrumb = computed(() => {
+const routeBreadcrumbList = computed(() => {
   return router.currentRoute.value.matched.filter((item) => item.name !== 'layout')
 })
+
+const currentRouteName = computed(() => {
+  return router.currentRoute.value.name as string
+})
+
+const renderIcon: DropdownProps['renderIcon'] = (option) => {
+  return isFunction(option.icon)
+    ? h(option.icon, {
+        class: 'ml-1.5 size-5',
+      })
+    : null
+}
 
 const onDropdownSelected: DropdownProps['onSelect'] = (key) => {
   router.push({ name: key })
 }
 
-function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options'] {
-  return route.map((item) => {
-    return {
-      label: item.meta?.title || item.meta?.label,
-      key: (item.name as string) || item.path,
-      icon: () => h('span', { class: `${item.meta?.icon} size-5` }),
-      children: !isEmpty(item.children)
-        ? resolveDropdownOptions(item.children as RouteRecordRaw[])
-        : undefined,
-    }
-  })
+function isCurrentRoute(name: RouteRecordNameGeneric) {
+  return name === currentRouteName.value
 }
 
-function isCurrentRoute(name: RouteRecordNameGeneric) {
-  return name === router.currentRoute.value.name
+function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options'] {
+  return route.map((item) => ({
+    label: item.meta?.title || item.meta?.label,
+    key: (item.name as string) || item.path,
+    icon: item.meta?.icon ? () => h('span', { class: `${item.meta?.icon} size-5` }) : undefined,
+    children:
+      Array.isArray(item.children) && !isEmpty(item.children)
+        ? resolveDropdownOptions(item.children)
+        : undefined,
+  }))
 }
+
+const BreadcrumbItem = defineComponent({
+  props: {
+    meta: {
+      type: Object as PropType<RouteRecordRaw['meta']>,
+      required: true,
+    },
+  },
+  setup(props) {
+    return () => (
+      <div class='flex shrink-0 items-center gap-x-1.5 rounded px-1.5 py-1'>
+        {props.meta?.icon && <span class={`${props.meta?.icon} size-5`} />}
+        {props.meta?.title}
+      </div>
+    )
+  },
+})
 </script>
 <template>
   <TransitionGroup
@@ -47,34 +76,27 @@ function isCurrentRoute(name: RouteRecordNameGeneric) {
     leave-from-class="grid-cols-[1fr]"
   >
     <li
-      v-for="{ children, meta, name, path } in routerBreadcrumb"
+      v-for="{ children, meta, name, path } in routeBreadcrumbList"
       :key="path"
-      class="grid shrink-0 justify-start overflow-hidden"
+      class="grid overflow-hidden"
     >
-      <div
-        class="flex min-w-0 items-center"
-        :class="{
-          'not-hover:text-[var(--text-color-3)]': !isCurrentRoute(name),
-        }"
-      >
+      <div class="flex min-w-0 items-center">
+        <BreadcrumbItem
+          v-if="isEmpty(children)"
+          :meta="meta"
+        />
         <NDropdown
+          v-else
           :options="resolveDropdownOptions(children)"
-          placement="bottom-start"
+          :disabled="isEmpty(children)"
+          :value="currentRouteName"
+          :render-icon="renderIcon"
           @select="onDropdownSelected"
         >
-          <div
-            class="flex shrink-0 items-center gap-x-1.5 rounded px-1.5 py-1 transition-[background-color,color]"
-            :class="{
-              'cursor-pointer hover:bg-[var(--button-color-2-hover)]': !isCurrentRoute(name),
-            }"
-          >
-            <span
-              v-if="meta?.icon"
-              class="size-5"
-              :class="meta?.icon"
-            />
-            {{ meta?.title }}
-          </div>
+          <BreadcrumbItem
+            :meta="meta"
+            class="cursor-pointer transition-[background-color,color] not-hover:text-[var(--text-color-3)] hover:bg-[var(--button-color-2-hover)]"
+          />
         </NDropdown>
         <span
           class="iconify-[fluent--slash-forward-20-regular] w-3.5 text-[var(--text-color-3)]"

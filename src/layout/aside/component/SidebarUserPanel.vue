@@ -2,12 +2,14 @@
 import { useMessage } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
-import Avatar from '@/components/Avatar.vue'
+import Avatar from '@/components/UserAvatar.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
 import { usePreferencesStore, useUserStore } from '@/stores'
 
 const preferencesStore = usePreferencesStore()
+
 const userStore = useUserStore()
+
 const message = useMessage()
 
 const handleUserCardClick = () => {

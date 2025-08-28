@@ -15,3 +15,7 @@ export interface LayoutProvider {
   layoutSlideDirection: Ref<LayoutSlideDirection>
   setLayoutSlideDirection: (direction: LayoutSlideDirection) => void
 }
+
+export interface HeaderLayoutProvider {
+  navigationContainerElement: Ref<HTMLElement | null>
+}

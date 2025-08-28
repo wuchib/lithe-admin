@@ -1,19 +1,29 @@
 <script setup lang="ts">
+import { defineAsyncComponent, provide, ref } from 'vue'
+
 import { CollapseTransition } from '@/components'
+import { headerLayoutInjectionKey } from '@/injection'
 import { usePreferencesStore } from '@/stores'
 
 import Actions from './actions/index.vue'
 import AvatarDropdown from './AvatarDropdown.vue'
-import Breadcrumb from './Breadcrumb.vue'
-import HorizontalMenu from './HorizontalMenu.vue'
 import LogoArea from './LogoArea.vue'
-import Navigation from './Navigation.vue'
 
 defineOptions({
   name: 'HeaderLayout',
 })
 
+const AsyncNavigationButton = defineAsyncComponent(() => import('./NavigationButton.vue'))
+const AsyncHorizontalMenu = defineAsyncComponent(() => import('./HorizontalMenu.vue'))
+const AsyncBreadcrumb = defineAsyncComponent(() => import('./Breadcrumb.vue'))
+
 const preferencesStore = usePreferencesStore()
+
+const navigationContainerRef = ref<HTMLElement | null>(null)
+
+provide(headerLayoutInjectionKey, {
+  navigationContainerElement: navigationContainerRef,
+})
 </script>
 <template>
   <header
@@ -21,14 +31,17 @@ const preferencesStore = usePreferencesStore()
   >
     <LogoArea />
     <div class="flex flex-1 items-center px-4 py-3.5">
-      <div class="flex h-9 flex-1 items-center">
+      <div
+        ref="navigationContainerRef"
+        class="flex h-9 flex-1 items-center"
+      >
         <CollapseTransition
           :display="
             preferencesStore.preferences.showNavigation &&
             preferencesStore.preferences.navigationMode === 'sidebar'
           "
         >
-          <Navigation />
+          <AsyncNavigationButton />
         </CollapseTransition>
         <CollapseTransition
           :display="
@@ -37,10 +50,10 @@ const preferencesStore = usePreferencesStore()
           "
           contentTag="nav"
         >
-          <Breadcrumb />
+          <AsyncBreadcrumb />
         </CollapseTransition>
         <CollapseTransition :display="preferencesStore.preferences.navigationMode === 'horizontal'">
-          <HorizontalMenu />
+          <AsyncHorizontalMenu />
         </CollapseTransition>
       </div>
       <Actions class="gap-x-3 pl-4" />

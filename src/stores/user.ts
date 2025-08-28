@@ -7,7 +7,7 @@ import { resolveMenu, resolveRoute } from '@/router/helper'
 import { routeRecordRaw } from '@/router/record'
 
 import type { MenuMixedOptions } from '@/router/helper'
-import type { MenuProps } from 'naive-ui'
+import type { MenuOption } from 'naive-ui'
 import type { RouteRecordRaw } from 'vue-router'
 
 interface User {
@@ -29,7 +29,7 @@ export const useUserStore = defineStore('userStore', () => {
 
   const token = useStorage<string | null>('token', '')
 
-  const menuList = ref<MenuProps['options']>([])
+  const menuList = ref<MenuOption[]>([])
 
   const routeList = ref<RouteRecordRaw[]>([])
 
