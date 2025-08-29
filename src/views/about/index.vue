@@ -23,8 +23,9 @@ const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
-const dir = `📂 lithe-admin
+const dir = `.📂 lithe-admin
 ├── 📄 LICENSE
+├── 📄 README.en_US.md
 ├── 📄 README.md
 ├── 📄 eslint.config.ts
 ├── 📄 index.html
@@ -45,6 +46,8 @@ const dir = `📂 lithe-admin
 │  └── 📂 components/
 │    ├── 📄 Logo.vue
 │    ├── 📄 Noise.vue
+│    ├── 📄 UserAvatar.vue
+│    ├── 📄 UserDropdown.vue
 │    └── 📂 button-animation/
 │      ├── 📄 ButtonAnimation.test.ts
 │      ├── 📄 ButtonAnimation.vue
@@ -80,25 +83,27 @@ const dir = `📂 lithe-admin
 │  └── 📂 layout/
 │    └── 📂 aside/
 │      └── 📂 component/
-│        ├── 📄 Avatar.vue
-│        ├── 📄 Menu.vue
-│        ├── 📄 UserCard.vue
+│        ├── 📄 SidebarMenu.vue
+│        ├── 📄 SidebarUserPanel.vue
 │      ├── 📄 index.vue
 │    └── 📂 component/
 │      ├── 📄 Tabs.vue
 │    └── 📂 footer/
 │      ├── 📄 index.vue
 │    └── 📂 header/
+│      ├── 📄 AvatarDropdown.vue
 │      ├── 📄 Breadcrumb.vue
+│      ├── 📄 HorizontalMenu.vue
 │      ├── 📄 LogoArea.vue
-│      ├── 📄 Navigation.vue
+│      ├── 📄 NavigationButton.vue
 │      └── 📂 actions/
 │        └── 📂 component/
 │          ├── 📄 FullScreen.vue
+│          ├── 📄 LayoutThumbnail.vue
 │          ├── 📄 NoiseModal.vue
 │          ├── 📄 PreferencesDrawer.vue
 │          ├── 📄 SignOut.vue
-│          ├── 📄 ThemeDropdown.vue
+│          ├── 📄 ThemePopselect.vue
 │          ├── 📄 WatermarkModal.vue
 │        ├── 📄 index.vue
 │      ├── 📄 index.vue
