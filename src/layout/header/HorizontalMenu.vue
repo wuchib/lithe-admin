@@ -48,9 +48,13 @@ const moreDropdownOptions = computed<DropdownProps['options']>(() => {
   })
 })
 
-const hasActiveChild = computed(() => {
-  if (!Array.isArray(moreDropdownOptions.value)) return false
-  const stack = [...moreDropdownOptions.value]
+const shouldShowMore = computed(
+  () => Array.isArray(moreDropdownOptions.value) && !isEmpty(moreDropdownOptions.value),
+)
+
+function hasActiveChild(children: unknown) {
+  if (!Array.isArray(children)) return false
+  const stack = [...children]
   while (stack.length) {
     const node = stack.pop()
     if (node?.key === menuActiveKey.value) return true
@@ -59,11 +63,7 @@ const hasActiveChild = computed(() => {
     }
   }
   return false
-})
-
-const shouldShowMore = computed(
-  () => Array.isArray(moreDropdownOptions.value) && !isEmpty(moreDropdownOptions.value),
-)
+}
 
 const renderIcon: DropdownProps['renderIcon'] = (option) => {
   return isFunction(option.icon)
@@ -127,9 +127,9 @@ watch(
 
 watchThrottled(
   containerWidth,
-  (width) => {
+  (containerWidth) => {
     if (!initialized) return
-    updateMenuVisibility(width)
+    updateMenuVisibility(containerWidth)
   },
   {
     throttle: 100,
@@ -162,7 +162,7 @@ onBeforeUnmount(() => {
             'relative flex items-center px-2.5 py-2': isEmpty(children),
           },
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
-          menuActiveKey === key || hasActiveChild
+          menuActiveKey === key || hasActiveChild(children)
             ? 'bg-primary/15 text-primary'
             : 'hover:bg-neutral-150 dark:hover:bg-neutral-800',
         ]"
@@ -216,7 +216,7 @@ onBeforeUnmount(() => {
         v-show="shouldShowMore"
         class="flex shrink-0 cursor-pointer items-center rounded-naive px-3 py-2 leading-4 font-medium transition-[background-color,color]"
         :class="[
-          hasActiveChild
+          hasActiveChild(moreDropdownOptions)
             ? 'bg-primary/15 text-primary'
             : 'hover:bg-neutral-150 dark:hover:bg-neutral-800',
         ]"
