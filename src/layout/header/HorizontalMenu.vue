@@ -41,8 +41,8 @@ const menuRightBoundMap = reactive(new Map<Key, number>())
 const threshold = ref(Number.POSITIVE_INFINITY)
 
 const moreDropdownOptions = computed<DropdownProps['options']>(() => {
-  return (userStore.menuList as NonNullable<MenuProps['options']>).filter((item: any) => {
-    if (item?.type) return false
+  return (userStore.menuList as NonNullable<MenuProps['options']>).filter((item) => {
+    if (item.type) return false
     const menuRightBound = menuRightBoundMap.get(item.key) ?? 0
     return menuRightBound + MENU.ITEM_COLUMN_GAP > threshold.value
   })
