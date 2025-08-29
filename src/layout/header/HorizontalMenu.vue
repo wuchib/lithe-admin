@@ -2,7 +2,7 @@
 import { useElementSize, watchThrottled } from '@vueuse/core'
 import { isFunction, isEmpty } from 'lodash-es'
 import { NDropdown } from 'naive-ui'
-import { h, computed, ref, watch, nextTick, onBeforeUnmount } from 'vue'
+import { h, computed, ref, watch, nextTick, onBeforeUnmount, reactive } from 'vue'
 
 import { useInjection } from '@/composables'
 import { headerLayoutInjectionKey } from '@/injection'
@@ -14,13 +14,14 @@ import type { ComponentPublicInstance } from 'vue'
 
 type Key = string | number | undefined
 
-const MENU_SIZE = {
-  MORE_BUTTON: 44,
+const MENU = {
+  MORE_BUTTON_WIDTH: 44,
   ITEM_COLUMN_GAP: 4,
   BOUNDARY_OFFSET: 1,
 }
 
 let rafId: number | null = null
+
 let initialized = false
 
 const userStore = useUserStore()
@@ -35,15 +36,34 @@ const navigationWrapperRef = ref<HTMLElement | null>(null)
 
 const menuActiveKey = ref('')
 
-const menuRightBoundMap = new Map<Key, number>()
+const menuRightBoundMap = reactive(new Map<Key, number>())
 
-const partiallyVisibleMenuKeys = ref<Set<Key>>(new Set())
+const threshold = ref(Number.POSITIVE_INFINITY)
 
 const moreDropdownOptions = computed<DropdownProps['options']>(() => {
-  return (userStore.menuList as NonNullable<MenuProps['options']>).filter((item) =>
-    partiallyVisibleMenuKeys.value.has(item.key),
-  )
+  return (userStore.menuList as NonNullable<MenuProps['options']>).filter((item: any) => {
+    if (item?.type) return false
+    const menuRightBound = menuRightBoundMap.get(item.key) ?? 0
+    return menuRightBound + MENU.ITEM_COLUMN_GAP > threshold.value
+  })
 })
+
+const hasActiveChild = computed(() => {
+  if (!Array.isArray(moreDropdownOptions.value)) return false
+  const stack = [...moreDropdownOptions.value]
+  while (stack.length) {
+    const node = stack.pop()
+    if (node?.key === menuActiveKey.value) return true
+    if (Array.isArray(node?.children)) {
+      stack.push(...node.children)
+    }
+  }
+  return false
+})
+
+const shouldShowMore = computed(
+  () => Array.isArray(moreDropdownOptions.value) && !isEmpty(moreDropdownOptions.value),
+)
 
 const renderIcon: DropdownProps['renderIcon'] = (option) => {
   return isFunction(option.icon)
@@ -67,16 +87,18 @@ function forwardRef(key: Key, ref: Element | ComponentPublicInstance | null) {
 
 function updateMenuVisibility(containerWidth: number) {
   if (containerWidth <= 0) return
-  for (const [key, rightBound] of menuRightBoundMap.entries()) {
-    if (
-      rightBound + MENU_SIZE.ITEM_COLUMN_GAP >
-      containerWidth - MENU_SIZE.MORE_BUTTON + MENU_SIZE.BOUNDARY_OFFSET
-    ) {
-      partiallyVisibleMenuKeys.value.add(key)
-    } else {
-      partiallyVisibleMenuKeys.value.delete(key)
+  const widthWithoutMore = containerWidth + MENU.BOUNDARY_OFFSET
+  const widthWithMore = containerWidth - MENU.MORE_BUTTON_WIDTH + MENU.BOUNDARY_OFFSET
+
+  let shouldComputeMoreWidth = false
+  for (const rightBound of menuRightBoundMap.values()) {
+    if (rightBound + MENU.ITEM_COLUMN_GAP > widthWithoutMore) {
+      shouldComputeMoreWidth = true
+      break
     }
   }
+
+  threshold.value = shouldComputeMoreWidth ? widthWithMore : widthWithoutMore
 }
 
 function scheduleUpdateMenuVisibility() {
@@ -88,16 +110,9 @@ function scheduleUpdateMenuVisibility() {
   })
 }
 
-function hasActiveChild(children: any[]): boolean {
-  const stack = [...children]
-  while (stack.length) {
-    const node = stack.pop()
-    if (node?.key === menuActiveKey.value) return true
-    if (Array.isArray(node?.children)) {
-      stack.push(...node.children)
-    }
-  }
-  return false
+function isMenuVisibleByKey(key: Key) {
+  const menuRightBound = menuRightBoundMap.get(key) ?? 0
+  return menuRightBound + MENU.ITEM_COLUMN_GAP <= threshold.value
 }
 
 watch(
@@ -130,7 +145,7 @@ onBeforeUnmount(() => {
     ref="navigationWrapperRef"
     class="relative flex items-center overflow-hidden"
     :style="{
-      columnGap: `${MENU_SIZE.ITEM_COLUMN_GAP}px`,
+      columnGap: `${MENU.ITEM_COLUMN_GAP}px`,
     }"
   >
     <template
@@ -140,14 +155,14 @@ onBeforeUnmount(() => {
       <div
         v-if="!type"
         :ref="(ref) => forwardRef(key, ref)"
-        v-show="!partiallyVisibleMenuKeys.has(key)"
+        v-show="isMenuVisibleByKey(key)"
         class="shrink-0 rounded-naive transition-[background-color,color]"
         :class="[
           {
             'relative flex items-center px-2.5 py-2': isEmpty(children),
           },
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
-          menuActiveKey === key || (Array.isArray(children) && hasActiveChild(children))
+          menuActiveKey === key || hasActiveChild
             ? 'bg-primary/15 text-primary'
             : 'hover:bg-neutral-150 dark:hover:bg-neutral-800',
         ]"
@@ -193,15 +208,15 @@ onBeforeUnmount(() => {
     <NDropdown
       :options="moreDropdownOptions"
       :value="menuActiveKey"
-      :disabled="isEmpty(moreDropdownOptions)"
+      :disabled="!shouldShowMore"
       :render-icon="renderIcon"
       size="large"
     >
       <div
-        v-show="!isEmpty(partiallyVisibleMenuKeys)"
+        v-show="shouldShowMore"
         class="flex shrink-0 cursor-pointer items-center rounded-naive px-3 py-2 leading-4 font-medium transition-[background-color,color]"
         :class="[
-          Array.isArray(moreDropdownOptions) && hasActiveChild(moreDropdownOptions)
+          hasActiveChild
             ? 'bg-primary/15 text-primary'
             : 'hover:bg-neutral-150 dark:hover:bg-neutral-800',
         ]"
