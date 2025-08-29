@@ -66,7 +66,7 @@ const signInFormRules: Record<string, FormItemRule[]> = {
   password: [{ required: true, message: '请输入密码', trigger: ['input'] }],
 }
 
-function toLayouts() {
+function toLayout() {
   const { r } = router.currentRoute.value.query
 
   setTimeout(() => {
@@ -88,7 +88,7 @@ const handleSubmitClick = () => {
   signInFormRef.value?.validate((errors) => {
     if (!errors) {
       loading.value = true
-      toLayouts()
+      toLayout()
     }
   })
 }
