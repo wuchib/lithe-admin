@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { usePreferencesStore } from '@/stores'
+import { usePreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
 
-import SidebarMenu from './component/SidebarMenu.vue'
-import SidebarUserPanel from './component/SidebarUserPanel.vue'
+import SidebarMenu from './SidebarMenu.vue'
+import SidebarUserPanel from './SidebarUserPanel.vue'
 
 defineOptions({
   name: 'AsideLayout',
@@ -14,8 +14,10 @@ const preferencesStore = usePreferencesStore()
 
 const menuCollapseWidth = computed(() => {
   return preferencesStore.preferences.sidebarMenu.collapsed
-    ? preferencesStore.preferences.sidebarMenu.width
-    : preferencesStore.preferences.sidebarMenu.maxWidth
+    ? preferencesStore.preferences.sidebarMenu.width ||
+        DEFAULT_PREFERENCES_OPTIONS.sidebarMenu.width
+    : preferencesStore.preferences.sidebarMenu.maxWidth ||
+        DEFAULT_PREFERENCES_OPTIONS.sidebarMenu.maxWidth
 })
 
 function handleCollapseClick() {
@@ -30,7 +32,7 @@ function handleCollapseClick() {
   <aside
     class="relative flex h-full flex-col justify-between gap-y-4 border-r border-naive-border bg-naive-card pb-4 transition-[background-color,border-color,width]"
     :style="{
-      width: `${menuCollapseWidth}px`,
+      width: `${menuCollapseWidth + 1}px`,
     }"
   >
     <SidebarMenu />

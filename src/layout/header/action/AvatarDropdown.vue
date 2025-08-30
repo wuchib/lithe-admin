@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ButtonAnimation } from '@/components'
-import Avatar from '@/components/UserAvatar.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
 </script>
 <template>
-  <div class="ml-4">
+  <div class="ml-1">
     <UserDropdown placement="bottom-end">
       <ButtonAnimation animation="beat">
-        <Avatar src="src path" />
+        <UserAvatar src="src path" />
       </ButtonAnimation>
     </UserDropdown>
   </div>

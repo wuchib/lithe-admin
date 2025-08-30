@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { isEmpty } from 'lodash-es'
-import { NButton, NDropdown, NEllipsis, NScrollbar } from 'naive-ui'
+import { NDropdown, NEllipsis, NScrollbar } from 'naive-ui'
 import {
   computed,
   defineComponent,
@@ -36,6 +36,10 @@ type ContextMenuActions = {
   keepalive: () => void
   lock: () => void
 }
+
+defineOptions({
+  name: 'Tabs',
+})
 
 const { shouldRefreshRoute } = useInjection(layoutInjectionKey)
 
@@ -295,7 +299,7 @@ const InternalTabs = defineComponent({
   setup(props, { emit }) {
     return () => (
       <VueDraggable
-        class='flex'
+        class='flex h-10.5'
         modelValue={props.modelValue}
         animation={150}
         easing='cubic-bezier(0, 0, 1, 1)'
@@ -330,22 +334,12 @@ const InternalTabs = defineComponent({
               onClick={() => handleTabClick(tab.path)}
               onContextmenu={(e) => handleTabContextMenuClick(e, tab)}
             >
-              <Transition
-                type='transition'
-                leaveActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
-                enterActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
-                leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
-                enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
-                onAfterEnter={() => {
-                  scrollToActiveTab('smooth')
-                }}
+              <div
+                class={[
+                  'relative z-10 flex h-full items-center pl-4',
+                  tab.pinned ? 'pr-4' : 'pr-2.5',
+                ]}
               >
-                {tab.path === pendingActivePath.value && (
-                  <div class='absolute inset-0 z-0 size-full border-t-[1.5px] border-primary bg-primary/6' />
-                )}
-              </Transition>
-
-              <div class={['flex items-center py-2.5 pl-4', tab.pinned ? 'pr-4' : 'pr-2.5']}>
                 <div
                   class={[
                     'flex flex-1 items-center overflow-hidden transition-[translate]',
@@ -360,6 +354,7 @@ const InternalTabs = defineComponent({
                   <div class='mr-2 grid shrink-0 place-items-center overflow-hidden'>
                     <span
                       class={[
+                        'size-4.5',
                         tab.icon,
                         {
                           'text-primary': tab.componentName && getTab(tab.id)?.keepAlive,
@@ -372,7 +367,7 @@ const InternalTabs = defineComponent({
                 {!tab.pinned && (
                   <div
                     class={[
-                      'ml-1 flex overflow-hidden transition-[opacity,scale]',
+                      'ml-1 flex overflow-hidden rounded-full p-1 transition-[background-color,opacity,scale] hover:bg-naive-button-hover',
                       {
                         'scale-0 opacity-0':
                           tab.locked || !preferencesStore.preferences.showTabClose,
@@ -380,24 +375,29 @@ const InternalTabs = defineComponent({
                           !tab.locked && !preferencesStore.preferences.showTabClose,
                       },
                     ]}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleTabCloseClick(tab.id)
+                    }}
                   >
-                    <NButton
-                      quaternary
-                      circle
-                      size='tiny'
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleTabCloseClick(tab.id)
-                      }}
-                      disabled={tab.locked}
-                    >
-                      {{
-                        icon: () => <span class='iconify ph--x' />,
-                      }}
-                    </NButton>
+                    <span class='iconify-[line-md--close] size-3.5' />
                   </div>
                 )}
               </div>
+              <Transition
+                type='transition'
+                leaveActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
+                enterActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
+                leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
+                enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
+                onAfterEnter={() => {
+                  scrollToActiveTab('smooth')
+                }}
+              >
+                {tab.path === pendingActivePath.value && (
+                  <div class='absolute inset-0 size-full border-t-[1.5px] border-primary bg-primary/6' />
+                )}
+              </Transition>
             </div>
           ))}
         </TransitionGroup>
@@ -444,7 +444,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div
-    class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] select-none"
+    class="flex min-h-0 border-b border-naive-border bg-naive-card transition-[background-color,border-color] select-none"
   >
     <InternalTabs v-model="tabPinnedList" />
     <NScrollbar

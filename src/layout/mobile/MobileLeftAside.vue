@@ -2,9 +2,9 @@
 import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 
-import SidebarMenu from '../aside/component/SidebarMenu.vue'
-import SidebarUserPanel from '../aside/component/SidebarUserPanel.vue'
-import LogoArea from '../header/LogoArea.vue'
+import SidebarMenu from '../aside/SidebarMenu.vue'
+import SidebarUserPanel from '../aside/SidebarUserPanel.vue'
+import Logo from '../header/logo/index.vue'
 
 const { layoutSlideDirection } = useInjection(layoutInjectionKey)
 </script>
@@ -15,7 +15,7 @@ const { layoutSlideDirection } = useInjection(layoutInjectionKey)
       '-translate-x-full': layoutSlideDirection !== 'right',
     }"
   >
-    <LogoArea />
+    <Logo />
     <SidebarMenu />
     <SidebarUserPanel />
   </div>

@@ -13,6 +13,10 @@ export interface CollapseTransitionProps extends TransitionProps {
   contentStyle?: CSSProperties
 }
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const {
   direction = 'vertical',
   type = 'transition',
@@ -60,7 +64,7 @@ const DIRECTION_CLASSES_MAP = {
       :class="containerClass"
       :style="[
         typeof duration === 'number' && {
-          '--default-transition-duration': `${duration}ms`,
+          transitionDuration: `${duration}ms`,
         },
         containerStyle,
       ]"

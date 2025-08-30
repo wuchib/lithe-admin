@@ -23,7 +23,7 @@ const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
-const dir = `.📂 lithe-admin
+const dir = `. 📂 lithe-admin
 ├── 📄 LICENSE
 ├── 📄 README.en_US.md
 ├── 📄 README.md
@@ -44,7 +44,7 @@ const dir = `.📂 lithe-admin
 │    ├── 📄 texture.png
 │    ├── 📄 topography.svg
 │  └── 📂 components/
-│    ├── 📄 Logo.vue
+│    ├── 📄 AppLogo.vue
 │    ├── 📄 Noise.vue
 │    ├── 📄 UserAvatar.vue
 │    ├── 📄 UserDropdown.vue
@@ -82,31 +82,31 @@ const dir = `.📂 lithe-admin
 │    ├── 📄 interface.ts
 │  └── 📂 layout/
 │    └── 📂 aside/
-│      └── 📂 component/
-│        ├── 📄 SidebarMenu.vue
-│        ├── 📄 SidebarUserPanel.vue
+│      ├── 📄 SidebarMenu.vue
+│      ├── 📄 SidebarUserPanel.vue
 │      ├── 📄 index.vue
-│    └── 📂 component/
-│      ├── 📄 Tabs.vue
 │    └── 📂 footer/
 │      ├── 📄 index.vue
 │    └── 📂 header/
-│      ├── 📄 AvatarDropdown.vue
-│      ├── 📄 Breadcrumb.vue
-│      ├── 📄 HorizontalMenu.vue
-│      ├── 📄 LogoArea.vue
-│      ├── 📄 NavigationButton.vue
-│      └── 📂 actions/
+│      └── 📂 action/
+│        ├── 📄 AvatarDropdown.vue
+│        ├── 📄 FullScreen.vue
+│        ├── 📄 PreferencesDrawer.vue
+│        ├── 📄 SignOut.vue
+│        ├── 📄 ThemePopselect.vue
 │        └── 📂 component/
-│          ├── 📄 FullScreen.vue
 │          ├── 📄 LayoutThumbnail.vue
 │          ├── 📄 NoiseModal.vue
-│          ├── 📄 PreferencesDrawer.vue
-│          ├── 📄 SignOut.vue
-│          ├── 📄 ThemePopselect.vue
 │          ├── 📄 WatermarkModal.vue
 │        ├── 📄 index.vue
 │      ├── 📄 index.vue
+│      └── 📂 logo/
+│        ├── 📄 index.vue
+│      └── 📂 navigation/
+│        ├── 📄 Breadcrumb.vue
+│        ├── 📄 HorizontalMenu.vue
+│        ├── 📄 NavigationButton.vue
+│        ├── 📄 index.vue
 │    ├── 📄 index.vue
 │    └── 📂 main/
 │      ├── 📄 index.vue
@@ -114,6 +114,8 @@ const dir = `.📂 lithe-admin
 │      ├── 📄 MobileHeader.vue
 │      ├── 📄 MobileLeftAside.vue
 │      ├── 📄 MobileRightAside.vue
+│    └── 📂 tabs/
+│      ├── 📄 index.vue
 │  ├── 📄 main.ts
 │  └── 📂 router/
 │    ├── 📄 guard.ts

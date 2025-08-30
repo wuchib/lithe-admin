@@ -3,7 +3,7 @@ import { ButtonAnimationProvider } from '@/components'
 import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 
-import Actions from '../header/actions/index.vue'
+import Actions from '../header/action/index.vue'
 
 const { layoutSlideDirection } = useInjection(layoutInjectionKey)
 </script>

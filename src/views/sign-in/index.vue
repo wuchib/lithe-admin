@@ -13,7 +13,7 @@ import {
 import topographySvg from '@/assets/topography.svg'
 import { usePersonalization, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import ThemePopselect from '@/layout/header/actions/component/ThemePopselect.vue'
+import ThemePopselect from '@/layout/header/action/ThemePopselect.vue'
 import router from '@/router'
 import { useUserStore } from '@/stores'
 

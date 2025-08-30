@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ButtonAnimation } from '@/components'
-import Logo from '@/components/Logo.vue'
+import AppLogo from '@/components/AppLogo.vue'
 import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
@@ -18,7 +18,7 @@ const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInj
       class="size-9"
       @click.stop="setLayoutSlideDirection('right')"
     >
-      <Logo />
+      <AppLogo />
     </div>
     <div class="flex items-center gap-x-2">
       <span

@@ -18,9 +18,9 @@ import { ccAPCA } from '@/utils/chromaHelper'
 import twColors from '@/utils/tailwindColor'
 import twc from '@/utils/tailwindColor'
 
-import LayoutThumbnail from './LayoutThumbnail.vue'
-import NoiseModal from './NoiseModal.vue'
-import WatermarkModal from './WatermarkModal.vue'
+import LayoutThumbnail from './component/LayoutThumbnail.vue'
+import NoiseModal from './component/NoiseModal.vue'
+import WatermarkModal from './component/WatermarkModal.vue'
 
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 

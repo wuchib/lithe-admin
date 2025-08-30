@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
 
-import Logo from '@/components/Logo.vue'
+import Logo from '@/components/AppLogo.vue'
 import { usePreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
+
+defineOptions({
+  name: 'Logo',
+})
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -36,16 +40,11 @@ watch(
 </script>
 <template>
   <div
-    class="shrink-0 border-r transition-[border-color,width] max-sm:border-0"
+    class="shrink-0 transition-[width]"
     :style="
       collapseWidth > 0 && {
         width: `${collapseWidth}px`,
       }
-    "
-    :class="
-      preferencesStore.preferences.navigationMode === 'sidebar'
-        ? 'border-naive-border'
-        : 'border-transparent'
     "
   >
     <div

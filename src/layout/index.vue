@@ -9,10 +9,10 @@ import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import { usePreferencesStore, useTabsStore } from '@/stores'
 
 import AsideLayout from './aside/index.vue'
-import Tabs from './component/Tabs.vue'
 import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
 import MainLayout from './main/index.vue'
+import Tabs from './tabs/index.vue'
 
 defineOptions({
   name: 'Layout',
@@ -51,13 +51,13 @@ watch(isSmallScreen, (isSmallScreen) => {
 </script>
 <template>
   <div
-    class="relative flex h-svh overflow-hidden"
+    class="relative h-svh overflow-hidden"
     :style="{ backgroundImage: `url(${texturePng})` }"
   >
     <AsyncMobileLeftAside v-if="isSmallScreen" />
 
     <div
-      class="relative flex h-full w-full flex-col max-sm:bg-naive-card/50"
+      class="relative flex h-full flex-col max-sm:bg-naive-card/50"
       :class="{
         'border-naive-border transition-[background-color,border-color,rounded,transform]':
           isSmallScreen,
@@ -80,8 +80,9 @@ watch(isSmallScreen, (isSmallScreen) => {
         >
           <AsideLayout />
         </CollapseTransition>
-
-        <div class="relative flex flex-1 flex-col overflow-hidden">
+        <div
+          class="relative flex flex-1 flex-col overflow-hidden border-t border-naive-border transition-[border-color]"
+        >
           <CollapseTransition
             v-if="!isSmallScreen"
             :display="!isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs"
@@ -90,9 +91,9 @@ watch(isSmallScreen, (isSmallScreen) => {
           >
             <Tabs />
           </CollapseTransition>
-          <div class="relative flex-1 overflow-hidden">
+          <main class="relative flex-1 overflow-hidden">
             <MainLayout />
-          </div>
+          </main>
           <EmptyPlaceholder
             :show="isEmpty(tabsStore.tabs)"
             description="空标签页"

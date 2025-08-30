@@ -210,7 +210,6 @@ onBeforeUnmount(() => {
       :value="menuActiveKey"
       :disabled="!shouldShowMore"
       :render-icon="renderIcon"
-      size="large"
     >
       <div
         v-show="shouldShowMore"
