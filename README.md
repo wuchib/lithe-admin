@@ -43,7 +43,7 @@ git clone https://github.com/tenianon/lithe-admin.git
 
 ### 精简版
 
-分支地址 [lite](https://github.com/tenianon/lithe-admin/tree/lite)，**精简版**不包含路由页面，只保留了页面基本架构
+分支地址 [lite](https://github.com/tenianon/lithe-admin/tree/lite)，**精简版**不包含路由页面，只保留了页面的基本结构
 
 ```bash
 git clone -b lite https://github.com/tenianon/lithe-admin.git
