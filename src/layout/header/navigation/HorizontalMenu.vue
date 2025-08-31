@@ -28,7 +28,7 @@ const userStore = useUserStore()
 
 const { navigationContainerElement } = useInjection(headerLayoutInjectionKey)
 
-const { width: containerWidth, stop: stopObserveContainerWidth } = useElementSize(
+const { width: containerWidth, stop: stopObserveContainerSize } = useElementSize(
   navigationContainerElement,
 )
 
@@ -90,15 +90,15 @@ function updateMenuVisibility(containerWidth: number) {
   const widthWithoutMore = containerWidth + MENU.BOUNDARY_OFFSET
   const widthWithMore = containerWidth - MENU.MORE_BUTTON_WIDTH + MENU.BOUNDARY_OFFSET
 
-  let shouldComputeMoreWidth = false
+  let needsMore = false
   for (const rightBound of menuRightBoundMap.values()) {
     if (rightBound + MENU.ITEM_COLUMN_GAP > widthWithoutMore) {
-      shouldComputeMoreWidth = true
+      needsMore = true
       break
     }
   }
 
-  threshold.value = shouldComputeMoreWidth ? widthWithMore : widthWithoutMore
+  threshold.value = needsMore ? widthWithMore : widthWithoutMore
 }
 
 function scheduleUpdateMenuVisibility() {
@@ -137,7 +137,7 @@ watchThrottled(
 )
 
 onBeforeUnmount(() => {
-  stopObserveContainerWidth()
+  stopObserveContainerSize()
 })
 </script>
 <template>

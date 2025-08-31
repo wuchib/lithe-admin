@@ -23,7 +23,7 @@ const preferencesStore = usePreferencesStore()
       "
     >
       <Navigation />
-      <Action class="gap-x-3" />
+      <Action class="gap-x-3 pl-4" />
     </div>
   </header>
 </template>
