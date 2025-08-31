@@ -444,7 +444,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div
-    class="flex min-h-0 border-b border-naive-border bg-naive-card transition-[background-color,border-color] select-none"
+    class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] select-none"
   >
     <InternalTabs v-model="tabPinnedList" />
     <NScrollbar
