@@ -7,7 +7,6 @@ import router from '@/router'
 import { useUserStore } from '@/stores'
 
 import type { DropdownProps } from 'naive-ui'
-import { useElementSize } from '@vueuse/core'
 
 const userStore = useUserStore()
 
@@ -43,36 +42,79 @@ watch(
   },
 )
 
-const fatherRef = ref()
-const totalMenuItemsWidth = ref<any>(0)
-const widths = ref<any[]>([]) //这里按顺序存储每一个menuItem的宽度
-const testInit = ref(true)
-const curWidths = ref<any[]>([])
+const fatherRef = ref() // 监听的菜单盒子
+const MenuItemsMeta = ref<any>({})
+const init = ref(false) // 初始化锁 关
 onMounted(()=>{
-  const children = Array.from(fatherRef.value.children) 
-  totalMenuItemsWidth.value = children.reduce((pre:any, cur:any)=>{
-    widths.value.push(cur.clientWidth)
-    curWidths.value.push(cur.clientWidth)
-    return cur.clientWidth + pre
-  },0)
-  console.log(totalMenuItemsWidth.value);
-  console.log(widths.value);
-  console.log(curWidths.value);
+  // 记录所有子菜单项的宽度和索引
+  userStore.menuList?.forEach((item: any, index: any)=>{
+    const menuItemDoms:any[] = Array.from(fatherRef.value.children)
+    const width = menuItemDoms[index].clientWidth
+    MenuItemsMeta.value[item.key] = { index, width, isShow: false }
+  })
+  init.value = true // 初始化锁 开
+  observeVisibleChildren(fatherRef.value, null, handleChildren)
 })
 
-
-const { width, height } = useElementSize(fatherRef)
-watch(()=>width.value,w=>{
-  if(w < totalMenuItemsWidth.value){
-    // 1.隐藏最后一个menuItem
-    curWidths.value.pop()
-    // 2.totalMenuItemsWidth = totalMenuItemsWidth - 隐藏的 menuItem 宽度
-    totalMenuItemsWidth.value = curWidths.value.reduce((pre,cur)=>cur + pre,0)
-    testInit.value = false
-  }else{
-    // 菜单项回显
+function handleChildren(count:Number, parentRectWidth:Number){
+  let totalWidth: Number = 0
+  for(const key in MenuItemsMeta.value){
+    const { index, width } = MenuItemsMeta.value[key]
+    MenuItemsMeta.value[key].isShow = index < count
+    if(count >= index) totalWidth = totalWidth + width
   }
-})
+  if(parentRectWidth > totalWidth){
+    for(const key in MenuItemsMeta.value){
+      const val = MenuItemsMeta.value[key]
+      if(val.index === count) val.isShow = true
+    }
+  }
+}
+
+
+/**
+ * 统计父元素中完全可见的子元素数量
+ * @param {HTMLElement} parent - 父容器元素
+ * @param {string} childSelector - 子元素选择器（默认直接取 parent.children）
+ * @param {Function} callback - 数量变化时的回调函数
+ * @returns {ResizeObserver} 返回 ResizeObserver 实例，可自行 disconnect()
+ */
+function observeVisibleChildren(parent:HTMLElement, childSelector = null, callback :any) {
+  if (!parent) {
+    throw new Error("父元素不能为空");
+  }
+
+  const getChildren = () => childSelector 
+    ? parent.querySelectorAll(childSelector) 
+    : parent.children;
+
+  function countFullyVisibleChildren() {
+    const parentRect = parent.getBoundingClientRect();
+    let count = 0;
+    const parentRectWidth = parentRect.width
+    Array.from(getChildren()).forEach(child => {
+      const rect = child.getBoundingClientRect();
+      if (rect.left >= parentRect.left && rect.right <= parentRect.right) {
+        count++;
+      }
+    });
+
+    if (callback) callback(count, parentRectWidth);
+    return count;
+  }
+
+  // 初始计算
+  countFullyVisibleChildren();
+
+  // 监听父元素宽度变化
+  const resizeObserver = new ResizeObserver(() => {
+    countFullyVisibleChildren();
+  });
+  resizeObserver.observe(parent);
+
+  return resizeObserver;
+}
+
 
 </script>
 <template>
@@ -83,8 +125,8 @@ watch(()=>width.value,w=>{
     >
       <div
         v-if="!type && isEmpty(children)"
+        v-show="!init || MenuItemsMeta[key as any]?.isShow"
         :data-key="key"
-        :is-hidden="i > curWidths.length - 1 && !testInit"
         class="relative flex items-center rounded-naive px-2.5 py-2 transition-[background-color,color]"
         :class="[
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
@@ -113,7 +155,7 @@ watch(()=>width.value,w=>{
       >
         <div
           :data-key="key"
-          :is-hidden="i > curWidths.length - 1 && !testInit"
+          v-show="!init || MenuItemsMeta[key as any]?.isShow"
           class="flex items-center rounded-naive py-2 pr-2 pl-2.5 transition-[background-color,color]"
           :class="[
             disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
@@ -136,7 +178,4 @@ watch(()=>width.value,w=>{
 </template>
 
 <style>
-[is-hidden="true"] {
-  display: none !important;
-}
 </style>
