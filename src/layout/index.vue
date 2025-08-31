@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
-import { computed, defineAsyncComponent, watch } from 'vue'
+import { computed, defineAsyncComponent, h, watch } from 'vue'
 
 import texturePng from '@/assets/texture.png'
 import { CollapseTransition, EmptyPlaceholder } from '@/components'
@@ -8,7 +8,6 @@ import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import { usePreferencesStore, useTabsStore } from '@/stores'
 
-import AsideLayout from './aside/index.vue'
 import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
 import MainLayout from './main/index.vue'
@@ -18,13 +17,27 @@ defineOptions({
   name: 'Layout',
 })
 
+const preferencesStore = usePreferencesStore()
+
 const AsyncMobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
 const AsyncMobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
 const AsyncMobileRightAside = defineAsyncComponent(() => import('./mobile/MobileRightAside.vue'))
+const AsyncAsideLayout = defineAsyncComponent({
+  loader: () => import('./aside/index.vue'),
+  loadingComponent: () =>
+    h('div', {
+      style: {
+        width: `${
+          preferencesStore.preferences.sidebarMenu.collapsed
+            ? preferencesStore.preferences.sidebarMenu.width
+            : preferencesStore.preferences.sidebarMenu.maxWidth
+        }px`,
+      },
+    }),
+  delay: 0,
+})
 
 const tabsStore = useTabsStore()
-
-const preferencesStore = usePreferencesStore()
 
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 
@@ -78,7 +91,7 @@ watch(isSmallScreen, (isSmallScreen) => {
           :display="preferencesStore.preferences.navigationMode === 'sidebar'"
           content-class="min-h-0"
         >
-          <AsideLayout />
+          <AsyncAsideLayout />
         </CollapseTransition>
         <div
           class="relative flex flex-1 flex-col overflow-hidden border-t border-naive-border transition-[border-color]"

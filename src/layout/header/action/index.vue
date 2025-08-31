@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
 import { useInjection } from '@/composables'
@@ -10,12 +10,15 @@ import FullScreen from './FullScreen.vue'
 import PreferencesDrawer from './PreferencesDrawer.vue'
 import SignOut from './SignOut.vue'
 import ThemePopselect from './ThemePopselect.vue'
-
 defineOptions({
   name: 'Actions',
 })
 
-const AsyncAvatarDropdown = defineAsyncComponent(() => import('./AvatarDropdown.vue'))
+const AsyncAvatarDropdown = defineAsyncComponent({
+  loader: () => import('./AvatarDropdown.vue'),
+  loadingComponent: () => h('div', { style: { width: '34px', marginLeft: '4px' } }),
+  delay: 0,
+})
 
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 
