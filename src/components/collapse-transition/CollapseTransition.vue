@@ -56,7 +56,7 @@ const DIRECTION_CLASSES_MAP = {
     <div
       v-if="displayDirective === 'if' ? display : true"
       v-show="displayDirective === 'show' ? display : true"
-      class="grid w-full"
+      class="grid"
       :class="containerClass"
       :style="[
         typeof duration === 'number' &&

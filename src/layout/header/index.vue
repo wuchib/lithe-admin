@@ -21,7 +21,7 @@ const preferencesStore = usePreferencesStore()
   >
     <LogoArea />
     <div class="flex flex-1 items-center px-4 py-3.5">
-      <div class="flex h-9 flex-1 items-center">
+      <div data-target class="flex h-9 flex-1 items-center">
         <CollapseTransition
           :display="
             preferencesStore.preferences.showNavigation &&

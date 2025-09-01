@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isFunction, isEmpty } from 'lodash-es'
 import { NDropdown } from 'naive-ui'
-import { h, onMounted, ref, watch, nextTick } from 'vue'
+import { h, onMounted, ref, watch, nextTick, computed } from 'vue'
 
 import router from '@/router'
 import { useUserStore } from '@/stores'
@@ -42,29 +42,43 @@ watch(
   },
 )
 
-const fatherRef = ref() // 监听的菜单盒子
+const fatherRef = ref<HTMLElement>() // 监听的菜单盒子
 const MenuItemsMeta = ref<any>({})
 const init = ref(false) // 初始化锁 关
+
+// 剩下的菜单项
+const extraMenuItems = ref<any[]>([])
+// 更多按钮的显隐
+const isShowExtraTrigger = computed(()=>{
+  const arr = Object.values(MenuItemsMeta.value)
+  return arr.filter((em:any)=>em.isShow).length !== arr.length
+})
+
 onMounted(()=>{
   // 记录所有子菜单项的宽度和索引
   userStore.menuList?.forEach((item: any, index: any)=>{
-    const menuItemDoms:any[] = Array.from(fatherRef.value.children)
-    const width = menuItemDoms[index].clientWidth
+    const menuItemDoms:any[] = Array.from((fatherRef.value as HTMLElement).children)
+    const width = menuItemDoms[index].clientWidth + 4
     MenuItemsMeta.value[item.key] = { index, width, isShow: false }
+    console.log(MenuItemsMeta.value);
+    
   })
   init.value = true // 初始化锁 开
-  observeVisibleChildren(fatherRef.value, null, handleChildren)
+  const targetFatherDom = (fatherRef.value as HTMLElement).closest("[data-target]")
+  observeVisibleChildren(targetFatherDom as HTMLElement, null, handleChildren)
 })
 
-function handleChildren(count:Number, parentRectWidth:Number){
-  let totalWidth: Number = 0
+function handleChildren(count:number, parentRectWidth:number){
+  let totalWidth: number = 0
   for(const key in MenuItemsMeta.value){
     const { index, width } = MenuItemsMeta.value[key]
+    console.log(isShowExtraTrigger.value); // todo... 如何利用【更多】显隐来做文章？！
     MenuItemsMeta.value[key].isShow = index < count
     if(count >= index) totalWidth = totalWidth + width
   }
-  if(parentRectWidth > totalWidth){
-    for(const key in MenuItemsMeta.value){
+  // 控制回显
+  if( parentRectWidth > totalWidth + 48 ){
+    for(const key in MenuItemsMeta.value){  
       const val = MenuItemsMeta.value[key]
       if(val.index === count) val.isShow = true
     }
@@ -80,19 +94,21 @@ function handleChildren(count:Number, parentRectWidth:Number){
  * @returns {ResizeObserver} 返回 ResizeObserver 实例，可自行 disconnect()
  */
 function observeVisibleChildren(parent:HTMLElement, childSelector = null, callback :any) {
-  if (!parent) {
+  if (!parent || !fatherRef.value) {
     throw new Error("父元素不能为空");
   }
-
   const getChildren = () => childSelector 
-    ? parent.querySelectorAll(childSelector) 
-    : parent.children;
+    ? (fatherRef.value as HTMLElement).querySelectorAll(childSelector) 
+    : (fatherRef.value as HTMLElement).children;
 
   function countFullyVisibleChildren() {
     const parentRect = parent.getBoundingClientRect();
     let count = 0;
     const parentRectWidth = parentRect.width
     Array.from(getChildren()).forEach(child => {
+      if(Array.from(child.attributes)[0].name === 'is-more') {
+        return
+      }
       const rect = child.getBoundingClientRect();
       if (rect.left >= parentRect.left && rect.right <= parentRect.right) {
         count++;
@@ -118,7 +134,7 @@ function observeVisibleChildren(parent:HTMLElement, childSelector = null, callba
 
 </script>
 <template>
-  <div class="relative flex w-full items-center gap-x-1 truncate" ref="fatherRef">
+  <div data-wrap class="relative flex w-full items-center gap-x-1 truncate" ref="fatherRef">
     <template
       v-for="({ disabled, key, type, label, icon, children }, i) in userStore.menuList"
       :key="key"
@@ -174,6 +190,17 @@ function observeVisibleChildren(parent:HTMLElement, childSelector = null, callba
         </div>
       </NDropdown>
     </template>
+  
+    <!-- downMenu -->
+    <n-dropdown
+        :options="extraMenuItems"
+        placement="bottom-start"
+        trigger="hover"
+      >
+      <div is-more v-show="isShowExtraTrigger" class="relative flex items-center rounded-naive px-2.5 py-2 transition-[background-color,color]">
+        更多
+      </div>
+    </n-dropdown>
   </div>
 </template>
 
