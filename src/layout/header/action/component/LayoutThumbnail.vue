@@ -22,9 +22,11 @@ const preferencesStore = usePreferencesStore()
       "
       @click="preferencesStore.modify({ navigationMode: 'sidebar' })"
     >
-      <div class="flex h-2.5 border-b border-neutral-350 dark:border-neutral-650">
+      <div class="flex h-2.5">
         <div class="h-full w-5 shrink-0 border-r border-neutral-350 dark:border-neutral-650"></div>
-        <div class="flex w-full items-center justify-between p-0.5">
+        <div
+          class="flex w-full items-center justify-between border-b border-neutral-350 p-0.5 dark:border-neutral-650"
+        >
           <div class="flex items-center gap-x-[1px]">
             <div
               v-for="i in 2"
