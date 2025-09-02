@@ -35,21 +35,20 @@ English | [简体中文](https://github.com/tenianon/lithe-admin/blob/main/READM
 - **Node.js**: `^20.19.0` or `>=22.12.0`
 - **Package Manager**: `pnpm` (recommended), or `npm`, or `yarn`
 
-### Clone the project
+### Create project
 
 ```bash
-git clone https://github.com/tenianon/lithe-admin.git
+# Using pnpm (recommended)
+pnpm create lithe-admin@latest
 ```
-
-### Lite version
-
-Branch address [lite](https://github.com/tenianon/lithe-admin/tree/lite), the **lite version** does not include routing pages, only preserving the basic page structure
-
 ```bash
-git clone -b lite https://github.com/tenianon/lithe-admin.git
+# Or npm
+npm create lithe-admin@latest
 ```
-
-
+```bash
+# Or yarn
+yarn create lithe-admin@latest
+```
 
 ### Install Dependencies
 
@@ -125,7 +124,3 @@ The `ph` prefix needs to be configured in `src/assets/base.css`. Refer to the of
   scale: 1.2;
 }
 ```
-
-## 📄 License
-
-This project is licensed under the terms of the [MIT License](./LICENSE).
