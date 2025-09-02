@@ -39,13 +39,13 @@
 
 ```bash
 # 使用 pnpm 创建项目(推荐)
-pnpm create lithe-admin@latest
+pnpm create lithe@latest
 
 # 或使用 npm 创建项目
-npm create lithe-admin@latest
+npm create lithe@latest
 
 # 或使用 yarn 创建项目
-yarn create lithe-admin@latest
+yarn create lithe@latest
 ```
 
 ### 安装依赖

@@ -39,15 +39,15 @@ English | [简体中文](https://github.com/tenianon/lithe-admin/blob/main/READM
 
 ```bash
 # Using pnpm (recommended)
-pnpm create lithe-admin@latest
+pnpm create lithe@latest
 ```
 ```bash
 # Or npm
-npm create lithe-admin@latest
+npm create lithe@latest
 ```
 ```bash
 # Or yarn
-yarn create lithe-admin@latest
+yarn create lithe@latest
 ```
 
 ### Install Dependencies
