@@ -18,7 +18,7 @@ export interface PreferencesOptions {
   showLogo: boolean
   showTabs: boolean
   showTabClose: boolean
-  showNavigation: boolean
+  showNavigationButton: boolean
   showBreadcrumb: boolean
   showWatermark: boolean
   showNoise: boolean
@@ -42,7 +42,7 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
   showLogo: true,
   showNoise: true,
   showWatermark: false,
-  showNavigation: true,
+  showNavigationButton: true,
   showBreadcrumb: true,
   showTopLoadingBar: true,
   enableNavigationTransition: true,
