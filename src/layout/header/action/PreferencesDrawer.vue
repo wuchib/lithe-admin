@@ -35,7 +35,7 @@ const {
   navigationMode,
   showTopLoadingBar,
   showLogo,
-  showNavigation,
+  showNavigationButton,
   showBreadcrumb,
   showTabs,
   showTabClose,
@@ -211,12 +211,12 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>显示导航按钮</span>
                 <NSwitch
-                  :value="showNavigation"
+                  :value="showNavigationButton"
                   :disabled="isSmallScreen || navigationMode !== 'sidebar'"
                   @update-value="
                     (value) =>
                       modify({
-                        showNavigation: value,
+                        showNavigationButton: value,
                       })
                   "
                 />
