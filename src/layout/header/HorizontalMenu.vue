@@ -49,22 +49,31 @@ const init = ref(false) // 初始化锁 关
 // 剩下的菜单项
 const extraMenuItems = ref<any[]>([])
 // 更多按钮的显隐
-const isShowExtraTrigger = computed(()=>{
-  const arr = Object.values(MenuItemsMeta.value)
-  return arr.filter((em:any)=>em.isShow).length !== arr.length
-})
+const isShowExtraTrigger = ref(false)
+
+// const isShowExtraTrigger = computed(()=>{
+//   if(!init.value) return false
+//   const arr = Object.values(MenuItemsMeta.value)
+//   console.log(arr);
+//   return arr.filter((em:any)=>(em.isShow)).length !== arr.length
+// })
 
 onMounted(()=>{
   // 记录所有子菜单项的宽度和索引
   userStore.menuList?.forEach((item: any, index: any)=>{
     const menuItemDoms:any[] = Array.from((fatherRef.value as HTMLElement).children)
     const width = menuItemDoms[index].clientWidth + 4
-    MenuItemsMeta.value[item.key] = { index, width, isShow: false }
-    console.log(MenuItemsMeta.value);
-    
+    MenuItemsMeta.value[item.key] = { index, width, key: item.key, isShow: true }
   })
-  init.value = true // 初始化锁 开
+  // 额外记录【更多】按钮
+  MenuItemsMeta.value['is-more'] = { index: -1, width: 48, key: 'is-more' } 
+  console.log(MenuItemsMeta.value);
+  
+  // 初始化锁 开
+  init.value = true 
+  // 找到目标父盒子
   const targetFatherDom = (fatherRef.value as HTMLElement).closest("[data-target]")
+  // 开始检测
   observeVisibleChildren(targetFatherDom as HTMLElement, null, handleChildren)
 })
 
@@ -72,19 +81,26 @@ function handleChildren(count:number, parentRectWidth:number){
   let totalWidth: number = 0
   for(const key in MenuItemsMeta.value){
     const { index, width } = MenuItemsMeta.value[key]
-    console.log(isShowExtraTrigger.value); // todo... 如何利用【更多】显隐来做文章？！
-    MenuItemsMeta.value[key].isShow = index < count
-    if(count >= index) totalWidth = totalWidth + width
-  }
-  // 控制回显
-  if( parentRectWidth > totalWidth + 48 ){
-    for(const key in MenuItemsMeta.value){  
-      const val = MenuItemsMeta.value[key]
-      if(val.index === count) val.isShow = true
+    if(index >= (isShowExtraTrigger.value ? count - 1 : count)){
+      MenuItemsMeta.value[key].isShow = false
     }
-  }
+    handleVisibleMoreBtn(MenuItemsMeta.value)
+    if(count >= index) totalWidth = totalWidth + width
+  } 
+  // 控制回显
+  // if( parentRectWidth > totalWidth ){
+  //   for(const key in MenuItemsMeta.value){  
+  //     const val = MenuItemsMeta.value[key]
+  //     if(val.index === count) val.isShow = true
+  //   }
+  // }
 }
 
+// 控制更多下拉按钮的显隐
+function handleVisibleMoreBtn(obj:any){
+  const arr = Object.values(obj).filter((item: any) => item.key !== 'is-more')
+  isShowExtraTrigger.value = !arr.every((d:any)=>d.isShow)
+}
 
 /**
  * 统计父元素中完全可见的子元素数量
@@ -99,16 +115,13 @@ function observeVisibleChildren(parent:HTMLElement, childSelector = null, callba
   }
   const getChildren = () => childSelector 
     ? (fatherRef.value as HTMLElement).querySelectorAll(childSelector) 
-    : (fatherRef.value as HTMLElement).children;
+    : (fatherRef.value as HTMLElement)?.children;
 
   function countFullyVisibleChildren() {
     const parentRect = parent.getBoundingClientRect();
     let count = 0;
     const parentRectWidth = parentRect.width
-    Array.from(getChildren()).forEach(child => {
-      if(Array.from(child.attributes)[0].name === 'is-more') {
-        return
-      }
+    Array.from(getChildren() || []).forEach(child => {
       const rect = child.getBoundingClientRect();
       if (rect.left >= parentRect.left && rect.right <= parentRect.right) {
         count++;
@@ -120,7 +133,7 @@ function observeVisibleChildren(parent:HTMLElement, childSelector = null, callba
   }
 
   // 初始计算
-  countFullyVisibleChildren();
+  // countFullyVisibleChildren();
 
   // 监听父元素宽度变化
   const resizeObserver = new ResizeObserver(() => {
