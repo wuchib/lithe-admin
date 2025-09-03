@@ -48,15 +48,9 @@ const init = ref(false) // 初始化锁 关
 
 // 剩下的菜单项
 const extraMenuItems = ref<any[]>([])
-// 更多按钮的显隐
-const isShowExtraTrigger = ref(false)
 
-// const isShowExtraTrigger = computed(()=>{
-//   if(!init.value) return false
-//   const arr = Object.values(MenuItemsMeta.value)
-//   console.log(arr);
-//   return arr.filter((em:any)=>(em.isShow)).length !== arr.length
-// })
+// 更多按钮的显隐
+const isShowExtraTrigger = computed(() => !Object.values(MenuItemsMeta.value).every((em: any) => em.isShow))
 
 onMounted(()=>{
   // 记录所有子菜单项的宽度和索引
@@ -81,26 +75,19 @@ function handleChildren(count:number, parentRectWidth:number){
   let totalWidth: number = 0
   for(const key in MenuItemsMeta.value){
     const { index, width } = MenuItemsMeta.value[key]
-    if(index >= (isShowExtraTrigger.value ? count - 1 : count)){
-      MenuItemsMeta.value[key].isShow = false
-    }
-    handleVisibleMoreBtn(MenuItemsMeta.value)
+    MenuItemsMeta.value[key].isShow = index < count
     if(count >= index) totalWidth = totalWidth + width
   } 
   // 控制回显
-  // if( parentRectWidth > totalWidth ){
-  //   for(const key in MenuItemsMeta.value){  
-  //     const val = MenuItemsMeta.value[key]
-  //     if(val.index === count) val.isShow = true
-  //   }
-  // }
+  if( parentRectWidth > totalWidth ){
+    for(const key in MenuItemsMeta.value){  
+      const val = MenuItemsMeta.value[key]
+      if(val.index === count) val.isShow = true
+    }
+  }
 }
 
-// 控制更多下拉按钮的显隐
-function handleVisibleMoreBtn(obj:any){
-  const arr = Object.values(obj).filter((item: any) => item.key !== 'is-more')
-  isShowExtraTrigger.value = !arr.every((d:any)=>d.isShow)
-}
+
 
 /**
  * 统计父元素中完全可见的子元素数量
@@ -120,7 +107,8 @@ function observeVisibleChildren(parent:HTMLElement, childSelector = null, callba
   function countFullyVisibleChildren() {
     const parentRect = parent.getBoundingClientRect();
     let count = 0;
-    const parentRectWidth = parentRect.width
+    const moreDivWidth = isShowExtraTrigger.value ? 48 : 0
+    const parentRectWidth = parentRect.width - moreDivWidth
     Array.from(getChildren() || []).forEach(child => {
       const rect = child.getBoundingClientRect();
       if (rect.left >= parentRect.left && rect.right <= parentRect.right) {
@@ -128,7 +116,7 @@ function observeVisibleChildren(parent:HTMLElement, childSelector = null, callba
       }
     });
 
-    if (callback) callback(count, parentRectWidth);
+    if (callback) callback(isShowExtraTrigger.value ? count - 1 : count, parentRectWidth);
     return count;
   }
 
