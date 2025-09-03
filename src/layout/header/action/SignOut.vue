@@ -6,6 +6,8 @@ import { useComponentModifier } from '@/composables'
 import { useUserStore } from '@/stores'
 
 const userStore = useUserStore()
+const { cleanup } = userStore
+
 const dialog = useDialog()
 
 const { getModalModifier } = useComponentModifier()
@@ -17,12 +19,8 @@ const handleSignOutClick = () => {
     content: '确定要退出登录吗？',
     positiveText: '确定',
     negativeText: '取消',
-    onPositiveClick: cleanupUserInfo,
+    onPositiveClick: () => cleanup(),
   })
-}
-
-function cleanupUserInfo() {
-  userStore.cleanup()
 }
 </script>
 <template>

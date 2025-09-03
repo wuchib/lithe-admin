@@ -29,6 +29,7 @@ const { isDark } = usePersonalization()
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 
 const userStore = useUserStore()
+const { setToken } = userStore
 
 const illustrations = [
   defineAsyncComponent(() => import('./component/Illustration1.vue')),
@@ -71,9 +72,9 @@ function toLayout() {
 
   setTimeout(() => {
     if (signInForm.account.includes('admin')) {
-      userStore.setToken('admin')
+      setToken('admin')
     } else {
-      userStore.setToken('user')
+      setToken('user')
     }
 
     router.replace({

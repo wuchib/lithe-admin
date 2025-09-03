@@ -1,7 +1,7 @@
 import { useStorage } from '@vueuse/core'
 import { mergeWith } from 'lodash-es'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { watch } from 'vue'
+import { computed, watch, type ComputedRef } from 'vue'
 
 import type { WatermarkProps } from 'naive-ui'
 
@@ -75,6 +75,13 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
 export const usePreferencesStore = defineStore('preferencesStore', () => {
   const preferences = useStorage<PreferencesOptions>('preferences', DEFAULT_PREFERENCES_OPTIONS)
 
+  const computedPreferences = Object.fromEntries(
+    Object.entries(preferences.value).map(([key]) => [
+      key,
+      computed(() => preferences.value[key as keyof PreferencesOptions]),
+    ]),
+  ) as { [K in keyof PreferencesOptions]: ComputedRef<PreferencesOptions[K]> }
+
   const modify = (options: Partial<PreferencesOptions>) => {
     preferences.value = mergeWith({}, preferences.value, options, (objValue, srcValue) => {
       if (Array.isArray(objValue) && Array.isArray(srcValue)) {
@@ -99,6 +106,7 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
 
   return {
     preferences,
+    ...computedPreferences,
     reset,
     modify,
   }

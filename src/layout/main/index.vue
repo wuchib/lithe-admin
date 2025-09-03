@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
+import { storeToRefs } from 'pinia'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 
@@ -22,7 +23,7 @@ const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
 
 const tabsStore = useTabsStore()
 
-const preferencesStore = usePreferencesStore()
+const { enableNavigationTransition, showTabs } = storeToRefs(usePreferencesStore())
 
 const { createTab, setTabActivePath } = tabsStore
 
@@ -85,9 +86,9 @@ watch(
       return
     }
 
-    if (!preferencesStore.preferences.enableNavigationTransition) return
+    if (!enableNavigationTransition.value) return
 
-    if (!preferencesStore.preferences.showTabs) {
+    if (!showTabs.value) {
       navigationTransitionName.value = 'scale'
       return
     }
@@ -155,7 +156,7 @@ onMounted(() => {
 </script>
 <template>
   <RouterView
-    v-if="preferencesStore.preferences.enableNavigationTransition"
+    v-if="enableNavigationTransition"
     v-slot="{ Component, route }"
   >
     <Transition

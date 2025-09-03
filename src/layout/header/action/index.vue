@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { defineAsyncComponent, h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
@@ -21,8 +22,7 @@ const AsyncAvatarDropdown = defineAsyncComponent({
 })
 
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
-
-const preferencesStore = usePreferencesStore()
+const { navigationMode } = storeToRefs(usePreferencesStore())
 </script>
 <template>
   <div class="flex items-center">
@@ -38,8 +38,6 @@ const preferencesStore = usePreferencesStore()
     <ThemePopselect />
     <PreferencesDrawer />
     <SignOut />
-    <AsyncAvatarDropdown
-      v-if="!isSmallScreen && preferencesStore.preferences.navigationMode === 'horizontal'"
-    />
+    <AsyncAvatarDropdown v-if="!isSmallScreen && navigationMode === 'horizontal'" />
   </div>
 </template>

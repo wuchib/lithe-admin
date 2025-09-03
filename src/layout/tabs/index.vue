@@ -1,6 +1,7 @@
 <script setup lang="tsx">
 import { isEmpty } from 'lodash-es'
 import { NDropdown, NEllipsis, NScrollbar } from 'naive-ui'
+import { storeToRefs } from 'pinia'
 import {
   computed,
   defineComponent,
@@ -47,7 +48,9 @@ const scrollbarRef = useTemplateRef<InstanceType<typeof NScrollbar>>('scrollbarR
 
 const tabsStore = useTabsStore()
 
-const preferencesStore = usePreferencesStore()
+const { tabs, tabActivePath } = storeToRefs(tabsStore)
+
+const { showTabClose } = storeToRefs(usePreferencesStore())
 
 const {
   setTabActivePath,
@@ -62,17 +65,17 @@ const {
 } = tabsStore
 
 const tabPinnedList = computed({
-  get: () => tabsStore.tabs.filter((tab) => tab.pinned),
+  get: () => tabs.value.filter((tab) => tab.pinned),
   set: (newPinnedTabs: Tab[]) => {
-    const currentUnpinnedTabs = tabsStore.tabs.filter((tab) => !tab.pinned)
+    const currentUnpinnedTabs = tabs.value.filter((tab) => !tab.pinned)
     setTabs([...newPinnedTabs, ...currentUnpinnedTabs])
   },
 })
 
 const tabUnPinnedList = computed({
-  get: () => tabsStore.tabs.filter((tab) => !tab.pinned),
+  get: () => tabs.value.filter((tab) => !tab.pinned),
   set: (newUnpinnedTabs: Tab[]) => {
-    const currentPinnedTabs = tabsStore.tabs.filter((tab) => tab.pinned)
+    const currentPinnedTabs = tabs.value.filter((tab) => tab.pinned)
     setTabs([...currentPinnedTabs, ...newUnpinnedTabs])
   },
 })
@@ -284,7 +287,7 @@ function handleTabRefreshClick() {
 
 const routerAfterEach = router.afterEach(() => {
   nextTick(() => {
-    pendingActivePath.value = tabsStore.tabActivePath
+    pendingActivePath.value = tabActivePath.value
   })
 })
 
@@ -328,26 +331,36 @@ const InternalTabs = defineComponent({
                 'relative cursor-pointer overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] hover:bg-primary/6 [&:not(.max-w-0)]:max-w-48',
                 {
                   'tab-active': tab.path === pendingActivePath.value,
-                  group: !tab.locked && !preferencesStore.preferences.showTabClose,
+                  group: !tab.locked && !showTabClose,
                 },
               ]}
               onClick={() => handleTabClick(tab.path)}
               onContextmenu={(e) => handleTabContextMenuClick(e, tab)}
             >
+              <Transition
+                type='transition'
+                leaveActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
+                enterActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
+                leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
+                enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
+                onAfterEnter={() => {
+                  scrollToActiveTab('smooth')
+                }}
+              >
+                {tab.path === pendingActivePath.value && (
+                  <div class='absolute inset-0 size-full border-t-[1.5px] border-primary bg-primary/6' />
+                )}
+              </Transition>
               <div
-                class={[
-                  'relative z-10 flex h-full items-center pl-4',
-                  tab.pinned ? 'pr-4' : 'pr-2.5',
-                ]}
+                class={['relative flex h-full items-center pl-4', tab.pinned ? 'pr-4' : 'pr-2.5']}
               >
                 <div
                   class={[
                     'flex flex-1 items-center overflow-hidden transition-[translate]',
                     {
-                      'translate-x-2.5':
-                        !tab.pinned && (tab.locked || !preferencesStore.preferences.showTabClose),
+                      'translate-x-2.5': !tab.pinned && (tab.locked || !showTabClose.value),
                       'group-hover:translate-x-0':
-                        !tab.pinned && !tab.locked && !preferencesStore.preferences.showTabClose,
+                        !tab.pinned && !tab.locked && !showTabClose.value,
                     },
                   ]}
                 >
@@ -369,10 +382,9 @@ const InternalTabs = defineComponent({
                     class={[
                       'ml-1 flex overflow-hidden rounded-full p-1 transition-[background-color,opacity,scale] hover:bg-naive-button-hover',
                       {
-                        'scale-0 opacity-0':
-                          tab.locked || !preferencesStore.preferences.showTabClose,
+                        'scale-0 opacity-0': tab.locked || !showTabClose.value,
                         'group-hover:scale-100 group-hover:opacity-100':
-                          !tab.locked && !preferencesStore.preferences.showTabClose,
+                          !tab.locked && !showTabClose.value,
                       },
                     ]}
                     onClick={(e) => {
@@ -384,20 +396,6 @@ const InternalTabs = defineComponent({
                   </div>
                 )}
               </div>
-              <Transition
-                type='transition'
-                leaveActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
-                enterActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
-                leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
-                enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
-                onAfterEnter={() => {
-                  scrollToActiveTab('smooth')
-                }}
-              >
-                {tab.path === pendingActivePath.value && (
-                  <div class='absolute inset-0 size-full border-t-[1.5px] border-primary bg-primary/6' />
-                )}
-              </Transition>
             </div>
           ))}
         </TransitionGroup>
@@ -407,7 +405,7 @@ const InternalTabs = defineComponent({
 })
 
 watch(
-  [() => tabsStore.tabs, () => tabsStore.tabActivePath],
+  [() => tabs.value, () => tabActivePath.value],
   ([newTabs, newTabActivePath], [oldTabs, oldTabActivePath]) => {
     if (!newTabActivePath) {
       tabBackgroundTransitionClasses.leaveToClass = 'scale-0 opacity-0'
@@ -434,7 +432,7 @@ watch(
 
 onMounted(() => {
   scrollToActiveTab()
-  pendingActivePath.value = tabsStore.tabActivePath
+  pendingActivePath.value = tabActivePath.value
   tabBackgroundTransitionClasses.enterFromClass = 'scale-0 opacity-0'
 })
 

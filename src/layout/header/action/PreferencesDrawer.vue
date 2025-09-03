@@ -8,6 +8,7 @@ import {
   useModal,
   NScrollbar,
 } from 'naive-ui'
+import { storeToRefs } from 'pinia'
 import { h, ref } from 'vue'
 
 import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
@@ -26,11 +27,27 @@ const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 
 const preferencesStore = usePreferencesStore()
 
+const { modify, reset } = preferencesStore
+
+const {
+  enableNavigationTransition,
+  enableTextSelect,
+  navigationMode,
+  showTopLoadingBar,
+  showLogo,
+  showNavigation,
+  showBreadcrumb,
+  showTabs,
+  showTabClose,
+  showFooter,
+  showWatermark,
+  showNoise,
+  sidebarMenu,
+} = storeToRefs(preferencesStore)
+
 const systemStore = useSystemStore()
 
 const { color, setColor } = usePersonalization()
-
-const { modify, reset } = preferencesStore
 
 const modal = useModal()
 
@@ -153,12 +170,10 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>展开侧边菜单</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.sidebarMenu.collapsed"
+                  :value="sidebarMenu.collapsed"
                   :checked-value="false"
                   :unchecked-value="true"
-                  :disabled="
-                    isSmallScreen || preferencesStore.preferences.navigationMode !== 'sidebar'
-                  "
+                  :disabled="isSmallScreen || navigationMode !== 'sidebar'"
                   @update-value="
                     (value) =>
                       modify({
@@ -172,7 +187,7 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>显示顶部加载条</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.showTopLoadingBar"
+                  :value="showTopLoadingBar"
                   @update-value="
                     (value) =>
                       modify({
@@ -184,7 +199,7 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>显示Logo</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.showLogo"
+                  :value="showLogo"
                   @update-value="
                     (value) =>
                       modify({
@@ -196,10 +211,8 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>显示导航按钮</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.showNavigation"
-                  :disabled="
-                    isSmallScreen || preferencesStore.preferences.navigationMode !== 'sidebar'
-                  "
+                  :value="showNavigation"
+                  :disabled="isSmallScreen || navigationMode !== 'sidebar'"
                   @update-value="
                     (value) =>
                       modify({
@@ -211,10 +224,8 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>显示面包屑</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.showBreadcrumb"
-                  :disabled="
-                    isSmallScreen || preferencesStore.preferences.navigationMode !== 'sidebar'
-                  "
+                  :value="showBreadcrumb"
+                  :disabled="isSmallScreen || navigationMode !== 'sidebar'"
                   @update-value="
                     (value) =>
                       modify({
@@ -226,7 +237,7 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>显示标签页</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.showTabs"
+                  :value="showTabs"
                   :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
@@ -239,7 +250,7 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>常显标签关闭按钮</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.showTabClose"
+                  :value="showTabClose"
                   :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
@@ -252,7 +263,7 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>显示底部</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.showFooter"
+                  :value="showFooter"
                   :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
@@ -278,7 +289,7 @@ const showNoiseModal = () => {
                 </ButtonAnimation>
               </div>
               <NSwitch
-                :value="preferencesStore.preferences.showWatermark"
+                :value="showWatermark"
                 @update-value="
                   (value) =>
                     modify({
@@ -300,7 +311,7 @@ const showNoiseModal = () => {
                 </ButtonAnimation>
               </div>
               <NSwitch
-                :value="preferencesStore.preferences.showNoise"
+                :value="showNoise"
                 @update-value="
                   (value) =>
                     modify({
@@ -313,7 +324,7 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>启用导航过渡效果</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.enableNavigationTransition"
+                  :value="enableNavigationTransition"
                   :disabled="isSmallScreen"
                   @update-value="
                     (value) =>
@@ -326,7 +337,7 @@ const showNoiseModal = () => {
               <div class="flex items-center justify-between">
                 <span>文字可选中</span>
                 <NSwitch
-                  :value="preferencesStore.preferences.enableTextSelect"
+                  :value="enableTextSelect"
                   @update-value="
                     (value) =>
                       modify({

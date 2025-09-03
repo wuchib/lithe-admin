@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { NSlider, NInputNumber } from 'naive-ui'
-import { reactive, ref, watchEffect } from 'vue'
+import { reactive, ref } from 'vue'
 
 import { usePreferencesStore } from '@/stores'
 
 import type { SliderProps } from 'naive-ui'
 
 const preferencesStore = usePreferencesStore()
+const { modify } = preferencesStore
 
-const opacity = ref(0)
+const opacity = ref(preferencesStore.noiseOpacity)
 
 const sliderRange = reactive({
   step: 0.001,
@@ -16,15 +17,11 @@ const sliderRange = reactive({
   max: 0.1,
 })
 
-const onSliderUpdate: SliderProps['onUpdateValue'] = (opacity) => {
-  preferencesStore.modify({
-    noiseOpacity: opacity,
+const onSliderUpdate: SliderProps['onUpdateValue'] = (value) => {
+  modify({
+    noiseOpacity: value,
   })
 }
-
-watchEffect(() => {
-  opacity.value = preferencesStore.preferences.noiseOpacity
-})
 </script>
 <template>
   <div class="flex flex-col gap-y-4 pt-6 pb-4">

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+
 import { usePreferencesStore } from '@/stores'
 
 import Action from './action/index.vue'
@@ -9,18 +11,14 @@ defineOptions({
   name: 'HeaderLayout',
 })
 
-const preferencesStore = usePreferencesStore()
+const { navigationMode } = storeToRefs(usePreferencesStore())
 </script>
 <template>
   <header class="flex bg-naive-card transition-[background-color]">
     <Logo />
     <div
       class="flex flex-1 items-center border-l px-4 py-3.5 transition-[border-color]"
-      :class="
-        preferencesStore.preferences.navigationMode === 'sidebar'
-          ? 'border-naive-border'
-          : 'border-transparent'
-      "
+      :class="navigationMode === 'sidebar' ? 'border-naive-border' : 'border-transparent'"
     >
       <Navigation />
       <Action class="gap-x-3 pl-4" />

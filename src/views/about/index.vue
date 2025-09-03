@@ -23,8 +23,7 @@ const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
-const dir = `. 📂 lithe-admin
-├── 📄 LICENSE
+const dir = ` 📂 lithe-admin
 ├── 📄 README.en_US.md
 ├── 📄 README.md
 ├── 📄 eslint.config.ts
@@ -175,7 +174,6 @@ const dir = `. 📂 lithe-admin
 ├── 📄 tsconfig.json
 ├── 📄 tsconfig.node.json
 ├── 📄 tsconfig.vitest.json
-├── 📄 vercel.json
 ├── 📄 vite.config.ts
 └── 📄 vitest.config.ts`
 

@@ -10,6 +10,7 @@ import {
   NGlobalStyle,
   NEl,
 } from 'naive-ui'
+import { storeToRefs } from 'pinia'
 import { provide, ref } from 'vue'
 import { RouterView } from 'vue-router'
 
@@ -21,7 +22,7 @@ import { layoutInjectionKey, mediaQueryInjectionKey } from './injection'
 
 import type { LayoutSlideDirection } from './injection'
 
-const preferencesStore = usePreferencesStore()
+const { showWatermark, showNoise, watermarkOptions } = storeToRefs(usePreferencesStore())
 const configProviderProps = getConfigProviderProps()
 
 const mediaQuery = {
@@ -58,11 +59,11 @@ provide(layoutInjectionKey, {
             <NDialogProvider>
               <RouterView />
               <NWatermark
-                v-if="preferencesStore.preferences.showWatermark"
+                v-if="showWatermark"
                 fullscreen
-                v-bind="preferencesStore.preferences.watermarkOptions"
+                v-bind="watermarkOptions"
               />
-              <Noise v-if="preferencesStore.preferences.showNoise" />
+              <Noise v-if="showNoise" />
             </NDialogProvider>
           </NMessageProvider>
         </NNotificationProvider>

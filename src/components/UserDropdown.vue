@@ -15,6 +15,8 @@ defineOptions({
 })
 
 const userStore = useUserStore()
+const { cleanup } = userStore
+
 const message = useMessage()
 
 const userDropdownOptions = [
@@ -36,7 +38,7 @@ const onUserDropdownSelected = (key: string) => {
       message.info('点击了个人中心')
       break
     case 'signOut':
-      userStore.cleanup()
+      cleanup()
       break
   }
 }

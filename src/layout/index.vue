@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
+import { storeToRefs } from 'pinia'
 import { computed, defineAsyncComponent, h, watch } from 'vue'
 
 import texturePng from '@/assets/texture.png'
@@ -18,6 +19,8 @@ defineOptions({
 })
 
 const preferencesStore = usePreferencesStore()
+const { modify } = preferencesStore
+const { sidebarMenu, navigationMode, showFooter, showTabs } = storeToRefs(preferencesStore)
 
 const AsyncMobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
 const AsyncMobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
@@ -28,9 +31,7 @@ const AsyncAsideLayout = defineAsyncComponent({
     h('div', {
       style: {
         width: `${
-          preferencesStore.preferences.sidebarMenu.collapsed
-            ? preferencesStore.preferences.sidebarMenu.width
-            : preferencesStore.preferences.sidebarMenu.maxWidth
+          sidebarMenu.value.collapsed ? sidebarMenu.value.width : sidebarMenu.value.maxWidth
         }px`,
       },
     }),
@@ -38,6 +39,7 @@ const AsyncAsideLayout = defineAsyncComponent({
 })
 
 const tabsStore = useTabsStore()
+const { tabs } = storeToRefs(tabsStore)
 
 const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
 
@@ -45,15 +47,15 @@ const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInj
 
 const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
-    ? preferencesStore.preferences.sidebarMenu.maxWidth || 0
+    ? sidebarMenu.value.maxWidth || 0
     : layoutSlideDirection.value === 'left'
-      ? -(preferencesStore.preferences.sidebarMenu.width || 0)
+      ? -(sidebarMenu.value.width || 0)
       : 0
 })
 
 watch(isSmallScreen, (isSmallScreen) => {
   if (isSmallScreen) {
-    preferencesStore.modify({
+    modify({
       sidebarMenu: {
         collapsed: false,
       },
@@ -88,7 +90,7 @@ watch(isSmallScreen, (isSmallScreen) => {
       <div class="flex flex-1 overflow-hidden">
         <CollapseTransition
           v-if="!isSmallScreen"
-          :display="preferencesStore.preferences.navigationMode === 'sidebar'"
+          :display="navigationMode === 'sidebar'"
           content-class="min-h-0"
         >
           <AsyncAsideLayout />
@@ -98,7 +100,7 @@ watch(isSmallScreen, (isSmallScreen) => {
         >
           <CollapseTransition
             v-if="!isSmallScreen"
-            :display="!isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs"
+            :display="!isEmpty(tabs) && showTabs"
             direction="horizontal"
             :render-content="false"
           >
@@ -108,7 +110,7 @@ watch(isSmallScreen, (isSmallScreen) => {
             <MainLayout />
           </main>
           <EmptyPlaceholder
-            :show="isEmpty(tabsStore.tabs)"
+            :show="isEmpty(tabs)"
             description="空标签页"
             size="huge"
           >
@@ -120,7 +122,7 @@ watch(isSmallScreen, (isSmallScreen) => {
           </EmptyPlaceholder>
           <CollapseTransition
             v-if="!isSmallScreen"
-            :display="preferencesStore.preferences.showFooter"
+            :display="showFooter"
             direction="horizontal"
             :render-content="false"
           >

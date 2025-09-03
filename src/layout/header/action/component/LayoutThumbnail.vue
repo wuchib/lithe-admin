@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+
 import { usePersonalization } from '@/composables'
 import { usePreferencesStore } from '@/stores'
 
 const { color } = usePersonalization()
 
 const preferencesStore = usePreferencesStore()
+const { modify } = preferencesStore
+const { navigationMode } = storeToRefs(preferencesStore)
 </script>
 <template>
   <div
@@ -16,11 +20,11 @@ const preferencesStore = usePreferencesStore()
     <div
       class="flex h-16 w-20 cursor-pointer flex-col rounded border border-neutral-350 outline-offset-4 transition-[outline] max-sm:pointer-events-none max-sm:opacity-50 dark:border-neutral-650"
       :class="
-        preferencesStore.preferences.navigationMode === 'sidebar'
+        navigationMode === 'sidebar'
           ? 'outline-2 outline-primary/50'
           : 'outline-2 outline-transparent hover:outline-primary/30'
       "
-      @click="preferencesStore.modify({ navigationMode: 'sidebar' })"
+      @click="modify({ navigationMode: 'sidebar' })"
     >
       <div class="flex h-2.5">
         <div class="h-full w-5 shrink-0 border-r border-neutral-350 dark:border-neutral-650"></div>
@@ -57,11 +61,11 @@ const preferencesStore = usePreferencesStore()
     <div
       class="flex h-16 w-20 cursor-pointer flex-col rounded border border-neutral-350 outline-offset-4 transition-[outline] duration-300 max-sm:pointer-events-none max-sm:opacity-50 dark:border-neutral-650"
       :class="
-        preferencesStore.preferences.navigationMode === 'horizontal'
+        navigationMode === 'horizontal'
           ? 'outline-2 outline-primary/50'
           : 'outline-2 outline-transparent hover:outline-primary/30'
       "
-      @click="preferencesStore.modify({ navigationMode: 'horizontal' })"
+      @click="modify({ navigationMode: 'horizontal' })"
     >
       <div class="flex h-2.5 border-b border-neutral-350 dark:border-neutral-650">
         <div class="h-full w-3 shrink-0"></div>

@@ -1,3 +1,5 @@
+import { storeToRefs } from 'pinia'
+
 import { useDiscreteApi } from '@/composables'
 import { usePreferencesStore, pinia, useUserStore } from '@/stores'
 
@@ -7,18 +9,20 @@ const Layout = () => import('@/layout/index.vue')
 
 const { loadingBar } = useDiscreteApi()
 
-const preferencesStore = usePreferencesStore(pinia)
+const { showTopLoadingBar } = storeToRefs(usePreferencesStore(pinia))
 
 export function setupRouterGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
-    if (preferencesStore.preferences.showTopLoadingBar) {
+    if (showTopLoadingBar.value) {
       loadingBar.start()
     }
 
     const userStore = useUserStore()
+    const { resolveMenuList, cleanup } = userStore
+    const { token, routeList } = storeToRefs(userStore)
 
     if (to.name === 'signIn') {
-      if (!userStore.token) {
+      if (!token.value) {
         next()
       } else {
         next(from.fullPath)
@@ -27,15 +31,15 @@ export function setupRouterGuard(router: Router) {
       return false
     }
 
-    if (!userStore.token) {
-      userStore.cleanup()
+    if (!token.value) {
+      cleanup()
       next()
       return false
     }
 
-    if (userStore.token && !router.hasRoute('layout')) {
+    if (token.value && !router.hasRoute('layout')) {
       try {
-        await userStore.resolveMenuList()
+        await resolveMenuList()
 
         router.addRoute({
           path: '/',
@@ -43,13 +47,13 @@ export function setupRouterGuard(router: Router) {
           component: Layout,
           // if you need to have a redirect when accessing / routing
           redirect: '/dashboard',
-          children: userStore.routeList,
+          children: routeList.value,
         })
 
         next(to.fullPath)
       } catch (error) {
         console.error('Error resolving user menu or adding route:', error)
-        userStore.cleanup()
+        cleanup()
         next()
       }
 
@@ -65,7 +69,7 @@ export function setupRouterGuard(router: Router) {
   })
 
   router.afterEach(() => {
-    if (preferencesStore.preferences.showTopLoadingBar) {
+    if (showTopLoadingBar.value) {
       loadingBar.finish()
     }
   })

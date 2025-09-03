@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { nextTick, ref, watch } from 'vue'
 
 import Logo from '@/components/AppLogo.vue'
@@ -10,24 +11,21 @@ defineOptions({
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
-const preferencesStore = usePreferencesStore()
+const { navigationMode, sidebarMenu, showLogo } = storeToRefs(usePreferencesStore())
 
 const logoAreaWrapRef = ref<HTMLElement | null>(null)
 
 const collapseWidth = ref(0)
 
 watch(
-  [
-    () => preferencesStore.preferences.navigationMode,
-    () => preferencesStore.preferences.sidebarMenu.collapsed,
-  ],
+  [() => navigationMode.value, () => sidebarMenu.value.collapsed],
   ([navigationMode, isCollapsed]) => {
     if (navigationMode === 'horizontal') {
       nextTick(() => {
         collapseWidth.value = logoAreaWrapRef.value?.clientWidth ?? 0
       })
     } else {
-      const { width, maxWidth } = preferencesStore.preferences.sidebarMenu
+      const { width, maxWidth } = sidebarMenu.value
       const { width: defaultWidth, maxWidth: defaultMaxWidth } =
         DEFAULT_PREFERENCES_OPTIONS.sidebarMenu
       collapseWidth.value = isCollapsed ? width || defaultWidth : maxWidth || defaultMaxWidth
@@ -51,10 +49,10 @@ watch(
       ref="logoAreaWrapRef"
       class="flex h-full items-center transition-[opacity,padding]"
       :class="[
-        preferencesStore.preferences.sidebarMenu.collapsed ? 'px-3' : 'px-4',
+        sidebarMenu.collapsed ? 'px-3' : 'px-4',
         {
-          'opacity-0': !preferencesStore.preferences.showLogo,
-          'w-fit': preferencesStore.preferences.navigationMode === 'horizontal',
+          'opacity-0': !showLogo,
+          'w-fit': navigationMode === 'horizontal',
         },
       ]"
     >
@@ -63,9 +61,7 @@ watch(
       </div>
       <div
         class="flex flex-1 overflow-hidden transition-[margin-left,max-width]"
-        :class="
-          preferencesStore.preferences.sidebarMenu.collapsed ? 'ml-0 max-w-0' : 'ml-4 max-w-44'
-        "
+        :class="sidebarMenu.collapsed ? 'ml-0 max-w-0' : 'ml-4 max-w-44'"
       >
         <h1 class="shrink-0 text-xl">
           {{ APP_NAME }}

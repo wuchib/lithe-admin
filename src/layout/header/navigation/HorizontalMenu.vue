@@ -2,6 +2,7 @@
 import { useElementSize, watchThrottled } from '@vueuse/core'
 import { isFunction, isEmpty } from 'lodash-es'
 import { NDropdown } from 'naive-ui'
+import { storeToRefs } from 'pinia'
 import { h, computed, ref, watch, nextTick, onBeforeUnmount, reactive } from 'vue'
 
 import { useInjection } from '@/composables'
@@ -24,7 +25,7 @@ let rafId: number | null = null
 
 let initialized = false
 
-const userStore = useUserStore()
+const { menuList } = storeToRefs(useUserStore())
 
 const { navigationContainerElement } = useInjection(headerLayoutInjectionKey)
 
@@ -41,7 +42,7 @@ const menuRightBoundMap = reactive(new Map<Key, number>())
 const threshold = ref(Number.POSITIVE_INFINITY)
 
 const moreDropdownOptions = computed<DropdownProps['options']>(() => {
-  return (userStore.menuList as NonNullable<MenuProps['options']>).filter((item) => {
+  return (menuList.value as NonNullable<MenuProps['options']>).filter((item) => {
     if (item.type) return false
     const menuRightBound = menuRightBoundMap.get(item.key) ?? 0
     return menuRightBound + MENU.ITEM_COLUMN_GAP > threshold.value
@@ -149,7 +150,7 @@ onBeforeUnmount(() => {
     }"
   >
     <template
-      v-for="{ disabled, key, type, label, icon, children } in userStore.menuList"
+      v-for="{ disabled, key, type, label, icon, children } in menuList"
       :key="key"
     >
       <div

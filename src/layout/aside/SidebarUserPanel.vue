@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { useMessage } from 'naive-ui'
+import { storeToRefs } from 'pinia'
 
 import { ButtonAnimation } from '@/components'
 import Avatar from '@/components/UserAvatar.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
 import { usePreferencesStore, useUserStore } from '@/stores'
 
-const preferencesStore = usePreferencesStore()
+const { sidebarMenu } = storeToRefs(usePreferencesStore())
 
-const userStore = useUserStore()
+const { user } = storeToRefs(useUserStore())
 
 const message = useMessage()
 
@@ -20,7 +21,7 @@ const handleUserCardClick = () => {
   <div
     class="flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
     :class="
-      preferencesStore.preferences.sidebarMenu.collapsed
+      sidebarMenu.collapsed
         ? 'mx-2 rounded-naive'
         : 'mx-4 rounded-xl bg-neutral-150 py-3.5 pr-2.5 pl-3.5 dark:bg-neutral-800'
     "
@@ -28,15 +29,15 @@ const handleUserCardClick = () => {
   >
     <UserDropdown
       placement="right-end"
-      :disabled="!preferencesStore.preferences.sidebarMenu.collapsed"
+      :disabled="!sidebarMenu.collapsed"
     >
       <div
         class="grid place-items-center overflow-hidden rounded-full transition-[margin,padding]"
-        :class="preferencesStore.preferences.sidebarMenu.collapsed ? 'mr-0 px-2 py-1.5' : 'mr-2'"
+        :class="sidebarMenu.collapsed ? 'mr-0 px-2 py-1.5' : 'mr-2'"
       >
         <div
           class="flex items-center justify-center overflow-hidden transition-[height,width]"
-          :class="preferencesStore.preferences.sidebarMenu.collapsed ? 'size-8' : 'size-10'"
+          :class="sidebarMenu.collapsed ? 'size-8' : 'size-10'"
         >
           <Avatar
             size="large"
@@ -57,12 +58,12 @@ const handleUserCardClick = () => {
     >
       <div
         class="grid flex-1 overflow-hidden"
-        v-show="!preferencesStore.preferences.sidebarMenu.collapsed"
+        v-show="!sidebarMenu.collapsed"
       >
         <div class="flex min-w-0 items-center overflow-hidden">
           <div class="flex flex-1 flex-col gap-y-px">
             <span class="truncate text-sm">
-              {{ userStore.user.name }}
+              {{ user.name }}
             </span>
             <span class="truncate text-xs text-neutral-450 dark:text-neutral-500">
               这里应该写点什么

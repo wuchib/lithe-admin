@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
 import { usePreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
@@ -11,19 +12,19 @@ defineOptions({
 })
 
 const preferencesStore = usePreferencesStore()
+const { modify } = preferencesStore
+const { sidebarMenu } = storeToRefs(preferencesStore)
 
 const menuCollapseWidth = computed(() => {
-  return preferencesStore.preferences.sidebarMenu.collapsed
-    ? preferencesStore.preferences.sidebarMenu.width ||
-        DEFAULT_PREFERENCES_OPTIONS.sidebarMenu.width
-    : preferencesStore.preferences.sidebarMenu.maxWidth ||
-        DEFAULT_PREFERENCES_OPTIONS.sidebarMenu.maxWidth
+  return sidebarMenu.value.collapsed
+    ? sidebarMenu.value.width || DEFAULT_PREFERENCES_OPTIONS.sidebarMenu.width
+    : sidebarMenu.value.maxWidth || DEFAULT_PREFERENCES_OPTIONS.sidebarMenu.maxWidth
 })
 
 function handleCollapseClick() {
-  preferencesStore.modify({
+  modify({
     sidebarMenu: {
-      collapsed: !preferencesStore.preferences.sidebarMenu.collapsed,
+      collapsed: !sidebarMenu.value.collapsed,
     },
   })
 }
@@ -44,7 +45,7 @@ function handleCollapseClick() {
       <span
         class="iconify size-4.5 transition-[color,rotate] ph--caret-left dark:text-neutral-400"
         :class="{
-          'rotate-180': preferencesStore.preferences.sidebarMenu.collapsed,
+          'rotate-180': sidebarMenu.collapsed,
         }"
       />
     </div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { defineAsyncComponent, provide, ref } from 'vue'
 
 import { CollapseTransition } from '@/components'
@@ -13,7 +14,7 @@ const AsyncNavigationButton = defineAsyncComponent(() => import('./NavigationBut
 const AsyncHorizontalMenu = defineAsyncComponent(() => import('./HorizontalMenu.vue'))
 const AsyncBreadcrumb = defineAsyncComponent(() => import('./Breadcrumb.vue'))
 
-const preferencesStore = usePreferencesStore()
+const { showNavigation, showBreadcrumb, navigationMode } = storeToRefs(usePreferencesStore())
 
 const navigationContainerRef = ref<HTMLElement | null>(null)
 
@@ -26,23 +27,13 @@ provide(headerLayoutInjectionKey, {
     ref="navigationContainerRef"
     class="flex h-9 flex-1 items-center"
   >
-    <CollapseTransition
-      :display="
-        preferencesStore.preferences.showNavigation &&
-        preferencesStore.preferences.navigationMode === 'sidebar'
-      "
-    >
+    <CollapseTransition :display="showNavigation && navigationMode === 'sidebar'">
       <AsyncNavigationButton />
     </CollapseTransition>
-    <CollapseTransition
-      :display="
-        preferencesStore.preferences.showBreadcrumb &&
-        preferencesStore.preferences.navigationMode === 'sidebar'
-      "
-    >
+    <CollapseTransition :display="showBreadcrumb && navigationMode === 'sidebar'">
       <AsyncBreadcrumb />
     </CollapseTransition>
-    <CollapseTransition :display="preferencesStore.preferences.navigationMode === 'horizontal'">
+    <CollapseTransition :display="navigationMode === 'horizontal'">
       <AsyncHorizontalMenu />
     </CollapseTransition>
   </nav>

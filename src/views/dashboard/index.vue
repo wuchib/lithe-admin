@@ -2,6 +2,7 @@
 import chroma from 'chroma-js'
 import * as echarts from 'echarts'
 import { NNumberAnimation } from 'naive-ui'
+import { storeToRefs } from 'pinia'
 import { onMounted, watch, ref, computed, onUnmounted, nextTick } from 'vue'
 
 import { ContentWrapper } from '@/components'
@@ -16,7 +17,7 @@ defineOptions({
 })
 
 const { isDark, color } = usePersonalization()
-const preferencesStore = usePreferencesStore()
+const { sidebarMenu, navigationMode } = storeToRefs(usePreferencesStore())
 
 const cardList = ref(generateCardData())
 
@@ -1050,23 +1051,17 @@ function resizeAllCharts() {
   if (highestRevenueChartInstance) highestRevenueChartInstance.resize()
 }
 
-watch(
-  [
-    () => preferencesStore.preferences.sidebarMenu.collapsed,
-    () => preferencesStore.preferences.navigationMode,
-  ],
-  () => {
-    if (collapseResizeTimeout !== null) {
-      clearTimeout(collapseResizeTimeout)
-      collapseResizeTimeout = null
-    }
-    nextTick(() => {
-      collapseResizeTimeout = setTimeout(() => {
-        resizeAllCharts()
-      }, 350)
-    })
-  },
-)
+watch([() => sidebarMenu.value.collapsed, () => navigationMode.value], () => {
+  if (collapseResizeTimeout !== null) {
+    clearTimeout(collapseResizeTimeout)
+    collapseResizeTimeout = null
+  }
+  nextTick(() => {
+    collapseResizeTimeout = setTimeout(() => {
+      resizeAllCharts()
+    }, 350)
+  })
+})
 
 watch([isDark, color], () => {
   if (revenueChartInstance) {
