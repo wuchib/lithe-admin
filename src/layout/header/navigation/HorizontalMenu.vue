@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useElementSize, watchThrottled } from '@vueuse/core'
+import { useElementSize, watchThrottled, useTemplateRefsList } from '@vueuse/core'
 import { isFunction, isEmpty } from 'lodash-es'
 import { NDropdown } from 'naive-ui'
 import { storeToRefs } from 'pinia'
-import { h, computed, ref, watch, nextTick, onBeforeUnmount, reactive } from 'vue'
+import { h, computed, ref, watch, onBeforeUnmount, reactive, useTemplateRef, onMounted } from 'vue'
 
 import { useInjection } from '@/composables'
 import { headerLayoutInjectionKey } from '@/injection'
@@ -11,7 +11,6 @@ import router from '@/router'
 import { useUserStore } from '@/stores'
 
 import type { DropdownProps, MenuProps } from 'naive-ui'
-import type { ComponentPublicInstance } from 'vue'
 
 type Key = string | number | undefined
 
@@ -21,10 +20,6 @@ const MENU = {
   BOUNDARY_OFFSET: 1,
 }
 
-let rafId: number | null = null
-
-let initialized = false
-
 const { menuList } = storeToRefs(useUserStore())
 
 const { navigationContainerElement } = useInjection(headerLayoutInjectionKey)
@@ -33,19 +28,21 @@ const { width: containerWidth, stop: stopObserveContainerSize } = useElementSize
   navigationContainerElement,
 )
 
-const navigationWrapperRef = ref<HTMLElement | null>(null)
-
 const menuActiveKey = ref('')
 
-const menuRightBoundMap = reactive(new Map<Key, number>())
+const navigationWrapperRef = useTemplateRef<HTMLElement>('navigationWrapper')
+
+const menuRefsList = useTemplateRefsList<HTMLDivElement>()
 
 const threshold = ref(Number.POSITIVE_INFINITY)
+
+const menuRightBoundMap = reactive(new Map<Key, number>())
 
 const moreDropdownOptions = computed<DropdownProps['options']>(() => {
   return (menuList.value as NonNullable<MenuProps['options']>).filter((item) => {
     if (item.type) return false
     const menuRightBound = menuRightBoundMap.get(item.key) ?? 0
-    return menuRightBound + MENU.ITEM_COLUMN_GAP > threshold.value
+    return menuRightBound > threshold.value
   })
 })
 
@@ -74,26 +71,17 @@ const renderIcon: DropdownProps['renderIcon'] = (option) => {
     : null
 }
 
-function forwardRef(key: Key, ref: Element | ComponentPublicInstance | null) {
-  if (!key || !ref || menuRightBoundMap.has(key)) return
-  nextTick(() => {
-    const rect = (ref as HTMLElement).getBoundingClientRect()
-    menuRightBoundMap.set(
-      key,
-      rect.right - (navigationWrapperRef.value?.getBoundingClientRect().left ?? 0),
-    )
-    scheduleUpdateMenuVisibility()
-  })
-}
-
 function updateMenuVisibility(containerWidth: number) {
   if (containerWidth <= 0) return
-  const widthWithoutMore = containerWidth + MENU.BOUNDARY_OFFSET
-  const widthWithMore = containerWidth - MENU.MORE_BUTTON_WIDTH + MENU.BOUNDARY_OFFSET
+
+  containerWidth += MENU.BOUNDARY_OFFSET
+
+  const widthWithoutMore = containerWidth
+  const widthWithMore = containerWidth - MENU.MORE_BUTTON_WIDTH
 
   let needsMore = false
   for (const rightBound of menuRightBoundMap.values()) {
-    if (rightBound + MENU.ITEM_COLUMN_GAP > widthWithoutMore) {
+    if (rightBound > widthWithoutMore) {
       needsMore = true
       break
     }
@@ -102,18 +90,21 @@ function updateMenuVisibility(containerWidth: number) {
   threshold.value = needsMore ? widthWithMore : widthWithoutMore
 }
 
-function scheduleUpdateMenuVisibility() {
-  if (rafId != null) return
-  rafId = requestAnimationFrame(() => {
-    rafId = null
-    updateMenuVisibility(containerWidth.value)
-    if (!initialized) initialized = true
-  })
-}
-
 function isMenuVisibleByKey(key: Key) {
   const menuRightBound = menuRightBoundMap.get(key) ?? 0
-  return menuRightBound + MENU.ITEM_COLUMN_GAP <= threshold.value
+  return menuRightBound <= threshold.value
+}
+
+function calculateMenuRightBound() {
+  const wrapperElementBoundLeft = navigationWrapperRef.value?.getBoundingClientRect().left ?? 0
+
+  menuRefsList.value.forEach((menuElement) => {
+    const menuElementBoundRight =
+      menuElement.getBoundingClientRect().right - wrapperElementBoundLeft
+    const menuElementKey = menuElement.dataset.key
+
+    menuRightBoundMap.set(menuElementKey, menuElementBoundRight + MENU.ITEM_COLUMN_GAP)
+  })
 }
 
 watch(
@@ -129,7 +120,6 @@ watch(
 watchThrottled(
   containerWidth,
   (containerWidth) => {
-    if (!initialized) return
     updateMenuVisibility(containerWidth)
   },
   {
@@ -137,13 +127,17 @@ watchThrottled(
   },
 )
 
+onMounted(() => {
+  calculateMenuRightBound()
+})
+
 onBeforeUnmount(() => {
   stopObserveContainerSize()
 })
 </script>
 <template>
   <div
-    ref="navigationWrapperRef"
+    ref="navigationWrapper"
     class="relative flex items-center overflow-hidden"
     :style="{
       columnGap: `${MENU.ITEM_COLUMN_GAP}px`,
@@ -155,8 +149,9 @@ onBeforeUnmount(() => {
     >
       <div
         v-if="!type"
-        :ref="(ref) => forwardRef(key, ref)"
+        :ref="menuRefsList.set"
         v-show="isMenuVisibleByKey(key)"
+        :data-key="key"
         class="shrink-0 rounded-naive transition-[background-color,color]"
         :class="[
           {
