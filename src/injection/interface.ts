@@ -1,11 +1,11 @@
 import type { ComputedRef, Ref } from 'vue'
 
 export interface MediaQueryProvider {
-  isSmallScreen: ComputedRef<boolean>
-  isMediumScreen: ComputedRef<boolean>
-  isLargeScreen: ComputedRef<boolean>
-  isExtraLargeScreen: ComputedRef<boolean>
-  isExtraExtraLargeScreen: ComputedRef<boolean>
+  isMaxSm: ComputedRef<boolean>
+  isMaxMd: ComputedRef<boolean>
+  isMaxLg: ComputedRef<boolean>
+  isMaxXl: ComputedRef<boolean>
+  isMax2Xl: ComputedRef<boolean>
 }
 
 export type LayoutSlideDirection = 'left' | 'right' | null

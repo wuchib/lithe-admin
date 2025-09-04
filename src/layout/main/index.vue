@@ -16,7 +16,7 @@ defineOptions({
   name: 'MainLayout',
 })
 
-const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
 const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
   useInjection(layoutInjectionKey)
@@ -81,7 +81,7 @@ watch(
       }
     }
 
-    if (isSmallScreen.value) {
+    if (isMaxSm.value) {
       navigationTransitionName.value = ''
       return
     }

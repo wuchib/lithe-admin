@@ -46,7 +46,7 @@ defineOptions({
   name: 'DataTable',
 })
 
-const { isMediumScreen, isLargeScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxMd, isMaxLg } = useInjection(mediaQueryInjectionKey)
 
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
 
@@ -398,7 +398,7 @@ function createOrEditData(data?: UserInfo) {
     draggable: true,
     style: {
       width: '500px',
-      ...(isMediumScreen.value ? { marginInline: '16px' } : {}),
+      ...(isMaxMd.value ? { marginInline: '16px' } : {}),
     },
     content: () => (
       <ActionModal
@@ -440,7 +440,7 @@ getDataList()
 <template>
   <ContentWrapper
     content-class="flex flex-col gap-y-2"
-    :scrollable="isLargeScreen"
+    :scrollable="isMaxLg"
   >
     <NAlert
       type="info"
@@ -449,7 +449,7 @@ getDataList()
       一个数据表格的例子，不算复杂，也许对你有帮助
     </NAlert>
     <NCard
-      :size="isMediumScreen ? 'small' : undefined"
+      :size="isMaxMd ? 'small' : undefined"
       class="flex-1"
       content-class="flex flex-col"
     >
@@ -458,10 +458,10 @@ getDataList()
           ref="formRef"
           :model="form"
           :rules="rules"
-          :inline="!isLargeScreen"
+          :inline="!isMaxLg"
           label-placement="left"
           class="max-lg:w-full max-lg:flex-col"
-          :label-width="isLargeScreen ? 70 : undefined"
+          :label-width="isMaxLg ? 70 : undefined"
         >
           <NFormItem
             label="姓名"
@@ -541,7 +541,7 @@ getDataList()
           ref="dataTableRef"
           v-model:checked-row-keys="checkedRowKeys"
           :remote="true"
-          :flex-height="!isLargeScreen"
+          :flex-height="!isMaxLg"
           :scroll-x="enableScrollX ? 1800 : 0"
           :columns="columns"
           :data="dataList"
@@ -581,7 +581,7 @@ getDataList()
               </NButton>
 
               <NButton
-                v-show="!isMediumScreen"
+                v-show="!isMaxMd"
                 @click="enableContextmenu = !enableContextmenu"
                 :type="enableContextmenu ? 'primary' : 'default'"
                 secondary
@@ -589,7 +589,7 @@ getDataList()
                 右键菜单
               </NButton>
               <NButton
-                v-show="!isMediumScreen"
+                v-show="!isMaxMd"
                 @click="handleDownloadCsvClick"
                 secondary
                 type="info"
@@ -601,10 +601,10 @@ getDataList()
           <NPagination
             v-bind="pagination"
             :prefix="paginationPrefix"
-            :page-slot="isMediumScreen ? 5 : undefined"
-            :show-quick-jump-dropdown="!isMediumScreen"
-            :show-quick-jumper="!isMediumScreen"
-            :show-size-picker="!isMediumScreen"
+            :page-slot="isMaxMd ? 5 : undefined"
+            :show-quick-jump-dropdown="!isMaxMd"
+            :show-quick-jumper="!isMaxMd"
+            :show-size-picker="!isMaxMd"
           />
         </div>
       </div>

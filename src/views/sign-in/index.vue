@@ -26,7 +26,7 @@ defineOptions({
 })
 
 const { isDark } = usePersonalization()
-const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
 const userStore = useUserStore()
 const { setToken } = userStore
@@ -143,7 +143,7 @@ onUnmounted(() => {
     />
     <div class="relative z-50 flex h-[480px] w-[800px] justify-center rounded shadow-lg">
       <div
-        v-if="!isSmallScreen"
+        v-if="!isMaxSm"
         class="flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] dark:bg-neutral-850"
       >
         <NCarousel

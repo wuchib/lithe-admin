@@ -23,7 +23,7 @@ import LayoutThumbnail from './component/LayoutThumbnail.vue'
 import NoiseModal from './component/NoiseModal.vue'
 import WatermarkModal from './component/WatermarkModal.vue'
 
-const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
 const preferencesStore = usePreferencesStore()
 
@@ -173,7 +173,7 @@ const showNoiseModal = () => {
                   :value="sidebarMenu.collapsed"
                   :checked-value="false"
                   :unchecked-value="true"
-                  :disabled="isSmallScreen || navigationMode !== 'sidebar'"
+                  :disabled="isMaxSm || navigationMode !== 'sidebar'"
                   @update-value="
                     (value) =>
                       modify({
@@ -212,7 +212,7 @@ const showNoiseModal = () => {
                 <span>显示导航按钮</span>
                 <NSwitch
                   :value="showNavigationButton"
-                  :disabled="isSmallScreen || navigationMode !== 'sidebar'"
+                  :disabled="isMaxSm || navigationMode !== 'sidebar'"
                   @update-value="
                     (value) =>
                       modify({
@@ -225,7 +225,7 @@ const showNoiseModal = () => {
                 <span>显示面包屑</span>
                 <NSwitch
                   :value="showBreadcrumb"
-                  :disabled="isSmallScreen || navigationMode !== 'sidebar'"
+                  :disabled="isMaxSm || navigationMode !== 'sidebar'"
                   @update-value="
                     (value) =>
                       modify({
@@ -238,7 +238,7 @@ const showNoiseModal = () => {
                 <span>显示标签页</span>
                 <NSwitch
                   :value="showTabs"
-                  :disabled="isSmallScreen"
+                  :disabled="isMaxSm"
                   @update-value="
                     (value) =>
                       modify({
@@ -251,7 +251,7 @@ const showNoiseModal = () => {
                 <span>常显标签关闭按钮</span>
                 <NSwitch
                   :value="showTabClose"
-                  :disabled="isSmallScreen"
+                  :disabled="isMaxSm"
                   @update-value="
                     (value) =>
                       modify({
@@ -264,7 +264,7 @@ const showNoiseModal = () => {
                 <span>显示底部</span>
                 <NSwitch
                   :value="showFooter"
-                  :disabled="isSmallScreen"
+                  :disabled="isMaxSm"
                   @update-value="
                     (value) =>
                       modify({
@@ -325,7 +325,7 @@ const showNoiseModal = () => {
                 <span>启用导航过渡效果</span>
                 <NSwitch
                   :value="enableNavigationTransition"
-                  :disabled="isSmallScreen"
+                  :disabled="isMaxSm"
                   @update-value="
                     (value) =>
                       modify({

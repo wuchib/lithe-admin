@@ -41,7 +41,7 @@ const AsyncAsideLayout = defineAsyncComponent({
 const tabsStore = useTabsStore()
 const { tabs } = storeToRefs(tabsStore)
 
-const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
 const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
 
@@ -53,8 +53,8 @@ const layoutTranslateOffset = computed(() => {
       : 0
 })
 
-watch(isSmallScreen, (isSmallScreen) => {
-  if (isSmallScreen) {
+watch(isMaxSm, (isMaxSm) => {
+  if (isMaxSm) {
     modify({
       sidebarMenu: {
         collapsed: false,
@@ -69,27 +69,27 @@ watch(isSmallScreen, (isSmallScreen) => {
     class="relative h-svh overflow-hidden"
     :style="{ backgroundImage: `url(${texturePng})` }"
   >
-    <AsyncMobileLeftAside v-if="isSmallScreen" />
+    <AsyncMobileLeftAside v-if="isMaxSm" />
 
     <div
       class="relative flex h-full flex-col max-sm:bg-naive-card/50"
       :class="{
         'border-naive-border transition-[background-color,border-color,rounded,transform]':
-          isSmallScreen,
-        'rounded-xl border pb-2': isSmallScreen && layoutTranslateOffset,
+          isMaxSm,
+        'rounded-xl border pb-2': isMaxSm && layoutTranslateOffset,
       }"
       :style="
-        isSmallScreen &&
+        isMaxSm &&
         layoutSlideDirection && {
           transform: `translate(${layoutTranslateOffset}px) scale(0.88)`,
         }
       "
     >
-      <HeaderLayout v-if="!isSmallScreen" />
+      <HeaderLayout v-if="!isMaxSm" />
       <AsyncMobileHeader v-else />
       <div class="flex flex-1 overflow-hidden">
         <CollapseTransition
-          v-if="!isSmallScreen"
+          v-if="!isMaxSm"
           :display="navigationMode === 'sidebar'"
           content-class="min-h-0"
         >
@@ -99,7 +99,7 @@ watch(isSmallScreen, (isSmallScreen) => {
           class="relative flex flex-1 flex-col overflow-hidden border-t border-naive-border transition-[border-color]"
         >
           <CollapseTransition
-            v-if="!isSmallScreen"
+            v-if="!isMaxSm"
             :display="!isEmpty(tabs) && showTabs"
             direction="horizontal"
             :render-content="false"
@@ -121,7 +121,7 @@ watch(isSmallScreen, (isSmallScreen) => {
             </template>
           </EmptyPlaceholder>
           <CollapseTransition
-            v-if="!isSmallScreen"
+            v-if="!isMaxSm"
             :display="showFooter"
             direction="horizontal"
             :render-content="false"
@@ -131,12 +131,12 @@ watch(isSmallScreen, (isSmallScreen) => {
         </div>
       </div>
       <div
-        v-if="isSmallScreen && layoutSlideDirection"
+        v-if="isMaxSm && layoutSlideDirection"
         class="absolute inset-0"
         style="z-index: 9997"
         @click="setLayoutSlideDirection(null)"
       />
     </div>
-    <AsyncMobileRightAside v-if="isSmallScreen" />
+    <AsyncMobileRightAside v-if="isMaxSm" />
   </div>
 </template>

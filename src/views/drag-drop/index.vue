@@ -15,7 +15,7 @@ defineOptions({
 
 let codeToHtml: any
 
-const { isMediumScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxMd } = useInjection(mediaQueryInjectionKey)
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -125,14 +125,14 @@ watch(
     </NAlert>
     <NCard
       title="基础使用"
-      :size="isMediumScreen ? 'small' : undefined"
+      :size="isMaxMd ? 'small' : undefined"
     >
       <NSplit
-        :direction="isMediumScreen ? 'vertical' : 'horizontal'"
-        :pane1-class="isMediumScreen ? 'pb-4' : 'pr-8'"
-        :pane2-class="isMediumScreen ? 'pt-4' : 'pl-8'"
+        :direction="isMaxMd ? 'vertical' : 'horizontal'"
+        :pane1-class="isMaxMd ? 'pb-4' : 'pr-8'"
+        :pane2-class="isMaxMd ? 'pt-4' : 'pl-8'"
         :style="{
-          height: isMediumScreen ? '580px' : '280px',
+          height: isMaxMd ? '580px' : '280px',
         }"
       >
         <template #1>
@@ -170,7 +170,7 @@ watch(
     </NCard>
     <NCard
       title="网格布局"
-      :size="isMediumScreen ? 'small' : undefined"
+      :size="isMaxMd ? 'small' : undefined"
     >
       <div class="mb-4">
         你可以把<span class="text-primary">网格布局</span>的元素拖进<span class="text-primary"
@@ -178,11 +178,11 @@ watch(
         >中，它们可以相互拖放
       </div>
       <NSplit
-        :direction="isMediumScreen ? 'vertical' : 'horizontal'"
-        :pane1-class="isMediumScreen ? 'pb-4' : 'pr-8'"
-        :pane2-class="isMediumScreen ? 'pt-4' : 'pl-8'"
+        :direction="isMaxMd ? 'vertical' : 'horizontal'"
+        :pane1-class="isMaxMd ? 'pb-4' : 'pr-8'"
+        :pane2-class="isMaxMd ? 'pt-4' : 'pl-8'"
         :style="{
-          height: isMediumScreen ? '680px' : '280px',
+          height: isMaxMd ? '680px' : '280px',
         }"
         :default-size="0.7"
       >
@@ -220,14 +220,14 @@ watch(
     </NCard>
     <NCard
       title="克隆使用"
-      :size="isMediumScreen ? 'small' : undefined"
+      :size="isMaxMd ? 'small' : undefined"
     >
       <NSplit
-        :direction="isMediumScreen ? 'vertical' : 'horizontal'"
-        :pane1-class="isMediumScreen ? 'pb-4' : 'pr-8'"
-        :pane2-class="isMediumScreen ? 'pt-4' : 'pl-8'"
+        :direction="isMaxMd ? 'vertical' : 'horizontal'"
+        :pane1-class="isMaxMd ? 'pb-4' : 'pr-8'"
+        :pane2-class="isMaxMd ? 'pt-4' : 'pl-8'"
         :style="{
-          height: isMediumScreen ? '780px' : '280px',
+          height: isMaxMd ? '780px' : '280px',
         }"
         :default-size="0.7"
       >
@@ -256,7 +256,7 @@ watch(
             <NScrollbar>
               <EmptyPlaceholder
                 :show="cloneTaskList.length <= 0"
-                :description="`把${isMediumScreen ? '上' : '左'}边的任务拖拽到这里`"
+                :description="`把${isMaxMd ? '上' : '左'}边的任务拖拽到这里`"
               />
               <VueDraggable
                 ref="cloneTaskListDragRef"

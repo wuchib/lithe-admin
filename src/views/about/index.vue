@@ -13,7 +13,7 @@ defineOptions({
 
 let codeToHtml: any
 
-const { isMediumScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxMd } = useInjection(mediaQueryInjectionKey)
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -219,7 +219,7 @@ onMounted(async () => {
   <ContentWrapper content-class="flex flex-col gap-y-2">
     <NCard
       :title="`关于 ${APP_NAME}`"
-      :size="isMediumScreen ? 'small' : undefined"
+      :size="isMaxMd ? 'small' : undefined"
     >
       <p class="text-base">
         {{ APP_NAME }} 是一个轻盈而优雅的后台管理模板，主要技术栈由
@@ -292,7 +292,7 @@ onMounted(async () => {
     <div class="flex gap-x-2 max-lg:flex-col">
       <NCard
         title="目录结构"
-        :size="isMediumScreen ? 'small' : undefined"
+        :size="isMaxMd ? 'small' : undefined"
       >
         <NScrollbar container-style="max-height: 1100px;">
           <div v-html="directoryStructureHighlight"></div>
@@ -300,7 +300,7 @@ onMounted(async () => {
       </NCard>
       <NCard
         title="依赖信息"
-        :size="isMediumScreen ? 'small' : undefined"
+        :size="isMaxMd ? 'small' : undefined"
       >
         <NSplit
           direction="vertical"

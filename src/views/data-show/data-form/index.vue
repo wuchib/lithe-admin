@@ -46,7 +46,7 @@ defineOptions({
 
 let codeToHtml: any
 
-const { isMediumScreen, isLargeScreen, isExtraLargeScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxMd, isMaxLg, isMaxXl } = useInjection(mediaQueryInjectionKey)
 
 const message = useMessage()
 
@@ -228,12 +228,12 @@ watch(
     >
       一个数据表单的例子，做了一些验证的限制，右边是规则和表单的数据，你可以拖动它们之间的分割线
     </NAlert>
-    <NCard :size="isMediumScreen ? 'small' : undefined">
+    <NCard :size="isMaxMd ? 'small' : undefined">
       <NSplit
-        :pane1-class="isLargeScreen ? 'pb-4' : 'pr-8'"
-        :pane2-class="isLargeScreen ? 'pt-4' : 'pl-8'"
+        :pane1-class="isMaxLg ? 'pb-4' : 'pr-8'"
+        :pane2-class="isMaxLg ? 'pt-4' : 'pl-8'"
         :default-size="0.6"
-        :direction="isExtraLargeScreen ? 'vertical' : 'horizontal'"
+        :direction="isMaxXl ? 'vertical' : 'horizontal'"
       >
         <template #1>
           <NScrollbar>

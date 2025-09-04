@@ -21,7 +21,7 @@ const AsyncAvatarDropdown = defineAsyncComponent({
   delay: 0,
 })
 
-const { isSmallScreen } = useInjection(mediaQueryInjectionKey)
+const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 const { navigationMode } = storeToRefs(usePreferencesStore())
 </script>
 <template>
@@ -38,6 +38,6 @@ const { navigationMode } = storeToRefs(usePreferencesStore())
     <ThemePopselect />
     <PreferencesDrawer />
     <SignOut />
-    <AsyncAvatarDropdown v-if="!isSmallScreen && navigationMode === 'horizontal'" />
+    <AsyncAvatarDropdown v-if="!isMaxSm && navigationMode === 'horizontal'" />
   </div>
 </template>
