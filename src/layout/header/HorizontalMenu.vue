@@ -50,7 +50,8 @@ const init = ref(false) // 初始化锁 关
 const extraMenuItems = ref<any[]>([])
 
 // 更多按钮的显隐
-const isShowExtraTrigger = computed(() => !Object.values(MenuItemsMeta.value).every((em: any) => em.isShow))
+// const isShowExtraTrigger = computed(() =>!Object.values(MenuItemsMeta.value).every((em: any) => em.isShow))
+const isShowExtraTrigger = ref(true)
 
 onMounted(()=>{
   // 记录所有子菜单项的宽度和索引
@@ -60,8 +61,7 @@ onMounted(()=>{
     MenuItemsMeta.value[item.key] = { index, width, key: item.key, isShow: true }
   })
   // 额外记录【更多】按钮
-  MenuItemsMeta.value['is-more'] = { index: -1, width: 48, key: 'is-more' } 
-  console.log(MenuItemsMeta.value);
+  MenuItemsMeta.value['is-more'] = { index: -1, width: 48, key: 'is-more', isShow: true } 
   
   // 初始化锁 开
   init.value = true 
@@ -76,19 +76,27 @@ function handleChildren(count:number, parentRectWidth:number){
   for(const key in MenuItemsMeta.value){
     const { index, width } = MenuItemsMeta.value[key]
     MenuItemsMeta.value[key].isShow = index < count
-    if(count >= index) totalWidth = totalWidth + width
+    if(count >= index && key !== 'is-more') {
+      console.log(index);
+      totalWidth = totalWidth + width
+    }
   } 
+  isShowExtraTrigger.value = !Object.values(MenuItemsMeta.value).every((em: any) => em.isShow)
+  console.log(totalWidth,'--------------------------', parentRectWidth);
+  console.log(count,'👀');
+  
   // 控制回显
-  if( parentRectWidth > totalWidth ){
+  if(parentRectWidth > totalWidth){
     for(const key in MenuItemsMeta.value){  
       const val = MenuItemsMeta.value[key]
       if(val.index === count) val.isShow = true
     }
+    isShowExtraTrigger.value = !Object.values(MenuItemsMeta.value).every((em: any) => em.isShow)
   }
 }
 
 
-
+let lastRight = Infinity
 /**
  * 统计父元素中完全可见的子元素数量
  * @param {HTMLElement} parent - 父容器元素
@@ -107,15 +115,24 @@ function observeVisibleChildren(parent:HTMLElement, childSelector = null, callba
   function countFullyVisibleChildren() {
     const parentRect = parent.getBoundingClientRect();
     let count = 0;
-    const moreDivWidth = isShowExtraTrigger.value ? 48 : 0
-    const parentRectWidth = parentRect.width - moreDivWidth
+    let parentRectWidth = 0
     Array.from(getChildren() || []).forEach(child => {
       const rect = child.getBoundingClientRect();
       if (rect.left >= parentRect.left && rect.right <= parentRect.right) {
         count++;
       }
     });
-
+    const moreDivWidth = isShowExtraTrigger.value ? 48 : 0
+    const collectedMenuItemsLen = Object.values(MenuItemsMeta.value).filter((d:any)=>d.key !== 'is-more').length
+    console.log(moreDivWidth,'更多盒子的宽度');
+    console.log(collectedMenuItemsLen,'items的数量');
+    console.log(count,'子盒子dom的数量');
+    if(count === collectedMenuItemsLen && parentRect.right > lastRight){
+      parentRectWidth = parentRect.width
+    }else{
+      parentRectWidth = parentRect.width - moreDivWidth
+    }
+    lastRight = parentRect.right
     if (callback) callback(isShowExtraTrigger.value ? count - 1 : count, parentRectWidth);
     return count;
   }
