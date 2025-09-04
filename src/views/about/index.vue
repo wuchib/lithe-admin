@@ -73,7 +73,6 @@ const dir = ` 📂 lithe-admin
 │    ├── 📄 useComponentThemeOverrides.ts
 │    ├── 📄 useDiscreteApi.ts
 │    ├── 📄 useInjection.ts
-│    ├── 📄 usePersonalization.ts
 │    ├── 📄 useResettable.ts
 │    ├── 📄 useTheme.ts
 │  └── 📂 injection/
@@ -92,7 +91,7 @@ const dir = ` 📂 lithe-admin
 │        ├── 📄 FullScreen.vue
 │        ├── 📄 PreferencesDrawer.vue
 │        ├── 📄 SignOut.vue
-│        ├── 📄 ThemePopselect.vue
+│        ├── 📄 ThemeModePopover.vue
 │        └── 📂 component/
 │          ├── 📄 LayoutThumbnail.vue
 │          ├── 📄 NoiseModal.vue
