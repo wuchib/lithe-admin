@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-
-import { usePreferencesStore } from '@/stores'
+import { useToRefsPreferences } from '@/stores'
 
 import Action from './action/index.vue'
 import Logo from './logo/index.vue'
@@ -11,7 +9,7 @@ defineOptions({
   name: 'HeaderLayout',
 })
 
-const { navigationMode } = storeToRefs(usePreferencesStore())
+const { navigationMode } = useToRefsPreferences()
 </script>
 <template>
   <header class="flex bg-naive-card transition-[background-color]">

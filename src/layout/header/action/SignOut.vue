@@ -5,8 +5,7 @@ import { ButtonAnimation } from '@/components'
 import { useComponentModifier } from '@/composables'
 import { useUserStore } from '@/stores'
 
-const userStore = useUserStore()
-const { cleanup } = userStore
+const { cleanup } = useUserStore()
 
 const dialog = useDialog()
 

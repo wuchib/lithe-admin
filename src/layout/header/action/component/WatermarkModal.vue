@@ -9,35 +9,11 @@ import {
   NSwitch,
   NSelect,
 } from 'naive-ui'
-import { storeToRefs } from 'pinia'
 
 import { HintHelp } from '@/components'
-import { usePreferencesStore } from '@/stores'
+import { useToRefsPreferences } from '@/stores'
 
-import type { PreferencesOptions } from '@/stores'
-
-const preferencesStore = usePreferencesStore()
-const { modify } = preferencesStore
-const { watermarkOptions } = storeToRefs(preferencesStore)
-
-const modifyWatermarkColor = (color: string) => {
-  modify({
-    watermarkOptions: {
-      fontColor: color,
-    },
-  })
-}
-
-const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOptions']>(
-  key: K,
-  value: PreferencesOptions['watermarkOptions'][K],
-) => {
-  modify({
-    watermarkOptions: {
-      [key]: value,
-    },
-  })
-}
+const { watermarkOptions } = useToRefsPreferences()
 </script>
 <template>
   <NForm
@@ -54,7 +30,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
         type="textarea"
         v-model:value="watermarkOptions.content"
         clearable
-        @update:value="(value) => updateWatermarkOptions('content', value)"
       />
     </NFormItem>
 
@@ -68,7 +43,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
           v-model:value="watermarkOptions.fontSize"
           :min="8"
           :max="32"
-          @update:value="(value) => updateWatermarkOptions('fontSize', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -76,14 +50,7 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
         path="fontColor"
         class="w-full"
       >
-        <NColorPicker
-          :default-value="watermarkOptions.fontColor"
-          @update-value="
-            (value) => {
-              modifyWatermarkColor(value)
-            }
-          "
-        />
+        <NColorPicker v-model:value="watermarkOptions.fontColor" />
       </NFormItem>
       <NFormItem
         label="字体风格"
@@ -97,7 +64,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
             { label: '斜体', value: 'italic' },
             { label: '倾斜', value: 'oblique' },
           ]"
-          @update:value="(value) => updateWatermarkOptions('fontStyle', value)"
         />
       </NFormItem>
     </div>
@@ -123,7 +89,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
           :min="100"
           :max="900"
           :step="100"
-          @update:value="(value) => updateWatermarkOptions('fontWeight', value ?? 0)"
         />
       </NFormItem>
     </div>
@@ -136,7 +101,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
           v-model:value="watermarkOptions.width"
           class="w-full"
           :min="1"
-          @update:value="(value) => updateWatermarkOptions('width', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -147,7 +111,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
           v-model:value="watermarkOptions.height"
           class="w-full"
           :min="1"
-          @update:value="(value) => updateWatermarkOptions('height', value ?? 0)"
         />
       </NFormItem>
     </div>
@@ -160,7 +123,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
         <NInputNumber
           v-model:value="watermarkOptions.xGap"
           class="w-full"
-          @update:value="(value) => updateWatermarkOptions('xGap', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -170,7 +132,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
         <NInputNumber
           v-model:value="watermarkOptions.yGap"
           class="w-full"
-          @update:value="(value) => updateWatermarkOptions('yGap', value ?? 0)"
         />
       </NFormItem>
     </div>
@@ -182,7 +143,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
         <NInputNumber
           v-model:value="watermarkOptions.xOffset"
           class="w-full"
-          @update:value="(value) => updateWatermarkOptions('xOffset', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -192,7 +152,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
         <NInputNumber
           v-model:value="watermarkOptions.yOffset"
           class="w-full"
-          @update:value="(value) => updateWatermarkOptions('yOffset', value ?? 0)"
         />
       </NFormItem>
     </div>
@@ -206,7 +165,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
           v-model:value="watermarkOptions.rotate"
           :min="-90"
           :max="90"
-          @update:value="(value) => updateWatermarkOptions('rotate', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -218,7 +176,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
           v-model:value="watermarkOptions.globalRotate"
           :min="-180"
           :max="180"
-          @update:value="(value) => updateWatermarkOptions('globalRotate', value ?? 0)"
         />
       </NFormItem>
       <NFormItem
@@ -226,10 +183,7 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
         path="cross"
         class="w-full"
       >
-        <NSwitch
-          v-model:value="watermarkOptions.cross"
-          @update:value="(value) => updateWatermarkOptions('cross', value)"
-        />
+        <NSwitch v-model:value="watermarkOptions.cross" />
       </NFormItem>
     </div>
     <NFormItem
@@ -239,7 +193,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
       <NInput
         type="textarea"
         v-model:value="watermarkOptions.image"
-        @update:value="(value) => updateWatermarkOptions('image', value)"
         clearable
       />
     </NFormItem>
@@ -256,10 +209,7 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
             content="修改后需重新打开水印"
             class="pb-1.5"
           />
-          <NInputNumber
-            v-model:value="watermarkOptions.imageWidth"
-            @update:value="(value) => updateWatermarkOptions('imageWidth', value ?? 0)"
-          />
+          <NInputNumber v-model:value="watermarkOptions.imageWidth" />
         </div>
       </NFormItem>
       <NFormItem
@@ -273,10 +223,7 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
             content="修改后需重新打开水印"
             class="pb-1.5"
           />
-          <NInputNumber
-            v-model:value="watermarkOptions.imageHeight"
-            @update:value="(value) => updateWatermarkOptions('imageHeight', value ?? 0)"
-          />
+          <NInputNumber v-model:value="watermarkOptions.imageHeight" />
         </div>
       </NFormItem>
 
@@ -297,7 +244,6 @@ const updateWatermarkOptions = <K extends keyof PreferencesOptions['watermarkOpt
             :max="1"
             :step="0.01"
             class="mt-2"
-            @update:value="(value) => updateWatermarkOptions('imageOpacity', value ?? 0)"
           />
         </div>
       </NFormItem>

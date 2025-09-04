@@ -1,9 +1,11 @@
-import { useStorage } from '@vueuse/core'
-import { mergeWith } from 'lodash-es'
-import { acceptHMRUpdate, defineStore } from 'pinia'
-import { computed, watch, type ComputedRef } from 'vue'
+import { useStorage, useColorMode } from '@vueuse/core'
+import { defineStore, acceptHMRUpdate, storeToRefs } from 'pinia'
+import { computed, watch } from 'vue'
+
+import { pinia } from '.'
 
 import type { WatermarkProps } from 'naive-ui'
+import type { ComputedRef } from 'vue'
 
 type NavigationMode = 'sidebar' | 'horizontal'
 
@@ -72,8 +74,20 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
   noiseOpacity: 0.02,
 } as const
 
+const DEFAULT_THEME_COLOR = '#8e51ff'
+
 export const usePreferencesStore = defineStore('preferencesStore', () => {
   const preferences = useStorage<PreferencesOptions>('preferences', DEFAULT_PREFERENCES_OPTIONS)
+
+  const themeColor = useStorage<string>('theme-color', DEFAULT_THEME_COLOR)
+
+  const themeMode = useColorMode({
+    emitAuto: true,
+    storageKey: 'theme-mode',
+    disableTransition: false,
+  })
+
+  const isDark = computed(() => themeMode.state.value === 'dark')
 
   const computedPreferences = Object.fromEntries(
     Object.entries(preferences.value).map(([key]) => [
@@ -82,16 +96,10 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
     ]),
   ) as { [K in keyof PreferencesOptions]: ComputedRef<PreferencesOptions[K]> }
 
-  const modify = (options: Partial<PreferencesOptions>) => {
-    preferences.value = mergeWith({}, preferences.value, options, (objValue, srcValue) => {
-      if (Array.isArray(objValue) && Array.isArray(srcValue)) {
-        return srcValue
-      }
-    })
-  }
-
   const reset = () => {
     preferences.value = structuredClone(DEFAULT_PREFERENCES_OPTIONS)
+    themeColor.value = DEFAULT_THEME_COLOR
+    themeMode.value = 'auto'
   }
 
   watch(
@@ -105,12 +113,20 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
   )
 
   return {
+    themeColor,
+    themeMode,
+    isDark,
     preferences,
     ...computedPreferences,
     reset,
-    modify,
   }
 })
+
+export function useToRefsPreferences() {
+  return {
+    ...storeToRefs(usePreferencesStore(pinia)),
+  }
+}
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(usePreferencesStore, import.meta.hot))

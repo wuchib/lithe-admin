@@ -2,12 +2,10 @@
 import chroma from 'chroma-js'
 import * as echarts from 'echarts'
 import { NNumberAnimation } from 'naive-ui'
-import { storeToRefs } from 'pinia'
 import { onMounted, watch, ref, computed, onUnmounted, nextTick } from 'vue'
 
 import { ContentWrapper } from '@/components'
-import { usePersonalization } from '@/composables'
-import { usePreferencesStore } from '@/stores'
+import { useToRefsPreferences } from '@/stores'
 import twc from '@/utils/tailwindColor'
 
 import type { ECharts } from 'echarts'
@@ -16,8 +14,7 @@ defineOptions({
   name: 'Dashboard',
 })
 
-const { isDark, color } = usePersonalization()
-const { sidebarMenu, navigationMode } = storeToRefs(usePreferencesStore())
+const { sidebarMenu, navigationMode, themeColor, isDark } = useToRefsPreferences()
 
 const cardList = ref(generateCardData())
 
@@ -49,7 +46,7 @@ const CHART_CONFIG = {
 const getBusinessLinesConfig = () => [
   {
     name: '主要收入',
-    color: color.value,
+    color: themeColor.value,
     dataRange: { min: 30000, max: 85000 },
   },
   {
@@ -1063,7 +1060,7 @@ watch([() => sidebarMenu.value.collapsed, () => navigationMode.value], () => {
   })
 })
 
-watch([isDark, color], () => {
+watch([isDark, themeColor], () => {
   if (revenueChartInstance) {
     if (revenueChartResizeHandler) {
       window.removeEventListener('resize', revenueChartResizeHandler)

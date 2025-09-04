@@ -1,5 +1,7 @@
 import { useStorage } from '@vueuse/core'
-import { acceptHMRUpdate, defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
+
+import { pinia } from '.'
 
 import type { RouteRecordNameGeneric } from 'vue-router'
 
@@ -183,6 +185,12 @@ export const useTabsStore = defineStore('tabsStore', () => {
     getRemovableIds,
   }
 })
+
+export function useToRefsTabs() {
+  return {
+    ...storeToRefs(useTabsStore(pinia)),
+  }
+}
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useTabsStore, import.meta.hot))

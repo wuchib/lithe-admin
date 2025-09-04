@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, ref, useTemplateRef, watch } from 'vue'
 
 import Logo from '@/components/AppLogo.vue'
-import { usePreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
+import { useToRefsPreferences, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
 
 defineOptions({
   name: 'Logo',
@@ -11,9 +10,9 @@ defineOptions({
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
-const { navigationMode, sidebarMenu, showLogo } = storeToRefs(usePreferencesStore())
+const { navigationMode, sidebarMenu, showLogo } = useToRefsPreferences()
 
-const logoAreaWrapRef = ref<HTMLElement | null>(null)
+const logoWrapperRef = useTemplateRef<HTMLElement>('logoWrapper')
 
 const collapseWidth = ref(0)
 
@@ -22,7 +21,7 @@ watch(
   ([navigationMode, isCollapsed]) => {
     if (navigationMode === 'horizontal') {
       nextTick(() => {
-        collapseWidth.value = logoAreaWrapRef.value?.clientWidth ?? 0
+        collapseWidth.value = logoWrapperRef.value?.clientWidth ?? 0
       })
     } else {
       const { width, maxWidth } = sidebarMenu.value
@@ -46,7 +45,7 @@ watch(
     "
   >
     <div
-      ref="logoAreaWrapRef"
+      ref="logoWrapper"
       class="flex h-full items-center transition-[opacity,padding]"
       :class="[
         sidebarMenu.collapsed ? 'px-3' : 'px-4',

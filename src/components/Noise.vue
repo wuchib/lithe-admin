@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-
 import noisePng from '@/assets/noise.png'
-import { usePreferencesStore } from '@/stores'
+import { useToRefsPreferences } from '@/stores'
 
-const { noiseOpacity } = storeToRefs(usePreferencesStore())
+const { noiseOpacity } = useToRefsPreferences()
 </script>
 <template>
   <div

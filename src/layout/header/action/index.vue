@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { defineAsyncComponent, h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import { usePreferencesStore } from '@/stores'
+import { useToRefsPreferences } from '@/stores'
 
 import FullScreen from './FullScreen.vue'
 import PreferencesDrawer from './PreferencesDrawer.vue'
 import SignOut from './SignOut.vue'
-import ThemePopselect from './ThemePopselect.vue'
+import ThemeModePopover from './ThemeModePopover.vue'
 defineOptions({
   name: 'Actions',
 })
@@ -22,7 +21,7 @@ const AsyncAvatarDropdown = defineAsyncComponent({
 })
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
-const { navigationMode } = storeToRefs(usePreferencesStore())
+const { navigationMode } = useToRefsPreferences()
 </script>
 <template>
   <div class="flex items-center">
@@ -35,7 +34,7 @@ const { navigationMode } = storeToRefs(usePreferencesStore())
       <span class="iconify-[mdi--github]" />
     </ButtonAnimation>
     <FullScreen />
-    <ThemePopselect />
+    <ThemeModePopover />
     <PreferencesDrawer />
     <SignOut />
     <AsyncAvatarDropdown v-if="!isMaxSm && navigationMode === 'horizontal'" />

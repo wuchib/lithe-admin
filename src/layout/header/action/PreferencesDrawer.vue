@@ -8,13 +8,12 @@ import {
   useModal,
   NScrollbar,
 } from 'naive-ui'
-import { storeToRefs } from 'pinia'
 import { h, ref } from 'vue'
 
 import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
-import { useComponentThemeOverrides, useInjection, usePersonalization } from '@/composables'
+import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import { usePreferencesStore, useSystemStore } from '@/stores'
+import { usePreferencesStore, useSystemStore, useToRefsPreferences } from '@/stores'
 import { ccAPCA } from '@/utils/chromaHelper'
 import twColors from '@/utils/tailwindColor'
 import twc from '@/utils/tailwindColor'
@@ -25,11 +24,11 @@ import WatermarkModal from './component/WatermarkModal.vue'
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
-const preferencesStore = usePreferencesStore()
-
-const { modify, reset } = preferencesStore
+const { reset } = usePreferencesStore()
 
 const {
+  preferences,
+  themeColor,
   enableNavigationTransition,
   enableTextSelect,
   navigationMode,
@@ -43,17 +42,15 @@ const {
   showWatermark,
   showNoise,
   sidebarMenu,
-} = storeToRefs(preferencesStore)
+} = useToRefsPreferences()
 
 const systemStore = useSystemStore()
-
-const { color, setColor } = usePersonalization()
 
 const modal = useModal()
 
 const { scrollbarInModal } = useComponentThemeOverrides()
 
-const showDrawer = ref(false)
+const showPreferencesDrawer = ref(false)
 
 const colorSwatches = [
   twColors.red[500],
@@ -114,14 +111,14 @@ const showNoiseModal = () => {
 <template>
   <div>
     <ButtonAnimation
-      @click="showDrawer = true"
+      @click="showPreferencesDrawer = true"
       title="侧边栏"
     >
       <span class="iconify rotate-180 ph--sidebar-simple-duotone" />
     </ButtonAnimation>
     <ButtonAnimationProvider>
       <NDrawer
-        v-model:show="showDrawer"
+        v-model:show="showPreferencesDrawer"
         :auto-focus="false"
         :width="320"
         :theme-overrides="{
@@ -144,9 +141,9 @@ const showNoiseModal = () => {
             <NDivider>主题颜色</NDivider>
             <NColorPicker
               v-bind="$attrs"
-              :default-value="color"
+              :value="themeColor"
               :swatches="colorSwatches"
-              @update-value="setColor"
+              @update-value="(color) => (themeColor = color)"
             >
               <template #label="currentColor">
                 <span
@@ -174,38 +171,21 @@ const showNoiseModal = () => {
                   :checked-value="false"
                   :unchecked-value="true"
                   :disabled="isMaxSm || navigationMode !== 'sidebar'"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        sidebarMenu: {
-                          collapsed: value,
-                        },
-                      })
-                  "
+                  @update-value="(value) => (preferences.sidebarMenu.collapsed = value)"
                 />
               </div>
               <div class="flex items-center justify-between">
                 <span>显示顶部加载条</span>
                 <NSwitch
                   :value="showTopLoadingBar"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        showTopLoadingBar: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.showTopLoadingBar = value)"
                 />
               </div>
               <div class="flex items-center justify-between">
                 <span>显示Logo</span>
                 <NSwitch
                   :value="showLogo"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        showLogo: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.showLogo = value)"
                 />
               </div>
               <div class="flex items-center justify-between">
@@ -213,12 +193,7 @@ const showNoiseModal = () => {
                 <NSwitch
                   :value="showNavigationButton"
                   :disabled="isMaxSm || navigationMode !== 'sidebar'"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        showNavigationButton: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.showNavigationButton = value)"
                 />
               </div>
               <div class="flex items-center justify-between">
@@ -226,12 +201,7 @@ const showNoiseModal = () => {
                 <NSwitch
                   :value="showBreadcrumb"
                   :disabled="isMaxSm || navigationMode !== 'sidebar'"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        showBreadcrumb: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.showBreadcrumb = value)"
                 />
               </div>
               <div class="flex items-center justify-between">
@@ -239,12 +209,7 @@ const showNoiseModal = () => {
                 <NSwitch
                   :value="showTabs"
                   :disabled="isMaxSm"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        showTabs: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.showTabs = value)"
                 />
               </div>
               <div class="flex items-center justify-between">
@@ -252,12 +217,7 @@ const showNoiseModal = () => {
                 <NSwitch
                   :value="showTabClose"
                   :disabled="isMaxSm"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        showTabClose: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.showTabClose = value)"
                 />
               </div>
               <div class="flex items-center justify-between">
@@ -265,12 +225,7 @@ const showNoiseModal = () => {
                 <NSwitch
                   :value="showFooter"
                   :disabled="isMaxSm"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        showFooter: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.showFooter = value)"
                 />
               </div>
             </div>
@@ -290,12 +245,7 @@ const showNoiseModal = () => {
               </div>
               <NSwitch
                 :value="showWatermark"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showWatermark: value,
-                    })
-                "
+                @update-value="(value) => (preferences.showWatermark = value)"
               />
             </div>
             <div class="flex items-center justify-between">
@@ -312,12 +262,7 @@ const showNoiseModal = () => {
               </div>
               <NSwitch
                 :value="showNoise"
-                @update-value="
-                  (value) =>
-                    modify({
-                      showNoise: value,
-                    })
-                "
+                @update-value="(value) => (preferences.showNoise = value)"
               />
             </div>
             <div class="flex flex-col gap-y-1.5">
@@ -326,24 +271,14 @@ const showNoiseModal = () => {
                 <NSwitch
                   :value="enableNavigationTransition"
                   :disabled="isMaxSm"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        enableNavigationTransition: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.enableNavigationTransition = value)"
                 />
               </div>
               <div class="flex items-center justify-between">
                 <span>文字可选中</span>
                 <NSwitch
                   :value="enableTextSelect"
-                  @update-value="
-                    (value) =>
-                      modify({
-                        enableTextSelect: value,
-                      })
-                  "
+                  @update-value="(value) => (preferences.enableTextSelect = value)"
                 />
               </div>
             </div>

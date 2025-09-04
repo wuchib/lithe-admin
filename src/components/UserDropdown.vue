@@ -14,8 +14,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const userStore = useUserStore()
-const { cleanup } = userStore
+const { cleanup } = useUserStore()
 
 const message = useMessage()
 

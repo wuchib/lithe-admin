@@ -1,10 +1,12 @@
 import { useStorage } from '@vueuse/core'
-import { acceptHMRUpdate, defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import router from '@/router'
 import { resolveMenu, resolveRoute } from '@/router/helper'
 import { routeRecordRaw } from '@/router/record'
+
+import { pinia } from '.'
 
 import type { MenuMixedOptions } from '@/router/helper'
 import type { MenuOption } from 'naive-ui'
@@ -27,7 +29,7 @@ const DEFAULT_USER: User = {
 export const useUserStore = defineStore('userStore', () => {
   const user = useStorage<User>('user', DEFAULT_USER)
 
-  const token = useStorage<string | null>('token', '')
+  const token = useStorage<string | null>('token', null)
 
   const menuList = ref<MenuOption[]>([])
 
@@ -81,6 +83,12 @@ export const useUserStore = defineStore('userStore', () => {
     cleanup,
   }
 })
+
+export function useToRefsUser() {
+  return {
+    ...storeToRefs(useUserStore(pinia)),
+  }
+}
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))

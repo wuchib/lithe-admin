@@ -3,22 +3,21 @@ import { NPopselect } from 'naive-ui'
 import { computed, h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
-import { usePersonalization } from '@/composables'
+import { useToRefsPreferences } from '@/stores'
 
-import type { Theme } from '@/composables'
 import type { PopoverProps } from 'naive-ui'
 
-interface ThemePopselectProps extends /* @vue-ignore */ PopoverProps {}
+interface ThemeModePopover extends /* @vue-ignore */ PopoverProps {}
 
-defineProps<ThemePopselectProps>()
+defineProps<ThemeModePopover>()
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const { setTheme, theme } = usePersonalization()
+const { themeMode } = useToRefsPreferences()
 
-const themeDropdownOptions = [
+const themeModeDropdownOptions = [
   {
     icon: () => h('span', { class: 'iconify ph--sun size-5' }),
     iconName: 'iconify ph--sun',
@@ -36,25 +35,19 @@ const themeDropdownOptions = [
   {
     icon: () => h('span', { class: 'iconify ph--desktop size-5' }),
     iconName: 'iconify ph--desktop',
-    key: 'system',
-    value: 'system',
+    key: 'auto',
+    value: 'auto',
     label: '跟随系统',
   },
 ]
 
 const themeIconClasses = computed(
   () =>
-    themeDropdownOptions.find((item) => item.key === theme.value)?.iconName ||
+    themeModeDropdownOptions.find((item) => item.key === themeMode.value)?.iconName ||
     'iconify ph--desktop size-5',
 )
 
-const onThemePopselectUpdated = (key: Theme) => {
-  if (key === theme.value) return
-
-  setTheme(key)
-}
-
-function renderSelectLabel(option: (typeof themeDropdownOptions)[number]) {
+function renderSelectLabel(option: (typeof themeModeDropdownOptions)[number]) {
   return h(
     'div',
     {
@@ -69,11 +62,10 @@ function renderSelectLabel(option: (typeof themeDropdownOptions)[number]) {
     class="p-0.5"
     trigger="click"
     v-bind="$attrs"
-    v-model:value="theme"
-    :options="themeDropdownOptions"
+    v-model:value="themeMode"
+    :options="themeModeDropdownOptions"
     :render-label="renderSelectLabel"
     :to="false"
-    @update-value="onThemePopselectUpdated"
   >
     <ButtonAnimation title="主题">
       <span :class="themeIconClasses" />

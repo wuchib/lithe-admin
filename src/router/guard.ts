@@ -1,7 +1,5 @@
-import { storeToRefs } from 'pinia'
-
 import { useDiscreteApi } from '@/composables'
-import { usePreferencesStore, pinia, useUserStore } from '@/stores'
+import { useUserStore, useToRefsPreferences, useToRefsUser } from '@/stores'
 
 import type { Router } from 'vue-router'
 
@@ -9,17 +7,16 @@ const Layout = () => import('@/layout/index.vue')
 
 const { loadingBar } = useDiscreteApi()
 
-const { showTopLoadingBar } = storeToRefs(usePreferencesStore(pinia))
+const { showTopLoadingBar } = useToRefsPreferences()
+const { resolveMenuList, cleanup } = useUserStore()
+
+const { token, routeList } = useToRefsUser()
 
 export function setupRouterGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
     if (showTopLoadingBar.value) {
       loadingBar.start()
     }
-
-    const userStore = useUserStore()
-    const { resolveMenuList, cleanup } = userStore
-    const { token, routeList } = storeToRefs(userStore)
 
     if (to.name === 'signIn') {
       if (!token.value) {

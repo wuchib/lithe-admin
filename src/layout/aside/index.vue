@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-import { usePreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
+import { useToRefsPreferences, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
 
 import SidebarMenu from './SidebarMenu.vue'
 import SidebarUserPanel from './SidebarUserPanel.vue'
@@ -11,9 +10,7 @@ defineOptions({
   name: 'AsideLayout',
 })
 
-const preferencesStore = usePreferencesStore()
-const { modify } = preferencesStore
-const { sidebarMenu } = storeToRefs(preferencesStore)
+const { preferences, sidebarMenu } = useToRefsPreferences()
 
 const menuCollapseWidth = computed(() => {
   return sidebarMenu.value.collapsed
@@ -22,11 +19,7 @@ const menuCollapseWidth = computed(() => {
 })
 
 function handleCollapseClick() {
-  modify({
-    sidebarMenu: {
-      collapsed: !sidebarMenu.value.collapsed,
-    },
-  })
+  preferences.value.sidebarMenu.collapsed = !sidebarMenu.value.collapsed
 }
 </script>
 <template>

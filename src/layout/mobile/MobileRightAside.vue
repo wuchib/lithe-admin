@@ -3,7 +3,7 @@ import { ButtonAnimationProvider } from '@/components'
 import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 
-import Actions from '../header/action/index.vue'
+import Action from '../header/action/index.vue'
 
 const { layoutSlideDirection } = useInjection(layoutInjectionKey)
 </script>
@@ -19,7 +19,7 @@ const { layoutSlideDirection } = useInjection(layoutInjectionKey)
         size="large"
         :circle="false"
       >
-        <Actions class="flex-col justify-center gap-y-4" />
+        <Action class="flex-col justify-center gap-y-4" />
       </ButtonAnimationProvider>
     </div>
   </div>

@@ -2,25 +2,26 @@ import { merge } from 'lodash-es'
 import { darkTheme, lightTheme } from 'naive-ui'
 import { computed } from 'vue'
 
+import { useToRefsPreferences } from '@/stores/preferences'
 import { commonThemeOverrides } from '@/theme/common'
 import { baseDarkThemeOverrides } from '@/theme/dark'
 import { baseLightThemeOverrides } from '@/theme/light'
 
-import { usePersonalization } from './usePersonalization'
-
 export function useTheme() {
-  const { color, isDark } = usePersonalization()
+  const { themeColor, isDark } = useToRefsPreferences()
 
-  const getLightThemeOverrides = (primaryColor = color.value) => {
+  const getLightThemeOverrides = (primaryColor = themeColor.value) => {
     return merge(commonThemeOverrides(primaryColor), baseLightThemeOverrides(primaryColor))
   }
 
-  const getDarkThemeOverrides = (primaryColor = color.value) => {
+  const getDarkThemeOverrides = (primaryColor = themeColor.value) => {
     return merge(commonThemeOverrides(primaryColor), baseDarkThemeOverrides(primaryColor))
   }
 
   const themeOverrides = computed(() => {
-    return isDark.value ? getDarkThemeOverrides(color.value) : getLightThemeOverrides(color.value)
+    return isDark.value
+      ? getDarkThemeOverrides(themeColor.value)
+      : getLightThemeOverrides(themeColor.value)
   })
 
   const theme = computed(() => {
@@ -28,8 +29,6 @@ export function useTheme() {
   })
 
   return {
-    color,
-    isDark,
     theme,
     themeOverrides,
     getLightThemeOverrides,

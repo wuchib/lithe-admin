@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { defineAsyncComponent, provide, useTemplateRef } from 'vue'
 
 import { CollapseTransition } from '@/components'
 import { headerLayoutInjectionKey } from '@/injection'
-import { usePreferencesStore } from '@/stores'
+import { useToRefsPreferences } from '@/stores'
 
 defineOptions({
   name: 'Navigation',
@@ -14,7 +13,7 @@ const AsyncNavigationButton = defineAsyncComponent(() => import('./NavigationBut
 const AsyncHorizontalMenu = defineAsyncComponent(() => import('./HorizontalMenu.vue'))
 const AsyncBreadcrumb = defineAsyncComponent(() => import('./Breadcrumb.vue'))
 
-const { showNavigationButton, showBreadcrumb, navigationMode } = storeToRefs(usePreferencesStore())
+const { showNavigationButton, showBreadcrumb, navigationMode } = useToRefsPreferences()
 
 const navigationContainerRef = useTemplateRef<HTMLElement>('navigationContainer')
 

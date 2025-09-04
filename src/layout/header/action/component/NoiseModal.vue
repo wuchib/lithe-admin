@@ -2,14 +2,13 @@
 import { NSlider, NInputNumber } from 'naive-ui'
 import { reactive, ref } from 'vue'
 
-import { usePreferencesStore } from '@/stores'
+import { useToRefsPreferences } from '@/stores'
 
 import type { SliderProps } from 'naive-ui'
 
-const preferencesStore = usePreferencesStore()
-const { modify } = preferencesStore
+const { preferences, noiseOpacity } = useToRefsPreferences()
 
-const opacity = ref(preferencesStore.noiseOpacity)
+const opacity = ref(noiseOpacity.value)
 
 const sliderRange = reactive({
   step: 0.001,
@@ -18,9 +17,7 @@ const sliderRange = reactive({
 })
 
 const onSliderUpdate: SliderProps['onUpdateValue'] = (value) => {
-  modify({
-    noiseOpacity: value,
-  })
+  preferences.value.noiseOpacity = value
 }
 </script>
 <template>

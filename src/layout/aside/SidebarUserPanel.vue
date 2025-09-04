@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { useMessage } from 'naive-ui'
-import { storeToRefs } from 'pinia'
 
 import { ButtonAnimation } from '@/components'
 import Avatar from '@/components/UserAvatar.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
-import { usePreferencesStore, useUserStore } from '@/stores'
+import { useToRefsPreferences, useToRefsUser } from '@/stores'
 
-const { sidebarMenu } = storeToRefs(usePreferencesStore())
+const { sidebarMenu } = useToRefsPreferences()
 
-const { user } = storeToRefs(useUserStore())
+const { user } = useToRefsUser()
 
 const message = useMessage()
 
-const handleUserCardClick = () => {
+const handleUserPanelClick = () => {
   message.info('你可以把它设计成有背景的User Card')
 }
 </script>
@@ -25,7 +24,7 @@ const handleUserCardClick = () => {
         ? 'mx-2 rounded-naive'
         : 'mx-4 rounded-xl bg-neutral-150 py-3.5 pr-2.5 pl-3.5 dark:bg-neutral-800'
     "
-    @click="handleUserCardClick"
+    @click="handleUserPanelClick"
   >
     <UserDropdown
       placement="right-end"

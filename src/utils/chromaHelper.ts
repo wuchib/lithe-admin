@@ -1,9 +1,10 @@
+//import { useDark } from '@vueuse/core'
 import chroma from 'chroma-js'
+import { ref } from 'vue'
 
-import { usePersonalization } from '@/composables'
 import twc from '@/utils/tailwindColor'
 
-const { isDark } = usePersonalization()
+const isDark = ref(false)
 
 export function ccAPCA(
   backgroundColor: string,

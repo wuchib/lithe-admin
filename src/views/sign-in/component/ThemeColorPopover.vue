@@ -2,10 +2,10 @@
 import { NPopover } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
-import { usePersonalization } from '@/composables'
+import { useToRefsPreferences } from '@/stores'
 import twColors from '@/utils/tailwindColor'
 
-const { color: currentColor, setColor } = usePersonalization()
+const { themeColor } = useToRefsPreferences()
 
 const colorSwatches = [
   twColors.red[500],
@@ -43,10 +43,10 @@ const colorSwatches = [
         :key="color"
         class="size-5 cursor-pointer rounded-full"
         :class="{
-          'ring-3 ring-primary/30': color === currentColor,
+          'ring-3 ring-primary/30': color === themeColor,
         }"
         :style="{ backgroundColor: color }"
-        @click="setColor(color)"
+        @click="themeColor = color"
       />
     </div>
   </NPopover>

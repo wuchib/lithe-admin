@@ -1,7 +1,6 @@
 <script setup lang="tsx">
 import { isEmpty } from 'lodash-es'
 import { NDropdown, NEllipsis, NScrollbar } from 'naive-ui'
-import { storeToRefs } from 'pinia'
 import {
   computed,
   defineComponent,
@@ -21,7 +20,7 @@ import { ButtonAnimation } from '@/components'
 import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
-import { usePreferencesStore, useTabsStore } from '@/stores'
+import { useTabsStore, useToRefsPreferences, useToRefsTabs } from '@/stores'
 
 import type { Tab, Key } from '@/stores'
 import type { DropdownOption } from 'naive-ui'
@@ -46,12 +45,6 @@ const { shouldRefreshRoute } = useInjection(layoutInjectionKey)
 
 const scrollbarRef = useTemplateRef<InstanceType<typeof NScrollbar>>('scrollbarRef')
 
-const tabsStore = useTabsStore()
-
-const { tabs, tabActivePath } = storeToRefs(tabsStore)
-
-const { showTabClose } = storeToRefs(usePreferencesStore())
-
 const {
   setTabActivePath,
   getTab,
@@ -62,7 +55,11 @@ const {
   getRemovableIdsAfter,
   getRemovableIdsOther,
   getRemovableIds,
-} = tabsStore
+} = useTabsStore()
+
+const { tabs, tabActivePath } = useToRefsTabs()
+
+const { showTabClose } = useToRefsPreferences()
 
 const tabPinnedList = computed({
   get: () => tabs.value.filter((tab) => tab.pinned),

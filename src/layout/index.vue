@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
-import { storeToRefs } from 'pinia'
 import { computed, defineAsyncComponent, h, watch } from 'vue'
 
 import texturePng from '@/assets/texture.png'
 import { CollapseTransition, EmptyPlaceholder } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
-import { usePreferencesStore, useTabsStore } from '@/stores'
+import { useToRefsPreferences, useToRefsTabs } from '@/stores'
 
 import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
@@ -18,9 +17,7 @@ defineOptions({
   name: 'Layout',
 })
 
-const preferencesStore = usePreferencesStore()
-const { modify } = preferencesStore
-const { sidebarMenu, navigationMode, showFooter, showTabs } = storeToRefs(preferencesStore)
+const { preferences, sidebarMenu, navigationMode, showFooter, showTabs } = useToRefsPreferences()
 
 const AsyncMobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
 const AsyncMobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
@@ -38,8 +35,7 @@ const AsyncAsideLayout = defineAsyncComponent({
   delay: 0,
 })
 
-const tabsStore = useTabsStore()
-const { tabs } = storeToRefs(tabsStore)
+const { tabs } = useToRefsTabs()
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
@@ -55,11 +51,7 @@ const layoutTranslateOffset = computed(() => {
 
 watch(isMaxSm, (isMaxSm) => {
   if (isMaxSm) {
-    modify({
-      sidebarMenu: {
-        collapsed: false,
-      },
-    })
+    preferences.value.sidebarMenu.collapsed = false
     setLayoutSlideDirection(null)
   }
 })
@@ -74,8 +66,7 @@ watch(isMaxSm, (isMaxSm) => {
     <div
       class="relative flex h-full flex-col max-sm:bg-naive-card/50"
       :class="{
-        'border-naive-border transition-[background-color,border-color,rounded,transform]':
-          isMaxSm,
+        'border-naive-border transition-[background-color,border-color,rounded,transform]': isMaxSm,
         'rounded-xl border pb-2': isMaxSm && layoutTranslateOffset,
       }"
       :style="

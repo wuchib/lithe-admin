@@ -11,11 +11,11 @@ import {
 } from 'vue'
 
 import topographySvg from '@/assets/topography.svg'
-import { usePersonalization, useInjection } from '@/composables'
+import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import ThemePopselect from '@/layout/header/action/ThemePopselect.vue'
+import ThemeModePopover from '@/layout/header/action/ThemeModePopover.vue'
 import router from '@/router'
-import { useUserStore } from '@/stores'
+import { useToRefsPreferences, useToRefsUser } from '@/stores'
 
 import ThemeColorPopover from './component/ThemeColorPopover.vue'
 
@@ -25,11 +25,10 @@ defineOptions({
   name: 'SignIn',
 })
 
-const { isDark } = usePersonalization()
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
-const userStore = useUserStore()
-const { setToken } = userStore
+const { isDark } = useToRefsPreferences()
+const { token } = useToRefsUser()
 
 const illustrations = [
   defineAsyncComponent(() => import('./component/Illustration1.vue')),
@@ -72,9 +71,9 @@ function toLayout() {
 
   setTimeout(() => {
     if (signInForm.account.includes('admin')) {
-      setToken('admin')
+      token.value = 'admin'
     } else {
-      setToken('user')
+      token.value = 'user'
     }
 
     router.replace({
@@ -167,7 +166,7 @@ onUnmounted(() => {
       >
         <div class="absolute top-0 left-0 z-50 flex w-full items-center justify-end gap-x-4 p-4">
           <ThemeColorPopover />
-          <ThemePopselect />
+          <ThemeModePopover />
         </div>
         <div>
           <div>

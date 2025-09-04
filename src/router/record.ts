@@ -221,7 +221,6 @@ export const routeRecordRaw: MenuMixedOptions[] = [
     component: 'about/index',
     meta: {
       showTab: true,
-      enableMultiTab: true,
     },
   },
 ]

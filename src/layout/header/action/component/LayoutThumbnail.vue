@@ -1,20 +1,13 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import { useToRefsPreferences } from '@/stores'
 
-import { usePersonalization } from '@/composables'
-import { usePreferencesStore } from '@/stores'
-
-const { color } = usePersonalization()
-
-const preferencesStore = usePreferencesStore()
-const { modify } = preferencesStore
-const { navigationMode } = storeToRefs(preferencesStore)
+const { preferences, themeColor, navigationMode } = useToRefsPreferences()
 </script>
 <template>
   <div
     class="flex justify-center gap-6"
     :style="{
-      '--primary-color': color,
+      '--primary-color': themeColor,
     }"
   >
     <div
@@ -24,7 +17,7 @@ const { navigationMode } = storeToRefs(preferencesStore)
           ? 'outline-2 outline-primary/50'
           : 'outline-2 outline-transparent hover:outline-primary/30'
       "
-      @click="modify({ navigationMode: 'sidebar' })"
+      @click="preferences.navigationMode = 'sidebar'"
     >
       <div class="flex h-2.5">
         <div class="h-full w-5 shrink-0 border-r border-neutral-350 dark:border-neutral-650"></div>
@@ -65,7 +58,7 @@ const { navigationMode } = storeToRefs(preferencesStore)
           ? 'outline-2 outline-primary/50'
           : 'outline-2 outline-transparent hover:outline-primary/30'
       "
-      @click="modify({ navigationMode: 'horizontal' })"
+      @click="preferences.navigationMode = 'horizontal'"
     >
       <div class="flex h-2.5 border-b border-neutral-350 dark:border-neutral-650">
         <div class="h-full w-3 shrink-0"></div>

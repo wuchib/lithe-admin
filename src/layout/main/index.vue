@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
-import { storeToRefs } from 'pinia'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import router from '@/router'
-import { usePreferencesStore, useTabsStore } from '@/stores'
+import { useToRefsPreferences, useTabsStore, useToRefsTabs } from '@/stores'
 
 import type { Tab } from '@/stores'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
@@ -21,11 +20,11 @@ const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
   useInjection(layoutInjectionKey)
 
-const tabsStore = useTabsStore()
+const { enableNavigationTransition, showTabs } = useToRefsPreferences()
 
-const { enableNavigationTransition, showTabs } = storeToRefs(usePreferencesStore())
+const { createTab, setTabActivePath } = useTabsStore()
 
-const { createTab, setTabActivePath } = tabsStore
+const { tabs, tabActivePath } = useToRefsTabs()
 
 const isMounted = ref(false)
 
@@ -34,7 +33,7 @@ const navigationTransitionName = ref('scale')
 const layoutRouteRedirect = router.getRoutes().find((item) => item.name === 'layout')?.redirect
 
 const keepAliveTabs = computed(() => {
-  return tabsStore.tabs.filter((tab) => tab.keepAlive).map((tab) => tab.componentName ?? '')
+  return tabs.value.filter((tab) => tab.keepAlive).map((tab) => tab.componentName ?? '')
 })
 
 let oldTabs: Tab[] = []
@@ -63,7 +62,7 @@ function createTabFromRoute(route: RouteLocationNormalizedLoaded) {
 }
 
 watch(
-  [() => tabsStore.tabs, () => tabsStore.tabActivePath],
+  [() => tabs.value, () => tabActivePath.value],
   ([newTabs, newTabActivePath], [, oldTabActivePath]) => {
     if (
       newTabActivePath &&
@@ -133,7 +132,7 @@ watch(
       const { showTab, enableMultiTab } = newRoute.meta
       const targetPath = enableMultiTab ? newRoute.fullPath : newRoute.path
 
-      const findTab = tabsStore.tabs.find((item) => item.path === targetPath)
+      const findTab = tabs.value.find((item) => item.path === targetPath)
 
       if (!isEmpty(findTab)) {
         setTabActivePath(findTab.path)
@@ -150,7 +149,7 @@ watch(
 )
 
 onMounted(() => {
-  oldTabs = [...tabsStore.tabs]
+  oldTabs = [...tabs.value]
   isMounted.value = true
 })
 </script>
