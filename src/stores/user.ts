@@ -35,10 +35,6 @@ export const useUserStore = defineStore('userStore', () => {
 
   const routeList = ref<RouteRecordRaw[]>([])
 
-  const setToken = (value: string | null) => {
-    token.value = value
-  }
-
   async function resolveMenuList() {
     const res = await new Promise<MenuMixedOptions[]>((resolve) => {
       if (token.value?.includes('admin')) {
@@ -79,7 +75,6 @@ export const useUserStore = defineStore('userStore', () => {
     menuList,
     routeList,
     resolveMenuList,
-    setToken,
     cleanup,
   }
 })
