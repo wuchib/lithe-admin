@@ -123,11 +123,14 @@ function observeVisibleChildren(parent:HTMLElement, childSelector = null, callba
       }
     });
     const moreDivWidth = isShowExtraTrigger.value ? 48 : 0
-    const collectedMenuItemsLen = Object.values(MenuItemsMeta.value).filter((d:any)=>d.key !== 'is-more').length
-    console.log(moreDivWidth,'更多盒子的宽度');
-    console.log(collectedMenuItemsLen,'items的数量');
-    console.log(count,'子盒子dom的数量');
-    if(count === collectedMenuItemsLen && parentRect.right > lastRight){
+    let collectedMenuItemsLen = 0
+    let wholeWidths = 0
+    Object.values(MenuItemsMeta.value).forEach((d:any)=>{
+      if(d.key === 'is-more') return
+      collectedMenuItemsLen ++
+      wholeWidths += d.width
+    })
+    if(parentRect.width > wholeWidths){
       parentRectWidth = parentRect.width
     }else{
       parentRectWidth = parentRect.width - moreDivWidth
