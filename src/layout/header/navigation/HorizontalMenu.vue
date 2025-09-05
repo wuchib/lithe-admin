@@ -5,8 +5,6 @@ import { NDropdown } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { h, computed, ref, watch, onBeforeUnmount, reactive, useTemplateRef, onMounted } from 'vue'
 
-import { useInjection } from '@/composables'
-import { headerLayoutInjectionKey } from '@/injection'
 import router from '@/router'
 import { useUserStore } from '@/stores'
 
@@ -22,11 +20,10 @@ const MENU = {
 
 const { menuList } = storeToRefs(useUserStore())
 
-const { navigationContainerElement } = useInjection(headerLayoutInjectionKey)
+const navigationContainerRef = ref<HTMLElement | null>(null)
 
-const { width: containerWidth, stop: stopObserveContainerSize } = useElementSize(
-  navigationContainerElement,
-)
+const { width: containerWidth, stop: stopObserveContainerSize } =
+  useElementSize(navigationContainerRef)
 
 const menuActiveKey = ref('')
 
@@ -128,6 +125,9 @@ watchThrottled(
 )
 
 onMounted(() => {
+  navigationContainerRef.value = navigationWrapperRef.value?.closest(
+    '[data-navigation-container]',
+  ) as HTMLElement
   calculateMenuRightBound()
 })
 

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { defineAsyncComponent, provide, useTemplateRef } from 'vue'
+import { defineAsyncComponent } from 'vue'
 
 import { CollapseTransition } from '@/components'
-import { headerLayoutInjectionKey } from '@/injection'
 import { useToRefsPreferences } from '@/stores'
 
 defineOptions({
@@ -14,16 +13,10 @@ const AsyncHorizontalMenu = defineAsyncComponent(() => import('./HorizontalMenu.
 const AsyncBreadcrumb = defineAsyncComponent(() => import('./Breadcrumb.vue'))
 
 const { showNavigationButton, showBreadcrumb, navigationMode } = useToRefsPreferences()
-
-const navigationContainerRef = useTemplateRef<HTMLElement>('navigationContainer')
-
-provide(headerLayoutInjectionKey, {
-  navigationContainerElement: navigationContainerRef,
-})
 </script>
 <template>
   <nav
-    ref="navigationContainer"
+    data-navigation-container
     class="flex h-9 flex-1 items-center"
   >
     <CollapseTransition :display="showNavigationButton && navigationMode === 'sidebar'">
