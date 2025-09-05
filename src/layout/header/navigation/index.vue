@@ -2,7 +2,7 @@
 import { defineAsyncComponent } from 'vue'
 
 import { CollapseTransition } from '@/components'
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 
 defineOptions({
   name: 'Navigation',
@@ -12,11 +12,10 @@ const AsyncNavigationButton = defineAsyncComponent(() => import('./NavigationBut
 const AsyncHorizontalMenu = defineAsyncComponent(() => import('./HorizontalMenu.vue'))
 const AsyncBreadcrumb = defineAsyncComponent(() => import('./Breadcrumb.vue'))
 
-const { showNavigationButton, showBreadcrumb, navigationMode } = useToRefsPreferences()
+const { showNavigationButton, showBreadcrumb, navigationMode } = toRefsPreferencesStore()
 </script>
 <template>
   <nav
-    data-navigation-container
     class="flex h-9 flex-1 items-center"
   >
     <CollapseTransition :display="showNavigationButton && navigationMode === 'sidebar'">

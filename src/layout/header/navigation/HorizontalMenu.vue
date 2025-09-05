@@ -95,7 +95,9 @@ function isMenuVisibleByKey(key: Key) {
 function calculateMenuRightBound() {
   const wrapperElementBoundLeft = navigationWrapperRef.value?.getBoundingClientRect().left ?? 0
 
-  menuRefsList.value.forEach((menuElement) => {
+  const reverseMenuRefsList = [...menuRefsList.value].reverse()
+
+  reverseMenuRefsList.forEach((menuElement) => {
     const menuElementBoundRight =
       menuElement.getBoundingClientRect().right - wrapperElementBoundLeft
     const menuElementKey = menuElement.dataset.key
@@ -126,7 +128,7 @@ watchThrottled(
 
 onMounted(() => {
   navigationContainerRef.value = navigationWrapperRef.value?.closest(
-    '[data-navigation-container]',
+    'nav',
   ) as HTMLElement
   calculateMenuRightBound()
 })
