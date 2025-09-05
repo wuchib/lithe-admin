@@ -1,5 +1,5 @@
 import { useDiscreteApi } from '@/composables'
-import { useUserStore, useToRefsPreferences, useToRefsUser } from '@/stores'
+import { useUserStore, toRefsPreferencesStore, toRefsUserStore } from '@/stores'
 
 import type { Router } from 'vue-router'
 
@@ -7,10 +7,10 @@ const Layout = () => import('@/layout/index.vue')
 
 const { loadingBar } = useDiscreteApi()
 
-const { showTopLoadingBar } = useToRefsPreferences()
+const { showTopLoadingBar } = toRefsPreferencesStore()
 const { resolveMenuList, cleanup } = useUserStore()
 
-const { token, routeList } = useToRefsUser()
+const { token, routeList } = toRefsUserStore()
 
 export function setupRouterGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {

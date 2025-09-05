@@ -2,13 +2,13 @@ import { merge } from 'lodash-es'
 import { darkTheme, lightTheme } from 'naive-ui'
 import { computed } from 'vue'
 
-import { useToRefsPreferences } from '@/stores/preferences'
+import { toRefsPreferencesStore } from '@/stores/preferences'
 import { commonThemeOverrides } from '@/theme/common'
 import { baseDarkThemeOverrides } from '@/theme/dark'
 import { baseLightThemeOverrides } from '@/theme/light'
 
 export function useTheme() {
-  const { themeColor, isDark } = useToRefsPreferences()
+  const { themeColor, isDark } = toRefsPreferencesStore()
 
   const getLightThemeOverrides = (primaryColor = themeColor.value) => {
     return merge(commonThemeOverrides(primaryColor), baseLightThemeOverrides(primaryColor))

@@ -5,7 +5,7 @@ import { NNumberAnimation } from 'naive-ui'
 import { onMounted, watch, ref, computed, onUnmounted, nextTick } from 'vue'
 
 import { ContentWrapper } from '@/components'
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 import twc from '@/utils/tailwindColor'
 
 import type { ECharts } from 'echarts'
@@ -14,7 +14,7 @@ defineOptions({
   name: 'Dashboard',
 })
 
-const { sidebarMenu, navigationMode, themeColor, isDark } = useToRefsPreferences()
+const { sidebarMenu, navigationMode, themeColor, isDark } = toRefsPreferencesStore()
 
 const cardList = ref(generateCardData())
 

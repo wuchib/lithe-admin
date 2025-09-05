@@ -1,12 +1,12 @@
 import { computed } from 'vue'
 
-import { useToRefsPreferences } from '@/stores/preferences'
+import { toRefsPreferencesStore } from '@/stores/preferences'
 import twc from '@/utils/tailwindColor'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
 export function useComponentThemeOverrides() {
-  const { isDark } = useToRefsPreferences()
+  const { isDark } = toRefsPreferencesStore()
 
   const scrollbarInModal = computed<GlobalThemeOverrides['Scrollbar']>(() =>
     isDark.value

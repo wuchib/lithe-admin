@@ -186,7 +186,7 @@ export const useTabsStore = defineStore('tabsStore', () => {
   }
 })
 
-export function useToRefsTabs() {
+export function toRefsTabsStore() {
   return {
     ...storeToRefs(useTabsStore(pinia)),
   }

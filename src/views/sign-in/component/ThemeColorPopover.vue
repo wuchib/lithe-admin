@@ -2,10 +2,10 @@
 import { NPopover } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 import twColors from '@/utils/tailwindColor'
 
-const { themeColor } = useToRefsPreferences()
+const { themeColor } = toRefsPreferencesStore()
 
 const colorSwatches = [
   twColors.red[500],

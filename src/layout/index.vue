@@ -6,7 +6,7 @@ import texturePng from '@/assets/texture.png'
 import { CollapseTransition, EmptyPlaceholder } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
-import { useToRefsPreferences, useToRefsTabs } from '@/stores'
+import { toRefsPreferencesStore, toRefsTabsStore } from '@/stores'
 
 import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
@@ -17,7 +17,7 @@ defineOptions({
   name: 'Layout',
 })
 
-const { preferences, sidebarMenu, navigationMode, showFooter, showTabs } = useToRefsPreferences()
+const { preferences, sidebarMenu, navigationMode, showFooter, showTabs } = toRefsPreferencesStore()
 
 const AsyncMobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
 const AsyncMobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
@@ -35,7 +35,7 @@ const AsyncAsideLayout = defineAsyncComponent({
   delay: 0,
 })
 
-const { tabs } = useToRefsTabs()
+const { tabs } = toRefsTabsStore()
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 

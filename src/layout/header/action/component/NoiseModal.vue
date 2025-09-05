@@ -2,11 +2,11 @@
 import { NSlider, NInputNumber } from 'naive-ui'
 import { reactive, ref } from 'vue'
 
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 
 import type { SliderProps } from 'naive-ui'
 
-const { preferences, noiseOpacity } = useToRefsPreferences()
+const { preferences, noiseOpacity } = toRefsPreferencesStore()
 
 const opacity = ref(noiseOpacity.value)
 

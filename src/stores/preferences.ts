@@ -122,7 +122,7 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
   }
 })
 
-export function useToRefsPreferences() {
+export function toRefsPreferencesStore() {
   return {
     ...storeToRefs(usePreferencesStore(pinia)),
   }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 
 import Action from './action/index.vue'
 import Logo from './logo/index.vue'
@@ -9,7 +9,7 @@ defineOptions({
   name: 'HeaderLayout',
 })
 
-const { navigationMode } = useToRefsPreferences()
+const { navigationMode } = toRefsPreferencesStore()
 </script>
 <template>
   <header class="flex bg-naive-card transition-[background-color]">

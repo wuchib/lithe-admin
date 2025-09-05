@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import noisePng from '@/assets/noise.png'
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 
-const { noiseOpacity } = useToRefsPreferences()
+const { noiseOpacity } = toRefsPreferencesStore()
 </script>
 <template>
   <div

@@ -79,7 +79,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
 })
 
-export function useToRefsUser() {
+export function toRefsUserStore() {
   return {
     ...storeToRefs(useUserStore(pinia)),
   }

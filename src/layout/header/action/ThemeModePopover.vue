@@ -3,7 +3,7 @@ import { NPopselect } from 'naive-ui'
 import { computed, h } from 'vue'
 
 import { ButtonAnimation } from '@/components'
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 
 import type { PopoverProps } from 'naive-ui'
 
@@ -15,7 +15,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const { themeMode } = useToRefsPreferences()
+const { themeMode } = toRefsPreferencesStore()
 
 const themeModeDropdownOptions = [
   {

@@ -2,7 +2,7 @@
 import { nextTick, ref, useTemplateRef, watch } from 'vue'
 
 import Logo from '@/components/AppLogo.vue'
-import { useToRefsPreferences, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
+import { toRefsPreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
 
 defineOptions({
   name: 'Logo',
@@ -10,7 +10,7 @@ defineOptions({
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
-const { navigationMode, sidebarMenu, showLogo } = useToRefsPreferences()
+const { navigationMode, sidebarMenu, showLogo } = toRefsPreferencesStore()
 
 const logoWrapperRef = useTemplateRef<HTMLElement>('logoWrapper')
 

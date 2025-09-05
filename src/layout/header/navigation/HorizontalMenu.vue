@@ -127,9 +127,7 @@ watchThrottled(
 )
 
 onMounted(() => {
-  navigationContainerRef.value = navigationWrapperRef.value?.closest(
-    'nav',
-  ) as HTMLElement
+  navigationContainerRef.value = navigationWrapperRef.value?.closest('nav') as HTMLElement
   calculateMenuRightBound()
 })
 

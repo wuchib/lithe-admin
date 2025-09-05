@@ -11,9 +11,9 @@ import {
 } from 'naive-ui'
 
 import { HintHelp } from '@/components'
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 
-const { watermarkOptions } = useToRefsPreferences()
+const { watermarkOptions } = toRefsPreferencesStore()
 </script>
 <template>
   <NForm

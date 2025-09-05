@@ -6,7 +6,7 @@ import { RouterView } from 'vue-router'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
 import router from '@/router'
-import { useToRefsPreferences, useTabsStore, useToRefsTabs } from '@/stores'
+import { toRefsPreferencesStore, useTabsStore, toRefsTabsStore } from '@/stores'
 
 import type { Tab } from '@/stores'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
@@ -20,11 +20,11 @@ const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
   useInjection(layoutInjectionKey)
 
-const { enableNavigationTransition, showTabs } = useToRefsPreferences()
+const { enableNavigationTransition, showTabs } = toRefsPreferencesStore()
 
 const { createTab, setTabActivePath } = useTabsStore()
 
-const { tabs, tabActivePath } = useToRefsTabs()
+const { tabs, tabActivePath } = toRefsTabsStore()
 
 const isMounted = ref(false)
 

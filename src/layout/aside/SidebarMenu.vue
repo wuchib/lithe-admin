@@ -5,11 +5,11 @@ import { storeToRefs } from 'pinia'
 import { h, ref, useTemplateRef, watch } from 'vue'
 
 import router from '@/router'
-import { useToRefsPreferences, useUserStore } from '@/stores'
+import { toRefsPreferencesStore, useUserStore } from '@/stores'
 
 import type { MenuInst, MenuProps } from 'naive-ui'
 
-const { sidebarMenu } = useToRefsPreferences()
+const { sidebarMenu } = toRefsPreferencesStore()
 
 const { menuList } = storeToRefs(useUserStore())
 

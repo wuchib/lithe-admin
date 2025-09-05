@@ -20,7 +20,7 @@ import { ButtonAnimation } from '@/components'
 import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
-import { useTabsStore, useToRefsPreferences, useToRefsTabs } from '@/stores'
+import { useTabsStore, toRefsPreferencesStore, toRefsTabsStore } from '@/stores'
 
 import type { Tab, Key } from '@/stores'
 import type { DropdownOption } from 'naive-ui'
@@ -57,9 +57,9 @@ const {
   getRemovableIds,
 } = useTabsStore()
 
-const { tabs, tabActivePath } = useToRefsTabs()
+const { tabs, tabActivePath } = toRefsTabsStore()
 
-const { showTabClose } = useToRefsPreferences()
+const { showTabClose } = toRefsPreferencesStore()
 
 const tabPinnedList = computed({
   get: () => tabs.value.filter((tab) => tab.pinned),
@@ -288,7 +288,7 @@ const routerAfterEach = router.afterEach(() => {
   })
 })
 
-const InternalTabs = defineComponent({
+const TabList = defineComponent({
   props: {
     modelValue: {
       type: Array as PropType<Tab[]>,
@@ -441,13 +441,13 @@ onBeforeUnmount(() => {
   <div
     class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] select-none"
   >
-    <InternalTabs v-model="tabPinnedList" />
+    <TabList v-model="tabPinnedList" />
     <NScrollbar
       ref="scrollbarRef"
       x-scrollable
       @wheel.passive="onScrollbarWheeled"
     >
-      <InternalTabs v-model="tabUnPinnedList" />
+      <TabList v-model="tabUnPinnedList" />
     </NScrollbar>
     <div class="flex items-center px-3">
       <ButtonAnimation

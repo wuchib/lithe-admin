@@ -13,7 +13,7 @@ import { h, ref } from 'vue'
 import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
 import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import { usePreferencesStore, useSystemStore, useToRefsPreferences } from '@/stores'
+import { usePreferencesStore, useSystemStore, toRefsPreferencesStore } from '@/stores'
 import { ccAPCA } from '@/utils/chromaHelper'
 import twColors from '@/utils/tailwindColor'
 import twc from '@/utils/tailwindColor'
@@ -42,7 +42,7 @@ const {
   showWatermark,
   showNoise,
   sidebarMenu,
-} = useToRefsPreferences()
+} = toRefsPreferencesStore()
 
 const systemStore = useSystemStore()
 

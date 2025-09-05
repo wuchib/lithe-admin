@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 
-const { preferences, themeColor, navigationMode } = useToRefsPreferences()
+const { preferences, themeColor, navigationMode } = toRefsPreferencesStore()
 </script>
 <template>
   <div

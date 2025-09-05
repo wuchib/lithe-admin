@@ -15,7 +15,7 @@ import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import ThemeModePopover from '@/layout/header/action/ThemeModePopover.vue'
 import router from '@/router'
-import { useToRefsPreferences, useToRefsUser } from '@/stores'
+import { toRefsPreferencesStore, toRefsUserStore } from '@/stores'
 
 import ThemeColorPopover from './component/ThemeColorPopover.vue'
 
@@ -27,8 +27,8 @@ defineOptions({
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
-const { isDark } = useToRefsPreferences()
-const { token } = useToRefsUser()
+const { isDark } = toRefsPreferencesStore()
+const { token } = toRefsUserStore()
 
 const illustrations = [
   defineAsyncComponent(() => import('./component/Illustration1.vue')),

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { useToRefsPreferences, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
+import { toRefsPreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
 
 import SidebarMenu from './SidebarMenu.vue'
 import SidebarUserPanel from './SidebarUserPanel.vue'
@@ -10,7 +10,7 @@ defineOptions({
   name: 'AsideLayout',
 })
 
-const { preferences, sidebarMenu } = useToRefsPreferences()
+const { preferences, sidebarMenu } = toRefsPreferencesStore()
 
 const menuCollapseWidth = computed(() => {
   return sidebarMenu.value.collapsed

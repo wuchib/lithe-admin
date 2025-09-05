@@ -4,11 +4,11 @@ import { useMessage } from 'naive-ui'
 import { ButtonAnimation } from '@/components'
 import Avatar from '@/components/UserAvatar.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
-import { useToRefsPreferences, useToRefsUser } from '@/stores'
+import { toRefsPreferencesStore, toRefsUserStore } from '@/stores'
 
-const { sidebarMenu } = useToRefsPreferences()
+const { sidebarMenu } = toRefsPreferencesStore()
 
-const { user } = useToRefsUser()
+const { user } = toRefsUserStore()
 
 const message = useMessage()
 

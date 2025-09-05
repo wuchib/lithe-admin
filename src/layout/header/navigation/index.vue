@@ -15,9 +15,7 @@ const AsyncBreadcrumb = defineAsyncComponent(() => import('./Breadcrumb.vue'))
 const { showNavigationButton, showBreadcrumb, navigationMode } = toRefsPreferencesStore()
 </script>
 <template>
-  <nav
-    class="flex h-9 flex-1 items-center"
-  >
+  <nav class="flex h-9 flex-1 items-center">
     <CollapseTransition :display="showNavigationButton && navigationMode === 'sidebar'">
       <AsyncNavigationButton />
     </CollapseTransition>

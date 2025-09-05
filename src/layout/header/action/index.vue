@@ -4,7 +4,7 @@ import { defineAsyncComponent, h } from 'vue'
 import { ButtonAnimation } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import { useToRefsPreferences } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
 
 import FullScreen from './FullScreen.vue'
 import PreferencesDrawer from './PreferencesDrawer.vue'
@@ -21,7 +21,7 @@ const AsyncAvatarDropdown = defineAsyncComponent({
 })
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
-const { navigationMode } = useToRefsPreferences()
+const { navigationMode } = toRefsPreferencesStore()
 </script>
 <template>
   <div class="flex items-center">
