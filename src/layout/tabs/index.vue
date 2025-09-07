@@ -328,7 +328,7 @@ const TabList = defineComponent({
                 'relative cursor-pointer overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] hover:bg-primary/6 [&:not(.max-w-0)]:max-w-48',
                 {
                   'tab-active': tab.path === pendingActivePath.value,
-                  group: !tab.locked && !showTabClose,
+                  group: !tab.locked && !showTabClose.value,
                 },
               ]}
               onClick={() => handleTabClick(tab.path)}
