@@ -31,6 +31,8 @@ const layoutSlideDirection = ref<LayoutSlideDirection>(null)
 
 const shouldRefreshRoute = ref(false)
 
+const isSidebarColResizing = ref(false)
+
 function setLayoutSlideDirection(direction: LayoutSlideDirection) {
   layoutSlideDirection.value = direction === layoutSlideDirection.value ? null : direction
 }
@@ -47,6 +49,7 @@ provide(layoutInjectionKey, {
   shouldRefreshRoute,
   layoutSlideDirection,
   setLayoutSlideDirection,
+  isSidebarColResizing,
 })
 </script>
 

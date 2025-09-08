@@ -14,4 +14,5 @@ export interface LayoutProvider {
   shouldRefreshRoute: Ref<boolean>
   layoutSlideDirection: Ref<LayoutSlideDirection>
   setLayoutSlideDirection: (direction: LayoutSlideDirection) => void
+  isSidebarColResizing: Ref<boolean>
 }
