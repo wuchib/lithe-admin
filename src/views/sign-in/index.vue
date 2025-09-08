@@ -37,7 +37,7 @@ const illustrations = [
 ]
 
 const loading = ref(false)
-
+const isNavigating = ref(false)
 const isRememberMed = ref(false)
 
 const textureMaskParams = reactive({
@@ -69,26 +69,29 @@ const signInFormRules: Record<string, FormItemRule[]> = {
 function toLayout() {
   const { r } = router.currentRoute.value.query
 
-  setTimeout(() => {
-    if (signInForm.account.includes('admin')) {
-      token.value = 'admin'
-    } else {
-      token.value = 'user'
-    }
-
-    router.replace({
+  isNavigating.value = true
+  router
+    .replace({
       path: (r as string) || '/',
     })
-
-    loading.value = false
-  }, 1000)
+    .finally(() => {
+      isNavigating.value = false
+    })
 }
 
 const handleSubmitClick = () => {
   signInFormRef.value?.validate((errors) => {
     if (!errors) {
       loading.value = true
-      toLayout()
+      setTimeout(() => {
+        if (signInForm.account.includes('admin')) {
+          token.value = 'admin'
+        } else {
+          token.value = 'user'
+        }
+        loading.value = false
+        toLayout()
+      }, 1000)
     }
   })
 }
@@ -228,9 +231,10 @@ onUnmounted(() => {
                   type="primary"
                   :loading="loading"
                   attr-type="button"
+                  :disabled="isNavigating"
                   block
                   size="medium"
-                  @click="handleSubmitClick()"
+                  @click="handleSubmitClick"
                 >
                   登&nbsp;录
                 </NButton>
