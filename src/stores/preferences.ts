@@ -13,6 +13,7 @@ export interface PreferencesOptions {
   navigationMode: NavigationMode
   sidebarMenu: Partial<{
     collapsed: boolean
+    minWidth: number
     width: number
     maxWidth: number
   }>
@@ -35,8 +36,9 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
   navigationMode: 'sidebar',
   sidebarMenu: {
     collapsed: false,
-    width: 64,
-    maxWidth: 256,
+    minWidth: 64,
+    width: 256,
+    maxWidth: 456,
   },
   showFooter: true,
   showTabs: true,
@@ -104,8 +106,8 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
 
   watch(
     () => preferences.value.enableTextSelect,
-    (newValue) => {
-      document.documentElement.style.userSelect = newValue ? 'auto' : 'none'
+    (enabled) => {
+      document.documentElement.style.userSelect = enabled ? 'auto' : 'none'
     },
     {
       immediate: true,

@@ -6,7 +6,7 @@ import texturePng from '@/assets/texture.png'
 import { CollapseTransition, EmptyPlaceholder } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey, layoutInjectionKey } from '@/injection'
-import { toRefsPreferencesStore, toRefsTabsStore } from '@/stores'
+import { DEFAULT_PREFERENCES_OPTIONS, toRefsPreferencesStore, toRefsTabsStore } from '@/stores'
 
 import FooterLayout from './footer/index.vue'
 import HeaderLayout from './header/index.vue'
@@ -24,14 +24,20 @@ const AsyncMobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileL
 const AsyncMobileRightAside = defineAsyncComponent(() => import('./mobile/MobileRightAside.vue'))
 const AsyncAsideLayout = defineAsyncComponent({
   loader: () => import('./aside/index.vue'),
-  loadingComponent: () =>
-    h('div', {
+  loadingComponent: () => {
+    const { minWidth, width, collapsed } = sidebarMenu.value
+    const { minWidth: defaultMinWidth, width: defaultWidth } =
+      DEFAULT_PREFERENCES_OPTIONS.sidebarMenu
+    const mergedMinWidth = minWidth || defaultMinWidth
+    const mergedWidth = width || defaultWidth
+    const finalWidth = collapsed ? mergedMinWidth : mergedWidth
+
+    return h('div', {
       style: {
-        width: `${
-          sidebarMenu.value.collapsed ? sidebarMenu.value.width : sidebarMenu.value.maxWidth
-        }px`,
+        width: `${finalWidth + 1}px`,
       },
-    }),
+    })
+  },
   delay: 0,
 })
 

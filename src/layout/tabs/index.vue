@@ -377,7 +377,7 @@ const TabList = defineComponent({
                 {!tab.pinned && (
                   <div
                     class={[
-                      'ml-1 flex overflow-hidden rounded-full p-1 transition-[background-color,opacity,scale] hover:bg-naive-button-hover',
+                      'ml-1 flex overflow-hidden rounded-full p-1 transition-[background-color,opacity,scale] hover:bg-naive-button2-hover',
                       {
                         'scale-0 opacity-0': tab.locked || !showTabClose.value,
                         'group-hover:scale-100 group-hover:opacity-100':

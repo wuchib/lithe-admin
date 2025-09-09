@@ -23,7 +23,10 @@ const handleSignOutClick = () => {
 }
 </script>
 <template>
-  <ButtonAnimation @click="handleSignOutClick">
+  <ButtonAnimation
+    @click="handleSignOutClick"
+    title="退出登录"
+  >
     <span class="iconify ph--sign-out" />
   </ButtonAnimation>
 </template>

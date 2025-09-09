@@ -40,7 +40,7 @@ watch(
   <NScrollbar>
     <NMenu
       ref="menuRef"
-      :collapsed-width="sidebarMenu.width"
+      :collapsed-width="sidebarMenu.minWidth"
       :collapsed="sidebarMenu.collapsed"
       :collapsed-icon-size="20"
       :value="menuActiveKey"

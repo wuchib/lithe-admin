@@ -95,11 +95,11 @@ const BreadcrumbItem = defineComponent({
         >
           <BreadcrumbItem
             :meta="meta"
-            class="cursor-pointer transition-[background-color,color] not-hover:text-[var(--text-color-3)] hover:bg-[var(--button-color-2-hover)]"
+            class="cursor-pointer transition-[background-color,color] not-hover:text-naive-text3 hover:bg-naive-button2-hover"
           />
         </NDropdown>
         <span
-          class="iconify-[fluent--slash-forward-20-regular] w-3.5 text-[var(--text-color-3)]"
+          class="iconify-[fluent--slash-forward-20-regular] w-3.5 text-naive-text3"
           v-if="!isCurrentRoute(name)"
         />
       </div>

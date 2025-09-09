@@ -12,6 +12,8 @@ defineOptions({
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
+const { minWidth: defaultMinWidth, width: defaultWidth } = DEFAULT_PREFERENCES_OPTIONS.sidebarMenu
+
 const { isSidebarColResizing } = useInjection(layoutInjectionKey)
 
 const { navigationMode, sidebarMenu, showLogo } = toRefsPreferencesStore()
@@ -21,21 +23,22 @@ const logoWrapperRef = useTemplateRef<HTMLElement>('logoWrapper')
 const collapseWidth = ref(0)
 
 watch(
-  [() => navigationMode.value, () => sidebarMenu.value.collapsed],
-  ([navigationMode, isCollapsed]) => {
+  [() => navigationMode.value, () => sidebarMenu.value],
+  ([navigationMode, { collapsed, width, minWidth }]) => {
     if (navigationMode === 'horizontal') {
       nextTick(() => {
         collapseWidth.value = logoWrapperRef.value?.clientWidth ?? 0
       })
     } else {
-      const { width, maxWidth } = sidebarMenu.value
-      const { width: defaultWidth, maxWidth: defaultMaxWidth } =
-        DEFAULT_PREFERENCES_OPTIONS.sidebarMenu
-      collapseWidth.value = isCollapsed ? width || defaultWidth : maxWidth || defaultMaxWidth
+      const mergedMinWidth = minWidth || defaultMinWidth
+      const mergedWidth = width || defaultWidth
+
+      collapseWidth.value = collapsed ? mergedMinWidth : mergedWidth
     }
   },
   {
     immediate: true,
+    deep: true,
   },
 )
 </script>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { watchDebounced } from '@vueuse/core'
 import chroma from 'chroma-js'
 import * as echarts from 'echarts'
 import { NNumberAnimation } from 'naive-ui'
-import { onMounted, watch, ref, computed, onUnmounted, nextTick } from 'vue'
+import { onMounted, watch, ref, computed, onUnmounted } from 'vue'
 
 import { ContentWrapper } from '@/components'
 import { toRefsPreferencesStore } from '@/stores'
@@ -1048,16 +1049,9 @@ function resizeAllCharts() {
   if (highestRevenueChartInstance) highestRevenueChartInstance.resize()
 }
 
-watch([() => sidebarMenu.value.collapsed, () => navigationMode.value], () => {
-  if (collapseResizeTimeout !== null) {
-    clearTimeout(collapseResizeTimeout)
-    collapseResizeTimeout = null
-  }
-  nextTick(() => {
-    collapseResizeTimeout = setTimeout(() => {
-      resizeAllCharts()
-    }, 350)
-  })
+watchDebounced([() => sidebarMenu.value, () => navigationMode.value], resizeAllCharts, {
+  debounce: 300,
+  deep: true,
 })
 
 watch([isDark, themeColor], () => {

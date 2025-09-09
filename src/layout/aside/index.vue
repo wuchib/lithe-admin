@@ -13,18 +13,27 @@ defineOptions({
   name: 'AsideLayout',
 })
 
+const {
+  minWidth: defaultMinWidth,
+  width: defaultWidth,
+  maxWidth: defaultMaxWidth,
+} = DEFAULT_PREFERENCES_OPTIONS.sidebarMenu
+
 const { preferences, sidebarMenu } = toRefsPreferencesStore()
 
 const { isSidebarColResizing } = useInjection(layoutInjectionKey)
 
-const sidelineRef = useTemplateRef<HTMLDivElement>('sidebarLine')
+const sidebarLineRef = useTemplateRef<HTMLDivElement>('sidebarLine')
 
-const { x } = useDraggable(sidelineRef, {})
+const { x: sidebarLineX } = useDraggable(sidebarLineRef, {})
 
 const menuCollapseWidth = computed(() => {
-  return sidebarMenu.value.collapsed
-    ? sidebarMenu.value.width || DEFAULT_PREFERENCES_OPTIONS.sidebarMenu.width
-    : sidebarMenu.value.maxWidth || DEFAULT_PREFERENCES_OPTIONS.sidebarMenu.maxWidth
+  const { minWidth, width, collapsed } = sidebarMenu.value
+
+  const mergedMinWidth = minWidth || defaultMinWidth
+  const mergedWidth = width || defaultWidth
+
+  return collapsed ? mergedMinWidth : mergedWidth
 })
 
 function handleCollapseClick() {
@@ -46,14 +55,27 @@ const onSidelineMouseDown = () => {
   )
 }
 
-watch(x, (newX) => {
-  console.log(newX)
+watch(sidebarLineX, (newSidebarLineX) => {
+  const { minWidth, maxWidth } = sidebarMenu.value
+  const mergedMinWidth = minWidth || defaultMinWidth
+  const mergedMaxWidth = maxWidth || defaultMaxWidth
+
+  if (newSidebarLineX <= mergedMinWidth) {
+    preferences.value.sidebarMenu.width = mergedMinWidth
+    preferences.value.sidebarMenu.collapsed = true
+  } else if (newSidebarLineX >= mergedMaxWidth) {
+    preferences.value.sidebarMenu.width = mergedMaxWidth
+    preferences.value.sidebarMenu.collapsed = false
+  } else {
+    preferences.value.sidebarMenu.width = newSidebarLineX
+    preferences.value.sidebarMenu.collapsed = false
+  }
 })
 </script>
 <template>
   <div class="flex h-full">
     <aside
-      class="relative flex h-full flex-col justify-between gap-y-4 bg-naive-card pb-4"
+      class="flex h-full flex-col justify-between gap-y-4 bg-naive-card pb-4"
       :class="{
         'transition-[background-color,width]': !isSidebarColResizing,
       }"
@@ -63,6 +85,15 @@ watch(x, (newX) => {
     >
       <SidebarMenu />
       <SidebarUserPanel />
+    </aside>
+    <div
+      class="relative flex h-full justify-center border-r border-naive-border transition-[border-color]"
+    >
+      <div
+        ref="sidebarLine"
+        class="absolute z-10 h-full w-[5px] cursor-col-resize"
+        @mousedown="onSidelineMouseDown"
+      />
       <div
         class="absolute top-1/2 right-0 z-50 grid size-6 translate-x-1/2 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-naive-border bg-white transition-[background-color,border-color] hover:bg-neutral-50 dark:bg-neutral-750 dark:hover:bg-neutral-700"
         @click="handleCollapseClick"
@@ -74,13 +105,6 @@ watch(x, (newX) => {
           }"
         />
       </div>
-    </aside>
-    <div class="relative flex h-full justify-center border-r border-naive-border">
-      <div
-        ref="sidebarLine"
-        class="absolute z-10 h-full w-[5px] cursor-col-resize"
-        @mousedown="onSidelineMouseDown"
-      ></div>
     </div>
   </div>
 </template>
